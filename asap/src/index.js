@@ -1,19 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import Publicity from './pages/Publicity';
-import reportWebVitals from './reportWebVitals';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-} from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import Publicity from "./pages/Publicity";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
 import Root from "./routes/root";
+import AddPublicity from "./pages/AddPublicity";
+import Login from "./pages/Login";
 
-
-
-const router = createBrowserRouter([
+const privateRouter = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
@@ -22,14 +18,28 @@ const router = createBrowserRouter([
         path: "/publicidad",
         element: <Publicity />,
       },
+      {
+        path: "/agregar-publicidad:editable:id",
+        element: <AddPublicity />,
+      },
     ],
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const publicRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />,
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+let isUser = localStorage.getItem("user");
+
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {isUser ? <RouterProvider router={privateRouter} /> : <RouterProvider router={publicRouter} />}
   </React.StrictMode>
 );
 

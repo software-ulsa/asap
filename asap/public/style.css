@@ -7541,8 +7541,7 @@ a.text-purple:hover, a.text-purple:focus {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px; }
 
-.page-wrapper > .container-fluid {
-  padding: 35px;
+.page-wrapper > .container-fluid {  
   min-height: calc(100vh - 210px); }
 
 /*******************

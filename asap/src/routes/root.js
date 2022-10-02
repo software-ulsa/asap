@@ -36,7 +36,7 @@ export default function Root() {
         {/* ============================================================== */}
         {/* Page wrapper  */}
         {/* ============================================================== */}
-        <div className="page-wrapper" style={{display:'block'}}>
+        <div className="page-wrapper" style={{ display: "block" }}>
           {/* ============================================================== */}
           {/* End Bread crumb and right sidebar toggle */}
           {/* ============================================================== */}
@@ -44,7 +44,7 @@ export default function Root() {
           {/* Container fluid  */}
           {/* ============================================================== */}
           <div className="container-fluid">
-            <Outlet/>
+            <Outlet />
           </div>
           {/* ============================================================== */}
           {/* End Container fluid  */}
@@ -53,8 +53,7 @@ export default function Root() {
           {/* footer */}
           {/* ============================================================== */}
           <footer className="footer text-center text-muted">
-            All Rights Reserved by Adminmart. Designed and Developed by{" "}
-            <a href="https://wrappixel.com">WrapPixel</a>.
+            Powered by <a href="#">Software4All</a> and <a href="#">Triangle Programming</a>
           </footer>
           {/* ============================================================== */}
           {/* End footer */}
