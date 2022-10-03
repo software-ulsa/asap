@@ -31,6 +31,10 @@ const publicRouter = createBrowserRouter([
     path: "/",
     element: <Login />,
   },
+  {
+    path: "/*",
+    element: <Login />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
