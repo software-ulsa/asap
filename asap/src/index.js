@@ -2,11 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import Publicity from "./pages/Publicity";
+import Admins from "./pages/Admins";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
 import Root from "./routes/root";
 import AddPublicity from "./pages/AddPublicity";
+import AddAdmin from "./pages/AddAdmin";
 import Login from "./pages/Login";
 
 const privateRouter = createBrowserRouter([
@@ -21,6 +23,14 @@ const privateRouter = createBrowserRouter([
       {
         path: "/agregar-publicidad:editable:id",
         element: <AddPublicity />,
+      },
+      {
+        path: "/administradores",
+        element: <Admins />,
+      },
+      {
+        path: "/agregar-administrador:editable:id",
+        element: <AddAdmin/>,
       },
     ],
   },
