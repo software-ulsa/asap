@@ -10,6 +10,7 @@ import Root from "./routes/root";
 import AddPublicity from "./pages/AddPublicity";
 import AddAdmin from "./pages/AddAdmin";
 import Login from "./pages/Login";
+import Account from "./pages/Account";
 
 const privateRouter = createBrowserRouter([
   {

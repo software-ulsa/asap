@@ -4,13 +4,29 @@ import { useParams } from "react-router-dom";
 const AddPublicity = () => {
   const { editable } = useParams();
 
+  const categories = [
+    "Música",
+    "Entretenimiento",
+    "Deportes",
+    "Moda & belleza inclusiva",
+    "Arte & cultura",
+    "Comida",
+    "Gaming",
+    "Viaje",
+    "Anime & comics",
+    "Actividades al aire libre",
+    "Fitness",
+    "Negocios & finanzas",
+    "Ciencia",
+  ];
+
   return (
     <>
       <div className="page-breadcrumb">
         <div className="row">
           <div className="col-7 align-self-center">
             <h4 className="page-title text-truncate text-dark font-weight-medium mb-1">
-              {editable === 'true' ? "Editar Publicidad" : "Agregar Publicidad"}
+              {editable === "true" ? "Editar Publicidad" : "Agregar Publicidad"}
             </h4>
             <div className="d-flex align-items-center">
               <nav aria-label="breadcrumb"></nav>
@@ -101,6 +117,18 @@ const AddPublicity = () => {
                       />
                       <small id="name" class="form-text text-muted">
                         Url de la empresa
+                      </small>
+                    </div>
+                  </div>
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <select className="form-control">
+                        {categories.map((cat, index) => (
+                          <option key={index+'cat'} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                      <small id="name" class="form-text text-muted">
+                        Categoría
                       </small>
                     </div>
                   </div>
