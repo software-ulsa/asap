@@ -3,9 +3,9 @@ import '../Account.css'
 
 function Account() {
   return (
-    <div className='Card'>
-        <div className='upper-container'>
-            <div className='image-container'>
+    <div className="Card">
+        <div className="upper-container">
+            <div className="image-container">
                 <img src="https://cdn-icons-png.flaticon.com/512/711/711769.png" alt='' height="100px" width="100px"/>
             </div>
         </div>
