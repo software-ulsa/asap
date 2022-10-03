@@ -51,7 +51,7 @@ const DataTable = (props) => {
 
   useEffect(() => {
     getPages();
-  }, []);
+  }, [props]);
 
   return (
     <>
