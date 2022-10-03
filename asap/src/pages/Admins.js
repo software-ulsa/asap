@@ -108,6 +108,22 @@ const Admins = () => {
                 <div className="col-12">
                     <div className="card" style={{ margin: "10px" }}>
                         <div className="card-body">
+                            <div className="row">
+                                <div className="col-6">
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="name"
+                                            placeholder="Buscar por nombre o ID"
+                  
+                                        />
+                                        <small id="name" class="form-text text-muted">
+                                            Buscar por nombre o ID
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
                             <h6 className="card-subtitle d-flex justify-content-end"></h6>
                         </div>
                         <DataTable columns={columns} data={data} />
