@@ -32,6 +32,10 @@ const privateRouter = createBrowserRouter([
         path: "/agregar-administrador:editable:id",
         element: <AddAdmin/>,
       },
+      {
+        path: "/account",
+        element: <Account />,
+      },
     ],
   },
 ]);
