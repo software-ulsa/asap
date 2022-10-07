@@ -11,6 +11,8 @@ import AddPublicity from "./pages/AddPublicity";
 import AddAdmin from "./pages/AddAdmin";
 import Login from "./pages/Login";
 import Account from "./pages/Account";
+import Specialist from "./pages/Specialist";
+import AddSpecialist from "./pages/AddSpecialist";
 
 const privateRouter = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ const privateRouter = createBrowserRouter([
       {
         path: "/account",
         element: <Account />,
+      },
+      {
+        path: "/especialistas",
+        element: <Specialist />,
+      },
+      {
+        path: "/agregar-especialista:editable:id",
+        element: <AddSpecialist />,
       },
     ],
   },
