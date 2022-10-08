@@ -4,6 +4,15 @@ import { useParams } from "react-router-dom";
 const AddSpecialist = () => {
   const { editable } = useParams();
 
+  function mostrarContrasena(){
+    var tipo = document.getElementById("password");
+    if(tipo.type == "password"){
+        tipo.type = "text";
+    }else{
+        tipo.type = "password";
+    }
+    };
+
   return (
     <>
       <div className="page-breadcrumb">
@@ -41,15 +50,18 @@ const AddSpecialist = () => {
                   </div>
                   <div className="col-sm-6">
                     <div className="custom-file">
-                      <input type="file" className="custom-file-input" id="file" />
-                      <label class="custom-file-label" for="inputGroupFile01" disabled={!editable}>
-                        Buscar archivo
-                      </label>
+                    <input 
+                        type="file" 
+                        class="form-control" 
+                        id="input-file"
+                        placeholder="Seleccionar foto de perfil"  
+                        accept=".png, .jpg" 
+                        disabled={!editable}/>
                       <small id="name" class="form-text text-muted">
-                        Imagen de publicación
+                        Foto de perfil
                       </small>
                     </div>
-                  </div>
+                    </div>
                 </div>
                 <div className="row">
                   <div className="col-sm-6">
@@ -57,7 +69,7 @@ const AddSpecialist = () => {
                       <input
                         type="text"
                         className="form-control"
-                        id="name"
+                        id="profession"
                         placeholder="Profesión"
                         disabled={!editable}
                       />
@@ -72,7 +84,7 @@ const AddSpecialist = () => {
                         disabled={!editable}
                         type="email"
                         className="form-control"
-                        id="name"
+                        id="email"
                         placeholder="Correo electrónico"
                       />
                       <small id="name" class="form-text text-muted">
@@ -85,7 +97,7 @@ const AddSpecialist = () => {
                       <input
                         type="text"
                         className="form-control"
-                        id="name"
+                        id="specialist"
                         placeholder="Especialidad"
                         disabled={!editable}
                       />
@@ -95,7 +107,8 @@ const AddSpecialist = () => {
                     </div>
                   </div>
                   <div className="col-sm-6">
-                    <div className="form-group">
+                  <div className="form-group">
+                    <div class="input-group mb-3">
                       <input
                         disabled={!editable}
                         type="password"
@@ -103,10 +116,14 @@ const AddSpecialist = () => {
                         id="password"
                         placeholder="Contraseña"
                       />
-                      <small id="name" class="form-text text-muted">
-                        Contraseña
-                      </small>
+                        <button className="btn btn-light" id="mostrar" onClick={mostrarContrasena}>
+                            <img src="https://static.thenounproject.com/png/2540381-200.png" height ="25" width="25" />
+                        </button><br/>
                     </div>
+                    <small id="name" class="form-text text-muted">
+                        Contraseña
+                    </small>
+                  </div>
                   </div>
 
                   <div className="col-sm-6">
@@ -115,7 +132,7 @@ const AddSpecialist = () => {
                         disabled={!editable}
                         type="text"
                         className="form-control"
-                        id="name"
+                        id="cedula"
                         placeholder="No. Cédula"
                       />
                       <small id="name" class="form-text text-muted">
@@ -125,13 +142,12 @@ const AddSpecialist = () => {
                   </div>
                   <div className="col-sm-6">
                     <div className="form-group">
-                      <input
-                        disabled={!editable}
-                        type="file"
-                        className="form-control"
-                        id="name"
-                        placeholder="Curriculum vitae"
-                      />
+                    <input disabled={!editable}
+                        type="file" 
+                        class="form-control" 
+                        id="cv"
+                        placeholder="Curriculum vitae"  
+                        accept=".pdf" />
                       <small id="name" class="form-text text-muted">
                         Curriculum vitae (PDF)
                       </small>
@@ -143,7 +159,7 @@ const AddSpecialist = () => {
                         disabled={!editable}
                         type="number"
                         className="form-control"
-                        id="name"
+                        id="phone"
                         placeholder="Teléfono"
                       />
                       <small id="name" class="form-text text-muted">
@@ -156,7 +172,7 @@ const AddSpecialist = () => {
             </div>
             {editable ? (
               <div className="row d-flex justify-content-center">
-                <a href="/publicidad">
+                <a href="/especialistas">
                   <button className="btn btn-danger" type="button">
                     Regresar
                   </button>
