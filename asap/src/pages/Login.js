@@ -4,9 +4,10 @@ import swal from 'sweetalert';
 async function loginUser(credentials) {
   return fetch('https://juresca-api.com/users/login', {
     method: 'POST',
-    headers: {
+    headers: new Headers({
       'Content-Type': 'application/json'
-    },
+    }),
+    mode: 'no-cors',
     body: JSON.stringify(credentials)
   })
     .then(data => data.json())
