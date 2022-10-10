@@ -17,7 +17,7 @@ const PrivateHeader = () => {
           <div className="navbar-brand">
             {/* Logo icon */}
             <a href="index.html">
-              <img src="./logoasap.png" style={{ width: "130px" ,height: "60px" }} />
+              <img src="./logoasap.png" style={{ width: "140px" ,height: "60px" }} />
               {/*End Logo icon */}
               {/* Logo text */}
               

@@ -6,10 +6,13 @@ const AddSpecialist = () => {
 
   function mostrarContrasena(){
     var tipo = document.getElementById("password");
+    var img = document.getElementById("imgeye");
     if(tipo.type == "password"){
         tipo.type = "text";
+        img.src = "https://cdn-icons-png.flaticon.com/512/2767/2767146.png";
     }else{
         tipo.type = "password";
+        img.src = "https://static.thenounproject.com/png/2540381-200.png"
     }
     };
 
@@ -117,7 +120,7 @@ const AddSpecialist = () => {
                         placeholder="Contraseña"
                       />
                         <button className="btn btn-light" id="mostrar" onClick={mostrarContrasena}>
-                            <img src="https://static.thenounproject.com/png/2540381-200.png" height ="25" width="25" />
+                            <img src="https://static.thenounproject.com/png/2540381-200.png" height ="25" width="25" id="imgeye"/>
                         </button><br/>
                     </div>
                     <small id="name" class="form-text text-muted">

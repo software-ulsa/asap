@@ -1,12 +1,26 @@
 import React, { useState } from "react";
 import DataTable from "../components/DataTable";
 import { useNavigate } from "react-router-dom";
+import swal from 'sweetalert';
 
 function Specialist() {
 
     const navigate = useNavigate();
 
     const deleteFunc = function (index) {
+        swal({
+          title: "¿Seguro que desea continuar?",
+          icon: "warning",
+          buttons: ["Cancelar","Continuar"]
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal("El especialista ha sido eliminado!", {
+              icon: "success",
+            });
+          } 
+        });
+
         console.log("Delete" + index);
     };
 
