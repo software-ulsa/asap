@@ -11,7 +11,10 @@ import AddPublicity from "./pages/AddPublicity";
 import AddAdmin from "./pages/AddAdmin";
 import Login from "./pages/Login";
 import Account from "./pages/Account";
-
+import Users from "./pages/User";
+import AddUser from "./pages/AddUser";
+import Publication from "./pages/Publication";
+import AddPublication from "./pages/AddPublication";
 const privateRouter = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +39,22 @@ const privateRouter = createBrowserRouter([
       {
         path: "/account",
         element: <Account />,
+      },
+      {
+        path: "/usuarios",
+        element: <Users />,
+      },
+      {
+        path: "/agregar-usuario:editable:id",
+        element: <AddUser />,
+      },
+      {
+        path: "/publicacion",
+        element: <Publication />,
+      },
+      {
+        path: "/agregar-publicacion:editable:id",
+        element: <AddPublication />,
       },
     ],
   },
