@@ -1,6 +1,41 @@
-import React from "react";
+import React, { useState } from 'react';
+import swal from 'sweetalert';
+
+async function loginUser(credentials) {
+  return fetch('https://juresca-api.com/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+ }
 
 export default function Login() {
+  const [correo, setCorreo] = useState();
+  const [password, setPassword] = useState();
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const response = await loginUser({
+      correo,
+      password
+    });
+    if ('accessToken' in response) {
+      swal("Success", response.message, "success", {
+        buttons: false,
+        timer: 2000,
+      })
+      .then((value) => {
+        localStorage.setItem('accessToken', response['accessToken']);
+        localStorage.setItem('correo', JSON.stringify(response['correo']));
+        window.location.href = "/account";
+      });
+    } else {
+      swal("Failed", response.message, "error");
+    }
+  }
   return (
   <div className="main-wrapper">
         <div
@@ -24,7 +59,7 @@ export default function Login() {
                 <p className="text-center">
                 Ingrese su dirección de correo electrónico y contraseña para acceder al panel de administración.
                 </p>
-                <form className="mt-4">
+                <form onSubmit={handleSubmit} className="mt-4">
                   <div className="row">
                     <div className="col-lg-12">
                       <div className="form-group">
@@ -33,9 +68,10 @@ export default function Login() {
                         </label>
                         <input
                           className="form-control"
-                          id="email"
+                          id="correo"
                           type="text"
                           placeholder="ingrese su correo electrónico"
+                          onChange={e => setCorreo(e.target.value)}
                         />
                       </div>
                     </div>
@@ -49,6 +85,7 @@ export default function Login() {
                           id="password"
                           type="password"
                           placeholder="ingrese su contraseña"
+                          onChange={e => setPassword(e.target.value)}
                         />
                       </div>
                     </div>
