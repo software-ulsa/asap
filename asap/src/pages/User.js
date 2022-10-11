@@ -3,6 +3,8 @@ import DataTable from "../components/DataTable";
 import { useNavigate } from "react-router-dom";
 
 const Users = () => {
+
+
     const navigate = useNavigate();
 
     const columns = [
@@ -17,18 +19,13 @@ const Users = () => {
             type: "text",
         },
         {
-            title: "Nivel  Académico",
-            name: "nivel",
+            title: "Correo",
+            name: "correo",
             type: "text",
         },
         {
-            title: "Semestre",
-            name: "semestre",
-            type: "text",
-        },
-        {
-            title: "Edad ",
-            name: "edad",
+            title: "Cargo",
+            name: "cargo",
             type: "text",
         },
         {
@@ -48,7 +45,11 @@ const Users = () => {
     };
 
     const editFunc = function (index) {
+
         navigate("/agregar-usuario" + true + index);
+
+        navigate("/agregar-administrador" + true + index);
+
     };
 
     const data = [
@@ -58,33 +59,60 @@ const Users = () => {
             nivel: "Arquitectura",
             semestre: "7 semestre",
             edad: "23",
+            correo: "123@gmail.com",
+            cargo: "Admin",
             deleteAction: deleteFunc,
             editAction: editFunc,
         },
         {
-            id: 2,
+             id: 2,
             name: "Jairo Esteban",
             nivel: "Software",
             semestre: "3 semestre",
             edad: "23",
+
+            id: 1,
+            name: "Angel Ricardo",
+            correo: "123@gmail.com",
+            cargo: "Admin",
             deleteAction: deleteFunc,
             editAction: editFunc,
         },
-        {
-            id: 3,
+        {            id: 3,
             name: "Carlos Cruz Gomez",
             nivel: "Civil",
             semestre: "7 semestre",
             edad: "23",
+
+            id: 1,
+            name: "Angel Ricardo",
+            correo: "123@gmail.com",
+            cargo: "Admin",
+
             deleteAction: deleteFunc,
             editAction: editFunc,
         },
         {
+
             id: 4,
             name: "Azucena Reyes Santiago",
             nivel: "Arquitectura",
             semestre: "7 semestre",
             edad: "23",
+
+            id: 1,
+            name: "Angel Ricardo",
+            correo: "123@gmail.com",
+            cargo: "Admin",
+            deleteAction: deleteFunc,
+            editAction: editFunc,
+        },
+        {
+            id: 1,
+            name: "Angel Ricardo",
+            correo: "123@gmail.com",
+            cargo: "Admin",
+
             deleteAction: deleteFunc,
             editAction: editFunc,
         },
@@ -103,8 +131,8 @@ const Users = () => {
                     <a href={"/agregar-usuario" + false}>
                         <button className="btn btn-info">Agregar usuario</button>
                     </a>
+                    </div>
                 </div>
-            </div>
             <div className="row">
                 <div className="col-12">
                     <div className="card" style={{ margin: "10px" }}>
@@ -121,7 +149,9 @@ const Users = () => {
                                         />
                                         <small id="name" class="form-text text-muted">
                                             Buscar por nombre o Matricula
+                  
                                         </small>
+    
                                     </div>
                                 </div>
                             </div>
@@ -131,8 +161,10 @@ const Users = () => {
                     </div>
                 </div>
             </div>
-        </>
+
+</>
     );
+
 };
 
 export default Users;

@@ -11,10 +11,15 @@ import AddPublicity from "./pages/AddPublicity";
 import AddAdmin from "./pages/AddAdmin";
 import Login from "./pages/Login";
 import Account from "./pages/Account";
+
 import Users from "./pages/User";
 import AddUser from "./pages/AddUser";
 import Publication from "./pages/Publication";
 import AddPublication from "./pages/AddPublication";
+
+import Specialist from "./pages/Specialist";
+import AddSpecialist from "./pages/AddSpecialist";
+
 const privateRouter = createBrowserRouter([
   {
     path: "/",
@@ -41,6 +46,7 @@ const privateRouter = createBrowserRouter([
         element: <Account />,
       },
       {
+
         path: "/usuarios",
         element: <Users />,
       },
@@ -55,6 +61,13 @@ const privateRouter = createBrowserRouter([
       {
         path: "/agregar-publicacion:editable:id",
         element: <AddPublication />,
+
+        path: "/especialistas",
+        element: <Specialist />,
+      },
+      {
+        path: "/agregar-especialista:editable:id",
+        element: <AddSpecialist />,
       },
     ],
   },
