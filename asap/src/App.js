@@ -1,24 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from "react";
+import { AuthContext } from "./app/context/AuthContext";
+
+import { RouterProvider } from "react-router-dom";
+import publicRoutes from "./app/routes/publicRoutes";
+import privateRoutes from "./app/routes/dashboardRoutes";
 
 function App() {
+  const { currentUser } = useContext(AuthContext);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {currentUser ? (
+        <RouterProvider router={privateRoutes} />
+      ) : (
+        <RouterProvider router={publicRoutes} />
+      )}
+    </>
   );
 }
 

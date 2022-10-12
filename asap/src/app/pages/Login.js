@@ -1,0 +1,179 @@
+import React, { useContext, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
+import swal from "sweetalert";
+import { Helmet } from "react-helmet";
+
+import {
+  AccountCircle,
+  Lock,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography,
+} from "@mui/material";
+
+import Logo from "../images/logo.png";
+import Background from "../images/background.png";
+import Banner from "../images/banner.png";
+import UsuarioService from "../services/UsuarioService";
+import { AuthContext } from "../context/AuthContext";
+
+export default function Login() {
+  const [correo, setCorreo] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+  const { currentUser, signin } = useContext(AuthContext);
+
+  const iniciarSesion = () => {
+    const user = {
+      correo: correo,
+      password: password,
+    };
+
+    UsuarioService.login(user)
+      .then((response) => {
+        signin(response);
+        navigate("/");
+      })
+      .catch((error) => {
+        swal("", error.error, "error");
+      });
+  };
+
+  if (currentUser) return <Navigate to="/" />;
+
+  return (
+    <>
+      <Helmet>
+        <title>Iniciar sesi&oacute;n - Pildora Raiz</title>
+        <meta name="Login" content="Página de iniciar sesión" />
+      </Helmet>
+      <section
+        className="vh-100"
+        style={{ backgroundImage: `url(${Background})` }}
+      >
+        <div className="container h-100">
+          <div className="row d-flex justify-content-center align-items-center h-100">
+            <div className="col col-xl-10">
+              <div className="card" style={{ borderRadius: "1rem" }}>
+                <div className="row g-0">
+                  <div className="col-md-6 col-lg-5 d-none d-md-block">
+                    <img
+                      src={Banner}
+                      alt="Salud mental"
+                      className="img-fluid"
+                      width={750}
+                      style={{ borderRadius: "1rem 0 0 1rem" }}
+                    />
+                  </div>
+                  <div className="col-md-6 col-lg-7 d-flex align-items-center pr-4">
+                    <div className="card-body text-black">
+                      <div className="d-flex justify-content-center">
+                        <img
+                          src={Logo}
+                          alt="ASAP - Logo"
+                          className="img-fluid mb-3"
+                          width={250}
+                        />
+                      </div>
+
+                      <div className="d-flex justify-content-center">
+                        <Typography
+                          variant="h5"
+                          marginBottom={5}
+                          color="#7795d8"
+                          fontWeight="bolder"
+                        >
+                          Iniciar sesi&oacute;n
+                        </Typography>
+                      </div>
+
+                      <div className="form-outline mb-4">
+                        <TextField
+                          fullWidth
+                          label="Correo electrónico"
+                          variant="outlined"
+                          value={correo}
+                          onChange={(event) => setCorreo(event.target.value)}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <AccountCircle />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </div>
+
+                      <div className="form-outline mb-4">
+                        <FormControl fullWidth variant="outlined">
+                          <InputLabel htmlFor="passwordInput">
+                            Password
+                          </InputLabel>
+                          <OutlinedInput
+                            id="passwordInput"
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(event) =>
+                              setPassword(event.target.value)
+                            }
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <Lock />
+                              </InputAdornment>
+                            }
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="toggle password visibility"
+                                  onClick={() => setShowPassword(!showPassword)}
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              </InputAdornment>
+                            }
+                            label="Contraseña"
+                          />
+                        </FormControl>
+                      </div>
+
+                      <div className="mb-4 px-5">
+                        <button
+                          className="btn btn-dark btn-lg btn-block rounded-pill"
+                          onClick={iniciarSesion}
+                          type="button"
+                        >
+                          ENTRAR
+                        </button>
+                      </div>
+                      <div className="d-flex justify-content-center">
+                        <a className="small px-5" href="#!">
+                          OLVID&Eacute; LA CONTRASE&Ntilde;A
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
