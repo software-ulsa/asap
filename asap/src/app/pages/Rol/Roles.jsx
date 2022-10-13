@@ -12,9 +12,7 @@ import EditarRol from "./EditarRol";
 const Roles = () => {
   const [roles, setRoles] = useState([]);
   const [rolToEdit, setRolToEdit] = useState({
-    id: 0,
-    nombre: "",
-    descripcion: "",
+    id: -1,
   });
   const [fetched, setFetched] = useState(false);
   const headers = [
@@ -47,18 +45,21 @@ const Roles = () => {
   );
 
   useEffect(() => {
-    RolService.getAllRoles()
-      .then((response) => {
-        setRoles(response);
-        setFetched(true);
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+    if (!fetched) {
+      RolService.getAllRoles()
+        .then((response) => {
+          setRoles(response);
+          setFetched(true);
+        })
+        .catch((error) => {
+          setFetched(true);
+          notify("error", error.error);
+        });
+    }
   }, [fetched, notify]);
 
   useEffect(() => {
-    if (rolToEdit && rolToEdit.nombre !== "") {
+    if (rolToEdit && rolToEdit.id !== -1) {
       handleOpenEdit();
     }
   }, [rolToEdit]);
