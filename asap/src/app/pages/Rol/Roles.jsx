@@ -1,6 +1,9 @@
-import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
 import { Helmet } from "react-helmet";
+import { Button, Grid, Typography } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+
 import DataTable from "../../components/DataTable";
 import RolService from "../../services/RolService";
 import CrearRol from "./CrearRol";
@@ -29,8 +32,19 @@ const Roles = () => {
       });
   }, [fetched]);
 
-  const dummyAction = () => {
-    console.log("huevos");
+  const notify = () => {
+    toast.success("Rol agregado", {
+      position: "top-right",
+      autoClose: 1500,
+      theme: "light",
+    });
+  };
+
+  const dummyAction = (event) => {
+    const btn = event.target.parentNode;
+    const btnRow = btn.parentNode.parentNode;
+    const itemId = btnRow.id.replace("item", "");
+    console.log(itemId);
   };
 
   return (
@@ -62,7 +76,8 @@ const Roles = () => {
         deleteAction={dummyAction}
         editAction={dummyAction}
       />
-      <CrearRol handleClose={handleClose} open={open} />
+      <CrearRol handleClose={handleClose} open={open} notify={notify} />
+      <ToastContainer />
     </>
   );
 };

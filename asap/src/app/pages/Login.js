@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import { Helmet } from "react-helmet";
 import { LoadingButton } from "@mui/lab";
 
@@ -51,7 +51,11 @@ export default function Login() {
         navigate("/");
       })
       .catch((error) => {
-        swal("", error.error, "error");
+        Swal.fire({
+          icon: "error",
+          text: error.error ? error.error : "Credenciales inválidas",
+        });
+        setLoading(false);
       });
   };
 

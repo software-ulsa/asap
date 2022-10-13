@@ -150,7 +150,7 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row, index) => (
-            <TableRow rowNumber={index}>
+            <TableRow id={`item${row.id}`}>
               {headers.map((header) => {
                 if (header.field === "id") {
                   return (
@@ -178,7 +178,7 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
                 align="center"
                 style={{ paddingLeft: 8 }}
               >
-                <DeleteRounded color="error" />
+                <EditRounded color="warning" onClick={editAction} />
               </TableCell>
               <TableCell
                 component="th"
@@ -186,7 +186,7 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
                 align="center"
                 style={{ paddingLeft: 8 }}
               >
-                <EditRounded color="warning" />
+                <DeleteRounded color="error" onClick={deleteAction} />
               </TableCell>
             </TableRow>
           ))}
@@ -200,7 +200,7 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
         <TableFooter>
           <TableRow>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              rowsPerPageOptions={[5, 10, 25, { label: "Todos", value: -1 }]}
               colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}

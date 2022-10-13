@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 
 import App from "./App";
+import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./app/context/AuthContext";
 import { CssBaseline, StyledEngineProvider } from "@mui/material";
 

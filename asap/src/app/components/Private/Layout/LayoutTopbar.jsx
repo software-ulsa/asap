@@ -1,27 +1,28 @@
-import {
-  Avatar,
-  Hidden,
-  Icon,
-  IconButton,
-  MenuItem,
-  useMediaQuery,
-} from "@mui/material";
-import { Box, styled, useTheme } from "@mui/system";
-import { Menu } from "../../../components";
-import { themeShadows } from "../../../components/Theme/themeColors";
-import useSettings from "../../../hooks/useSettings";
-import { topBarHeight } from "../../../utils/constant";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+
 import { Span } from "../../Typography";
+
+import { Box, styled, useTheme } from "@mui/system";
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   Logout,
   Person,
-  Settings,
 } from "@mui/icons-material";
+import {
+  Avatar,
+  Hidden,
+  IconButton,
+  MenuItem,
+  useMediaQuery,
+} from "@mui/material";
+
+import { Menu } from "../../../components";
+import { topBarHeight } from "../../../utils/constant";
+import useSettings from "../../../hooks/useSettings";
 import { AuthContext } from "../../../context/AuthContext";
+import { themeShadows } from "../../../components/Theme/themeColors";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
