@@ -178,7 +178,12 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
                 align="center"
                 style={{ paddingLeft: 8 }}
               >
-                <EditRounded color="warning" onClick={editAction} />
+                <IconButton
+                  id={`editButton${row.id}`}
+                  onClick={() => editAction(row.id)}
+                >
+                  <EditRounded color="warning" />
+                </IconButton>
               </TableCell>
               <TableCell
                 component="th"
@@ -186,7 +191,9 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
                 align="center"
                 style={{ paddingLeft: 8 }}
               >
-                <DeleteRounded color="error" onClick={deleteAction} />
+                <IconButton onClick={() => deleteAction(row.id)}>
+                  <DeleteRounded color="error" />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}

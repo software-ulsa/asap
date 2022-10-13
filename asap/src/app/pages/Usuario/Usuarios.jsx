@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UsuarioService from "../../services/UsuarioService";
 import DataTable from "../../components/DataTable";
 import { Helmet } from "react-helmet";

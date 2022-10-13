@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Helmet } from "react-helmet";
 import { Button, Grid, Typography } from "@mui/material";
@@ -7,9 +7,15 @@ import { ToastContainer, toast } from "react-toastify";
 import DataTable from "../../components/DataTable";
 import RolService from "../../services/RolService";
 import CrearRol from "./CrearRol";
+import EditarRol from "./EditarRol";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
+  const [rolToEdit, setRolToEdit] = useState({
+    id: 0,
+    nombre: "",
+    descripcion: "",
+  });
   const [fetched, setFetched] = useState(false);
   const headers = [
     { field: "id", label: "No." },
@@ -17,9 +23,28 @@ const Roles = () => {
     { field: "descripcion", label: "Descripción" },
   ];
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openCreate, setOpenCreate] = useState(false);
+  const handleOpenCreate = () => setOpenCreate(true);
+  const handleCloseCreate = () => setOpenCreate(false);
+
+  const [openEdit, setOpenEdit] = useState(false);
+  const handleOpenEdit = () => setOpenEdit(true);
+  const handleCloseEdit = () => setOpenEdit(false);
+
+  const notify = useCallback(
+    (action, message) => {
+      setFetched(!fetched);
+      const configuration = {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      };
+      action === "success"
+        ? toast.success(message, configuration)
+        : toast.error(message, configuration);
+    },
+    [fetched]
+  );
 
   useEffect(() => {
     RolService.getAllRoles()
@@ -28,23 +53,33 @@ const Roles = () => {
         setFetched(true);
       })
       .catch((error) => {
-        console.log(error);
+        notify("error", error);
       });
-  }, [fetched]);
+  }, [fetched, notify]);
 
-  const notify = () => {
-    toast.success("Rol agregado", {
-      position: "top-right",
-      autoClose: 1500,
-      theme: "light",
-    });
+  useEffect(() => {
+    if (rolToEdit && rolToEdit.nombre !== "") {
+      handleOpenEdit();
+    }
+  }, [rolToEdit]);
+
+  const deleteAction = (id) => {
+    RolService.deleteRol(id)
+      .then((response) => {
+        if (response.message) {
+          notify("success", response.message);
+        } else {
+          notify("error", response.error);
+        }
+      })
+      .catch((error) => {
+        notify("error", error);
+      });
   };
 
-  const dummyAction = (event) => {
-    const btn = event.target.parentNode;
-    const btnRow = btn.parentNode.parentNode;
-    const itemId = btnRow.id.replace("item", "");
-    console.log(itemId);
+  const editAction = (id) => {
+    const found = roles.find((rol) => rol.id === Number(id));
+    setRolToEdit(found);
   };
 
   return (
@@ -64,7 +99,7 @@ const Roles = () => {
             fullWidth
             variant="contained"
             color="success"
-            onClick={handleOpen}
+            onClick={handleOpenCreate}
           >
             Agregar
           </Button>
@@ -73,10 +108,20 @@ const Roles = () => {
       <DataTable
         rows={roles}
         headers={headers}
-        deleteAction={dummyAction}
-        editAction={dummyAction}
+        editAction={editAction}
+        deleteAction={deleteAction}
       />
-      <CrearRol handleClose={handleClose} open={open} notify={notify} />
+      <CrearRol
+        handleClose={handleCloseCreate}
+        open={openCreate}
+        notify={notify}
+      />
+      <EditarRol
+        handleClose={handleCloseEdit}
+        open={openEdit}
+        notify={notify}
+        rol={rolToEdit}
+      />
       <ToastContainer />
     </>
   );

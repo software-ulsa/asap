@@ -1,4 +1,5 @@
-import * as React from "react";
+import * as yup from "yup";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -9,16 +10,30 @@ import { Grid, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { useFormik } from "formik";
+import RolService from "../../services/RolService";
 
 const CrearRol = ({ open, handleClose, notify }) => {
+  const validationSchema = yup.object({
+    nombre: yup.string().required("Nombre requerido"),
+    descripcion: yup.string().required("Descripción requerida"),
+  });
+
   const formik = useFormik({
     initialValues: { nombre: "", descripcion: "" },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting }) => {
-      console.log(values);
-      setSubmitting(false);
-
-      notify();
+      RolService.createRol(values)
+        .then((response) => {
+          if (response.message) {
+            setSubmitting(false);
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
       handleClose();
     },
   });
@@ -49,7 +64,9 @@ const CrearRol = ({ open, handleClose, notify }) => {
                 variant="outlined"
                 value={formik.values.nombre}
                 onChange={formik.handleChange}
-                error={formik.touched.nombre}
+                onBlur={formik.handleBlur}
+                error={formik.touched.nombre && Boolean(formik.errors.nombre)}
+                helperText={formik.touched.nombre && formik.errors.nombre}
               />
             </Grid>
             <Grid item xs={12}>
@@ -61,7 +78,14 @@ const CrearRol = ({ open, handleClose, notify }) => {
                 variant="outlined"
                 value={formik.values.descripcion}
                 onChange={formik.handleChange}
-                error={formik.touched.descripcion}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.descripcion &&
+                  Boolean(formik.errors.descripcion)
+                }
+                helperText={
+                  formik.touched.descripcion && formik.errors.descripcion
+                }
               />
             </Grid>
           </Grid>
