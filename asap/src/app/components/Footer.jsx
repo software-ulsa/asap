@@ -22,11 +22,8 @@ const AppFooter = styled(Toolbar)(() => ({
 
 const FooterContent = styled("div")(() => ({
   width: "100%",
-  display: "flex",
-  alignItems: "center",
-  padding: "0px 1rem",
-  maxWidth: "1170px",
   margin: "0 auto",
+  textAlign: "center",
 }));
 
 const Footer = () => {

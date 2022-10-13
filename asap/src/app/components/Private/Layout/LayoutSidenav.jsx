@@ -1,4 +1,4 @@
-import { Hidden, IconButton, ButtonBase } from "@mui/material";
+import { IconButton, ButtonBase } from "@mui/material";
 import { Box, styled, useTheme } from "@mui/system";
 import { themeShadows } from "../../../components/Theme/themeColors";
 import useSettings from "../../../hooks/useSettings";
@@ -80,23 +80,21 @@ const LayoutSidenav = () => {
       <NavListBox>
         <Brand />
         <Sidenav />
-        <Hidden smDown>
-          <StyledIconButton onClick={handleSidenavToggle}>
-            {mode === "compact" ? (
-              <Menu />
-            ) : (
-              <>
-                <ButtonBase name="child" sx={{ width: "100%" }}>
-                  <Close sx={{ width: 24, height: "auto", fontSize: 15 }} />
+        <StyledIconButton onClick={handleSidenavToggle}>
+          {mode === "compact" ? (
+            <Menu />
+          ) : (
+            <>
+              <ButtonBase name="child" sx={{ width: "100%" }}>
+                <Close sx={{ width: 24, height: "auto", fontSize: 15 }} />
 
-                  <StyledText mode={mode} className="sidenavHoverShow">
-                    Cerrar
-                  </StyledText>
-                </ButtonBase>
-              </>
-            )}
-          </StyledIconButton>
-        </Hidden>
+                <StyledText mode={mode} className="sidenavHoverShow">
+                  Cerrar
+                </StyledText>
+              </ButtonBase>
+            </>
+          )}
+        </StyledIconButton>
       </NavListBox>
     </SidebarNavRoot>
   );

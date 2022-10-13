@@ -106,7 +106,7 @@ const FirstLayout = () => {
                 <LayoutTopbar />
               </ThemeProvider>
             )}
-            <Box flexGrow={1} position="relative">
+            <Box flexGrow={1} position="relative" padding={5}>
               <LoadingSuspense>
                 <Outlet />
               </LoadingSuspense>

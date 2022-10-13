@@ -1,114 +1,224 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import PropTypes from "prop-types";
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import {
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
+  DeleteRounded,
+  EditRounded,
+} from "@mui/icons-material";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import { TableHead } from "@mui/material";
 
-const DataTable = (props) => {
-  const [numberOfPages, setNumberOfPages] = useState(1);
+function TablePaginationActions(props) {
+  const theme = useTheme();
+  const { count, page, rowsPerPage, onPageChange } = props;
 
-  const [arrayOfData, setArrayOfData] = useState([]);
-
-  const [arrayOfButtons, setArrayOfButtons] = useState([]);
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [buttonSelected, setButtonSelected] = useState([]);
-
-  var num = Math.ceil(props.data.length / 15);
-  let temp = props.data;
-
-  const getPages = () => {
-    let array = [];
-    setNumberOfPages(num);
-    if (num === 1) {
-      setArrayOfData((arrayOfData) => [...arrayOfData, temp]);
-    } else {
-      while (temp.length > 0) {
-        let chunk = temp.splice(0, 15);
-        setArrayOfData((arrayOfData) => [...arrayOfData, chunk]);
-      }
-    }
-    var ar = [];
-    for (let i = 0; i < num; i++) {
-      var buttonState = false;
-      ar.push(buttonState);
-    }
-    setButtonSelected(ar);
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0);
   };
 
-  const handlePreviousClick = () => {
-    if (currentPage - 1 === 0) {
-      setCurrentPage(numberOfPages);
-    } else {
-      setCurrentPage(currentPage - 1);
-    }
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1);
   };
 
-  const handleNextClick = () => {
-    if (currentPage + 1 > numberOfPages) {
-      setCurrentPage(1);
-    } else {
-      setCurrentPage(currentPage + 1);
-    }
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1);
   };
 
-  useEffect(() => {
-    getPages();
-  }, [props]);
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  };
 
   return (
-    <>
-      <div className="table-responsive">
-        <table id="zero_config" className="table table-striped table-bordered no-wrap">
-          <thead>
-            <tr>
-              {props.columns.map((col, index) => (
-                <th key={index}>{col.title}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {arrayOfData &&
-              arrayOfData[currentPage - 1]?.map((row, index1) => (
-                <tr key={index1 + "row"}>
-                  {props.columns.map((column, index2) => (
-                    <td key={index1 + "cell" + index2}>
-                      {column.type === "text" && row[column.name]}
+    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+      <IconButton
+        onClick={handleFirstPageButtonClick}
+        disabled={page === 0}
+        aria-label="first page"
+      >
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+      </IconButton>
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleNextButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="next page"
+      >
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
+      </IconButton>
+      <IconButton
+        onClick={handleLastPageButtonClick}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+        aria-label="last page"
+      >
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+      </IconButton>
+    </Box>
+  );
+}
 
-                      {column.type === "delete" && (
-                        <button className="btn btn-danger" onClick={() => row.deleteAction(row.id)}>
-                          Eliminar
-                        </button>
-                      )}
-                      {column.type === "edit" && (
-                        <button className="btn btn-warning" onClick={() => row.editAction(row.id)}>
-                          Editar
-                        </button>
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <div className="row d-flex justify-content-center ">
-          <button className="btn btn-secondary" onClick={handlePreviousClick}>
-            Anterior
-          </button>
-          {buttonSelected.map((btn, index) => (
-            <button
-              key={index + "btn"}
-              className={" btn btn-" + (index + 1 === currentPage ? "dark" : "info")}
-              onClick={() => {
-                setCurrentPage(index + 1);
-              }}
-            >
-              {index + 1}
-            </button>
+TablePaginationActions.propTypes = {
+  count: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  page: PropTypes.number.isRequired,
+  rowsPerPage: PropTypes.number.isRequired,
+};
+
+const DataTable = ({ rows, headers, editAction, deleteAction }) => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#00ace6",
+      color: theme.palette.common.white,
+      fontWeight: "bold",
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  return (
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <TableHead>
+          <TableRow>
+            {headers.map((header) => {
+              if (header.field === "id") {
+                return (
+                  <StyledTableCell width="10%" align="center">
+                    {header.label}
+                  </StyledTableCell>
+                );
+              } else {
+                return (
+                  <StyledTableCell align="center">
+                    {header.label}
+                  </StyledTableCell>
+                );
+              }
+            })}
+            <StyledTableCell width="10%" align="center">
+              Editar
+            </StyledTableCell>
+            <StyledTableCell width="10%" align="center">
+              Eliminar
+            </StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row, index) => (
+            <TableRow rowNumber={index}>
+              {headers.map((header) => {
+                if (header.field === "id") {
+                  return (
+                    <TableCell component="th" scope="row" align="center">
+                      {index + 1}
+                    </TableCell>
+                  );
+                } else if (header.subfield) {
+                  return (
+                    <TableCell component="th" scope="row" align="center">
+                      {row[header.field][header.subfield]}
+                    </TableCell>
+                  );
+                } else {
+                  return (
+                    <TableCell component="th" scope="row" align="center">
+                      {row[header.field]}
+                    </TableCell>
+                  );
+                }
+              })}
+              <TableCell
+                component="th"
+                scope="row"
+                align="center"
+                style={{ paddingLeft: 8 }}
+              >
+                <DeleteRounded color="error" />
+              </TableCell>
+              <TableCell
+                component="th"
+                scope="row"
+                align="center"
+                style={{ paddingLeft: 8 }}
+              >
+                <EditRounded color="warning" />
+              </TableCell>
+            </TableRow>
           ))}
-          <button className="btn btn-secondary" onClick={handleNextClick}>
-            Siguiente
-          </button>
-        </div>
-      </div>
-    </>
+
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              colSpan={3}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: {
+                  "aria-label": "Filas por hoja",
+                },
+                native: true,
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
   );
 };
 

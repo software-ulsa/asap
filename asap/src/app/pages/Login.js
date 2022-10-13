@@ -3,10 +3,12 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 import swal from "sweetalert";
 import { Helmet } from "react-helmet";
+import { LoadingButton } from "@mui/lab";
 
 import {
   AccountCircle,
   Lock,
+  LoginRounded,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
@@ -29,12 +31,14 @@ import { AuthContext } from "../context/AuthContext";
 export default function Login() {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = React.useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const { currentUser, signin } = useContext(AuthContext);
 
   const iniciarSesion = () => {
+    setLoading(true);
     const user = {
       correo: correo,
       password: password,
@@ -43,6 +47,7 @@ export default function Login() {
     UsuarioService.login(user)
       .then((response) => {
         signin(response);
+        setLoading(false);
         navigate("/");
       })
       .catch((error) => {
@@ -55,7 +60,7 @@ export default function Login() {
   return (
     <>
       <Helmet>
-        <title>Iniciar sesi&oacute;n - Pildora Raiz</title>
+        <title>Iniciar sesi&oacute;n - ASAP</title>
         <meta name="Login" content="Página de iniciar sesión" />
       </Helmet>
       <section
@@ -153,13 +158,16 @@ export default function Login() {
                       </div>
 
                       <div className="mb-4 px-5">
-                        <button
-                          className="btn btn-dark btn-lg btn-block rounded-pill"
+                        <LoadingButton
                           onClick={iniciarSesion}
-                          type="button"
+                          startIcon={<LoginRounded />}
+                          fullWidth
+                          loading={loading}
+                          variant="contained"
+                          color="primary"
                         >
-                          ENTRAR
-                        </button>
+                          Entrar
+                        </LoadingButton>
                       </div>
                       <div className="d-flex justify-content-center">
                         <a className="small px-5" href="#!">

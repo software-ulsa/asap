@@ -12,7 +12,6 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(
   function (config) {
-    console.log(process.env.REACT_APP_API);
     const token = ls.get("token");
     config.headers = {
       "Content-Type": "application/json",
