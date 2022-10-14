@@ -53,7 +53,6 @@ const Roles = () => {
         })
         .catch((error) => {
           setFetched(true);
-          notify("error", error.error);
         });
     }
   }, [fetched, notify]);

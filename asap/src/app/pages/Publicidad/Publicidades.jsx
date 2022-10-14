@@ -54,7 +54,6 @@ const Publicidades = () => {
         })
         .catch((error) => {
           setFetched(true);
-          notify("error", error.error);
         });
     }
   }, [fetched, notify]);

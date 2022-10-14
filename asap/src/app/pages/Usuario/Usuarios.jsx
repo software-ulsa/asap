@@ -54,7 +54,6 @@ const Usuarios = () => {
         })
         .catch((error) => {
           setFetched(true);
-          notify("error", error.error);
         });
     }
   }, [fetched, notify]);

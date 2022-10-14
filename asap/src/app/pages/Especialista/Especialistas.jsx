@@ -55,7 +55,6 @@ const Especialistas = () => {
         })
         .catch((error) => {
           setFetched(true);
-          notify("error", error.error);
         });
     }
   }, [fetched, notify]);

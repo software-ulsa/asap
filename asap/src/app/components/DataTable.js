@@ -42,7 +42,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{ flexShrink: 0 }}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
@@ -119,7 +119,7 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table sx={{ minWidth: 500 }}>
         <TableHead>
           <TableRow>
             {headers.map((header) => {
@@ -198,26 +198,43 @@ const DataTable = ({ rows, headers, editAction, deleteAction }) => {
             </TableRow>
           ))}
 
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+          {rows.length <= 0 ? (
+            <TableRow style={{ height: 50 }}>
+              <TableCell colSpan={headers.length + 2} align="center">
+                No hay datos para mostrar
+              </TableCell>
             </TableRow>
+          ) : (
+            <></>
           )}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TablePagination
+              sx={{
+                borderBottomWidth: 0,
+                ".MuiTablePagination-toolbar": {
+                  backgroundColor: "#88ace6",
+                  width: "100%",
+                },
+                ".MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows":
+                  {
+                    fontWeight: "bold",
+                    marginBottom: 0,
+                  },
+              }}
               rowsPerPageOptions={[5, 10, 25, { label: "Todos", value: -1 }]}
-              colSpan={3}
+              colSpan={headers.length + 2}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
                 inputProps: {
-                  "aria-label": "Filas por hoja",
+                  "aria-label": "Filas a mostrar",
                 },
                 native: true,
               }}
+              labelRowsPerPage={<span>Filas a mostrar:</span>}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

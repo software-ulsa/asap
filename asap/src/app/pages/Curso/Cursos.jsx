@@ -53,7 +53,6 @@ const Cursos = () => {
         })
         .catch((error) => {
           setFetched(true);
-          notify("error", error.error);
         });
     }
   }, [fetched, notify]);
