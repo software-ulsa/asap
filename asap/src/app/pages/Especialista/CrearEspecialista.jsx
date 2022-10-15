@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { useFormik } from "formik";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -7,6 +8,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
+  Avatar,
   Divider,
   FormControl,
   Grid,
@@ -16,20 +18,48 @@ import {
   Select,
   Stack,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
-import { useFormik } from "formik";
+import { deepOrange } from "@mui/material/colors";
+import { Close, PhotoCameraRounded } from "@mui/icons-material";
+
 import EspecialistaService from "../../services/EspecialistaService";
+import ImagesService from "../../services/ImagesService";
+import { useState } from "react";
 
 const CrearEspecialista = ({ open, handleClose, notify }) => {
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const [image, setImage] = useState("");
+  const [file, setFile] = useState();
+
+  const doClickOnInput = () => {
+    var input = document.getElementById("subirImagen");
+    input?.click();
+  };
+
+  const guardarEspecialista = (values) => {
+    EspecialistaService.createEspecialista(values)
+      .then((response) => {
+        if (response.message) {
+          notify("success", response.message);
+        } else {
+          notify("error", response.error);
+        }
+      })
+      .catch((error) => {
+        notify("error", error);
+      });
+  };
 
   const validationSchema = yup.object({
     nombre: yup.string().required("Nombre requerido"),
     ape_paterno: yup.string().required("Apellido paterno requerido"),
     ape_materno: yup.string().required("Apellido materno requerido"),
-    edad: yup.number().positive().integer().required("Edad requerida"),
+    edad: yup
+      .number()
+      .positive("La edad debe ser mayor a 0")
+      .integer("La edad debe ser un número")
+      .required("Edad requerida"),
     sexo: yup.string().required("Sexo requerido"),
     especialidad: yup.string().required("Especialidad requerida"),
     cedula: yup
@@ -62,25 +92,44 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
       correo: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      EspecialistaService.createEspecialista(values)
-        .then((response) => {
-          if (response.message) {
-            setSubmitting(false);
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      if (file) {
+        ImagesService.upload(file)
+          .then((response) => {
+            ImagesService.get(response.data)
+              .then((url) => {
+                values.foto_especialista = url;
+                guardarEspecialista(values);
+              })
+              .catch((error) => console.log(error));
+          })
+          .catch((error) => console.log(error));
+      } else {
+        guardarEspecialista(values);
+      }
+      setFile();
+      setImage("");
+      resetForm();
+      setSubmitting(false);
       handleClose();
     },
   });
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm">
+      <TextField
+        type="file"
+        accept="image/*"
+        id="subirImagen"
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            setImage(URL.createObjectURL(file));
+            setFile(file);
+          }
+        }}
+        hidden
+      ></TextField>
       <DialogTitle>Agregar especialista</DialogTitle>
       <Box
         position="absolute"
@@ -96,6 +145,22 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
       <form onSubmit={formik.handleSubmit}>
         <DialogContent>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Divider>
+                <IconButton onClick={doClickOnInput}>
+                  <Avatar
+                    sx={{
+                      bgcolor: deepOrange[500],
+                      height: "150px",
+                      width: "150px",
+                    }}
+                    src={image}
+                  >
+                    <PhotoCameraRounded />
+                  </Avatar>
+                </IconButton>
+              </Divider>
+            </Grid>
             <Grid item xs={12}>
               <Divider>Informaci&oacute;n b&aacute;sica</Divider>
             </Grid>
@@ -125,7 +190,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 onBlur={formik.handleBlur}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -144,7 +209,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -163,7 +228,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 }
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -177,7 +242,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 helperText={formik.touched.edad && formik.errors.edad}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel color="info" id="lblSexo">
                   Sexo
@@ -200,7 +265,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
             <Grid item xs={12}>
               <Divider>Datos de contacto</Divider>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -216,7 +281,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 helperText={formik.touched.telefono && formik.errors.telefono}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -228,7 +293,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 onBlur={formik.handleBlur}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -246,7 +311,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
             <Grid item xs={12}>
               <Divider>Profesi&oacute;n</Divider>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -265,7 +330,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 }
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
@@ -285,7 +350,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                 }
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
