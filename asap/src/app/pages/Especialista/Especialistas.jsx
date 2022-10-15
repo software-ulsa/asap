@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import EspecialistaService from "../../services/EspecialistaService";
 import DataTable from "../../components/DataTable";
 import CrearEspecialista from "./CrearEspecialista";
+import EditarEspecialista from "./EditarEspecialita";
 
 const Especialistas = () => {
   const [especialistas, setEspecialistas] = useState([]);
@@ -80,7 +81,7 @@ const Especialistas = () => {
   };
 
   const editAction = (id) => {
-    const found = especialistas.find((rol) => rol.id === Number(id));
+    const found = especialistas.find((especialista) => especialista.id === Number(id));
     setItemToEdit(found);
   };
 
@@ -118,7 +119,13 @@ const Especialistas = () => {
         open={openCreate}
         notify={notify}
       />
-      <ToastContainer />
+      <EditarEspecialista
+        handleClose={handleCloseEdit}
+        open={openEdit}
+        notify={notify}
+        especialista={itemToEdit}
+      />
+      <ToastContainer/>
     </>
   );
 };
