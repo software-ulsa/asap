@@ -59,7 +59,7 @@ const httpFormDataClient = axios.create({
 
 httpFormDataClient.interceptors.request.use(
   function (config) {
-    const token = localStorage.getItem("token");
+    const token = ls.get("token");
     config.headers = {
       "Content-Type": "multipart/form-data",
     };
