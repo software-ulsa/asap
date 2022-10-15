@@ -8,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Formik } from "formik";
 import {
+    Avatar,
   Divider,
   FormControl,
   Grid,
@@ -17,17 +18,38 @@ import {
   Select,
   Stack,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, PhotoCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { useFormik } from "formik";
 import EspecialistaService from "../../services/EspecialistaService";
+import { deepOrange } from "@mui/material/colors";
+import { useState } from "react";
 
 const EditarEspecialista = ({ open, handleClose, notify, especialista }) => {
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
+    const [image, setImage] = useState(especialista?.foto_especialista || "");
+    const [file, setFile] = useState();
+console.log(especialista)
+    const doClickOnInput = () => {
+        var input = document.getElementById("subirImagen");
+        input?.click();
+      };
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <TextField
+        type="file"
+        accept="image/*"
+        id="subirImagen"
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            setImage(URL.createObjectURL(file));
+            setFile(file);
+          }
+        }}
+        hidden
+      ></TextField>
       <DialogTitle>Editar especialista</DialogTitle>
       <Box
         position="absolute"
@@ -88,6 +110,22 @@ const EditarEspecialista = ({ open, handleClose, notify, especialista }) => {
       <form onSubmit={props.handleSubmit}>
         <DialogContent>
           <Grid container spacing={2}>
+          <Grid item xs={12}>
+              <Divider>
+                <IconButton onClick={doClickOnInput}>
+                  <Avatar
+                    sx={{
+                      bgcolor: deepOrange[500],
+                      height: "150px",
+                      width: "150px",
+                    }}
+                    src={image}
+                  >
+                    <PhotoCameraRounded />
+                  </Avatar>
+                </IconButton>
+              </Divider>
+            </Grid>
             <Grid item xs={12}>
               <Divider>Informaci&oacute;n b&aacute;sica</Divider>
             </Grid>
