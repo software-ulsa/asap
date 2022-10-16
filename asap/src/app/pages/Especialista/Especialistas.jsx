@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
+import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
-import { Button, Grid, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 
+import { Button, Grid, Typography } from "@mui/material";
+
 import EspecialistaService from "../../services/EspecialistaService";
-import DataTable from "../../components/DataTable";
+
 import CrearEspecialista from "./CrearEspecialista";
-import EditarEspecialista from "./EditarEspecialita";
+import EditarEspecialista from "./EditarEspecialista";
 
 const Especialistas = () => {
   const [especialistas, setEspecialistas] = useState([]);
-  const [itemToEdit, setItemToEdit] = useState({
-    id: -1,
-  });
+  const [itemId, setItemId] = useState(-1);
+  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
@@ -60,12 +61,6 @@ const Especialistas = () => {
     }
   }, [fetched, notify]);
 
-  useEffect(() => {
-    if (itemToEdit && itemToEdit.id !== -1) {
-      handleOpenEdit();
-    }
-  }, [itemToEdit]);
-
   const deleteAction = (id) => {
     EspecialistaService.deleteEspecialista(id)
       .then((response) => {
@@ -81,8 +76,12 @@ const Especialistas = () => {
   };
 
   const editAction = (id) => {
-    const found = especialistas.find((especialista) => especialista.id === Number(id));
+    const found = especialistas.find(
+      (especialista) => especialista.id === Number(id)
+    );
+    setItemId(id);
     setItemToEdit(found);
+    handleOpenEdit();
   };
 
   return (
@@ -125,7 +124,7 @@ const Especialistas = () => {
         notify={notify}
         especialista={itemToEdit}
       />
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 };

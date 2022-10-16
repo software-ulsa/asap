@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
+import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
-import { Button, Grid, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 
+import { Button, Grid, Typography } from "@mui/material";
+
 import NotaService from "../../services/NotaService";
-import DataTable from "../../components/DataTable";
+
 import CrearNota from "./CrearNota";
 
 const Notas = () => {
   const [notas, setNotas] = useState([]);
-  const [itemToEdit, setItemToEdit] = useState({
-    id: -1,
-  });
+  const [itemId, setItemId] = useState(-1);
+  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [

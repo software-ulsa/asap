@@ -16,14 +16,13 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Stack,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { deepOrange } from "@mui/material/colors";
 import { Close, PhotoCameraRounded } from "@mui/icons-material";
 
 import EspecialistaService from "../../services/EspecialistaService";
-import ImagesService from "../../services/ImagesService";
+import ImagenesService from "../../services/ImagesService";
 import { useState } from "react";
 
 const CrearEspecialista = ({ open, handleClose, notify }) => {
@@ -72,7 +71,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
       .string()
       .matches(phoneRegExp, "Teléfono no váildo")
       .required("Teléfono requerido"),
-    correo: yup.string().email().required("Correo requerido"),
+    correo: yup.string().email("Correo no válido").required("Correo requerido"),
   });
 
   const formik = useFormik({
@@ -94,14 +93,10 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       if (file) {
-        ImagesService.upload(file)
+        ImagenesService.upload(file)
           .then((response) => {
-            ImagesService.get(response.data)
-              .then((url) => {
-                values.foto_especialista = url;
-                guardarEspecialista(values);
-              })
-              .catch((error) => console.log(error));
+            values.foto_especialista = response.data;
+            guardarEspecialista(values);
           })
           .catch((error) => console.log(error));
       } else {
@@ -160,9 +155,6 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
                   </Avatar>
                 </IconButton>
               </Divider>
-            </Grid>
-            <Grid item xs={12}>
-              <Divider>Informaci&oacute;n b&aacute;sica</Divider>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -263,7 +255,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <Divider>Datos de contacto</Divider>
+              <Divider>Contacto</Divider>
             </Grid>
             <Grid item xs={12}>
               <TextField

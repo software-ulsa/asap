@@ -1,18 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
+import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
-import { Button, Grid, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
-import DataTable from "../../components/DataTable";
+
+import { Button, Grid, Typography } from "@mui/material";
+
 import RolService from "../../services/RolService";
+
 import CrearRol from "./CrearRol";
 import EditarRol from "./EditarRol";
 
 const Roles = () => {
   const [roles, setRoles] = useState([]);
-  const [rolToEdit, setRolToEdit] = useState({
-    id: -1,
-  });
+  const [itemId, setItemId] = useState(-1);
+  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
+
   const [fetched, setFetched] = useState(false);
   const headers = [
     { field: "id", label: "No." },
@@ -57,10 +60,10 @@ const Roles = () => {
   }, [fetched, notify]);
 
   useEffect(() => {
-    if (rolToEdit && rolToEdit.id !== -1) {
+    if (itemToEdit && itemToEdit.id !== -1) {
       handleOpenEdit();
     }
-  }, [rolToEdit]);
+  }, [itemToEdit]);
 
   const deleteAction = (id) => {
     RolService.deleteRol(id)
@@ -78,7 +81,9 @@ const Roles = () => {
 
   const editAction = (id) => {
     const found = roles.find((rol) => rol.id === Number(id));
-    setRolToEdit(found);
+    setItemId(id);
+    setItemToEdit(found);
+    handleOpenEdit();
   };
 
   return (
@@ -119,7 +124,7 @@ const Roles = () => {
         handleClose={handleCloseEdit}
         open={openEdit}
         notify={notify}
-        rol={rolToEdit}
+        rol={itemToEdit}
       />
       <ToastContainer />
     </>

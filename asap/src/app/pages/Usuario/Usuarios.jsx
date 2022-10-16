@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
+import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
+
 import { Button, Grid, Typography } from "@mui/material";
 
 import UsuarioService from "../../services/UsuarioService";
-import DataTable from "../../components/DataTable";
+
 import CrearUsuario from "./CrearUsuario";
+
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
-  const [itemToEdit, setItemToEdit] = useState({
-    id: -1,
-  });
+  const [itemId, setItemId] = useState(-1);
+  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
@@ -80,7 +82,9 @@ const Usuarios = () => {
 
   const editAction = (id) => {
     const found = usuarios.find((rol) => rol.id === Number(id));
+    setItemId(id);
     setItemToEdit(found);
+    handleOpenEdit();
   };
 
   return (

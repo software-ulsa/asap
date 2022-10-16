@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
+import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
+
 import { Button, Grid, Typography } from "@mui/material";
 
 import PublicidadService from "../../services/PublicidadService";
-import DataTable from "../../components/DataTable";
+
 import CrearPublicidad from "./CrearPublicidad";
 
 const Publicidades = () => {
   const [publicidades, setPublicidades] = useState([]);
-  const [itemToEdit, setItemToEdit] = useState({
-    id: -1,
-  });
+  const [itemId, setItemId] = useState(-1);
+  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [

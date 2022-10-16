@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
+import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
-import { Button, Grid, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 
+import { Button, Grid, Typography } from "@mui/material";
+
 import CursoService from "../../services/CursoService";
-import DataTable from "../../components/DataTable";
+
 import CrearCurso from "./CrearCurso";
 
 const Cursos = () => {
   const [cursos, setCursos] = useState([]);
-  const [itemToEdit, setItemToEdit] = useState({
-    id: -1,
-  });
+  const [itemId, setItemId] = useState(-1);
+  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
@@ -79,7 +80,9 @@ const Cursos = () => {
 
   const editAction = (id) => {
     const found = cursos.find((rol) => rol.id === Number(id));
+    setItemId(id);
     setItemToEdit(found);
+    handleOpenEdit();
   };
 
   return (
