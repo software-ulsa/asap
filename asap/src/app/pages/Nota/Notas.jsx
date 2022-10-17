@@ -9,6 +9,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import NotaService from "../../services/NotaService";
 
 import CrearNota from "./CrearNota";
+import EditarNota from "./EditarNota";
 
 const Notas = () => {
   const [notas, setNotas] = useState([]);
@@ -79,7 +80,7 @@ const Notas = () => {
   };
 
   const editAction = (id) => {
-    const found = notas.find((rol) => rol.id === Number(id));
+    const found = notas.find((nota) => nota.id === Number(id));
     setItemToEdit(found);
   };
 
@@ -116,6 +117,12 @@ const Notas = () => {
         handleClose={handleCloseCreate}
         open={openCreate}
         notify={notify}
+      />
+      <EditarNota
+        handleClose={handleCloseEdit}
+        open={openEdit}
+        notify={notify}
+        nota={itemToEdit}
       />
       <ToastContainer />
     </>

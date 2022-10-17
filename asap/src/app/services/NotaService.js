@@ -24,6 +24,6 @@ export default class NotaService {
   }
 
   static async getNotaByKeyword(palabras_clave) {
-    return (await httpClient.get(`${prefix}/getByKeyword`)).data;
+    return (await httpClient.get(`${prefix}/getByKeyword/${palabras_clave}`)).data;
   }
 }
