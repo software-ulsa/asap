@@ -8,8 +8,8 @@ import { Button, Grid, Typography } from "@mui/material";
 
 import EspecialistaService from "../../services/EspecialistaService";
 
-import CrearEspecialista from "./CrearEspecialista";
-import EditarEspecialista from "./EditarEspecialista";
+import CrearEspecialista from "./Crear/CrearEspecialista";
+import EditarEspecialista from "./Editar/EditarEspecialista";
 
 const Especialistas = () => {
   const [especialistas, setEspecialistas] = useState([]);
