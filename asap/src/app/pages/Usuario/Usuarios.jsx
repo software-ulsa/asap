@@ -10,6 +10,8 @@ import UsuarioService from "../../services/UsuarioService";
 
 import CrearUsuario from "./CrearUsuario";
 
+import EditarUsuario from "./EditarUsuario";
+
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [itemId, setItemId] = useState(-1);
@@ -81,7 +83,7 @@ const Usuarios = () => {
   };
 
   const editAction = (id) => {
-    const found = usuarios.find((rol) => rol.id === Number(id));
+    const found = usuarios.find((usuario) => usuario.id === Number(id));
     setItemId(id);
     setItemToEdit(found);
     handleOpenEdit();
@@ -120,6 +122,12 @@ const Usuarios = () => {
         handleClose={handleCloseCreate}
         open={openCreate}
         notify={notify}
+      />
+       <EditarUsuario
+        handleClose={handleCloseEdit}
+        open={openEdit}
+        notify={notify}
+        usuario={itemToEdit}
       />
       <ToastContainer />
     </>
