@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import DataTable from "../../components/DataTable";
 
 import { Helmet } from "react-helmet";
@@ -11,9 +13,8 @@ import CursoService from "../../services/CursoService";
 import CrearCurso from "./CrearCurso";
 
 const Cursos = () => {
+  const navigate = useNavigate();
   const [cursos, setCursos] = useState([]);
-  const [itemId, setItemId] = useState(-1);
-  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
@@ -25,10 +26,6 @@ const Cursos = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreate = () => setOpenCreate(true);
   const handleCloseCreate = () => setOpenCreate(false);
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
 
   const notify = useCallback(
     (action, message) => {
@@ -58,12 +55,6 @@ const Cursos = () => {
     }
   }, [fetched, notify]);
 
-  useEffect(() => {
-    if (itemToEdit && itemToEdit.id !== -1) {
-      handleOpenEdit();
-    }
-  }, [itemToEdit]);
-
   const deleteAction = (id) => {
     CursoService.deleteCurso(id)
       .then((response) => {
@@ -79,10 +70,8 @@ const Cursos = () => {
   };
 
   const editAction = (id) => {
-    const found = cursos.find((rol) => rol.id === Number(id));
-    setItemId(id);
-    setItemToEdit(found);
-    handleOpenEdit();
+    const found = cursos.find((curso) => curso.id === Number(id));
+    navigate("/editar-curso", { state: { item: found } });
   };
 
   return (

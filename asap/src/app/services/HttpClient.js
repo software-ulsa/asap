@@ -1,10 +1,11 @@
 import axios from "axios";
 import SecureLS from "secure-ls";
+import { baseURL } from "../utils/constant";
 
 const ls = new SecureLS({ encodingType: "aes" });
 
 const httpClient = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: baseURL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -51,7 +52,7 @@ httpClient.interceptors.response.use(
 );
 
 const httpFormDataClient = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: baseURL,
   headers: {
     "Content-Type": "multipart/form-data",
   },
