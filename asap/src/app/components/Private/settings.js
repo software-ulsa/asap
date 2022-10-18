@@ -1,11 +1,11 @@
-import { themes } from '../Theme/initThemes';
-import layoutSettings from './Layout/LayoutSettings';
+import { themes } from "../Theme/initThemes";
+import layoutSettings from "./Layout/LayoutSettings";
 
 // UPDATE BELOW CODE
 // DOC http://demos.ui-lib.com/matx-react-doc/layout.html
 export const MainLayoutSettings = {
-  activeLayout: 'layout1', // layout1, layout2
-  activeTheme: 'whitePurple', // View all valid theme colors inside MatxTheme/themeColors.js
+  activeLayout: "layout1", // layout1, layout2
+  activeTheme: "whitePurple", // View all valid theme colors inside MatxTheme/themeColors.js
   perfectScrollbar: true,
 
   themes: themes,
@@ -15,6 +15,6 @@ export const MainLayoutSettings = {
   footer: {
     show: true,
     fixed: true,
-    theme: 'whitePurple', // View all valid theme colors inside MatxTheme/themeColors.js
+    theme: "whitePurple", // View all valid theme colors inside MatxTheme/themeColors.js
   },
 };
