@@ -135,10 +135,10 @@ const CrearNota = ({ open, handleClose, notify }) => {
         accept="image/*"
         id="subirThumbnail"
         onChange={(e) => {
-          const file = e.target.files[0];
-          if (file) {
-            setImageThumb(URL.createObjectURL(file));
-            setFileThumbnail(file);
+          const fileThumbnail = e.target.files[0];
+          if (fileThumbnail) {
+            setImageThumb(URL.createObjectURL(fileThumbnail));
+            setFileThumbnail(fileThumbnail);
           }
         }}
       ></input>

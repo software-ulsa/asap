@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ChipInput from "material-ui-chip-input";
-import { Field, useFormik } from "formik";
+//import { Field, useFormik } from "formik";
 import { PhotoCameraRounded } from "@mui/icons-material";
 import {
   Grid,
@@ -13,14 +13,10 @@ import {
   DialogTitle,
   Avatar,
   Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
-import { deepOrange } from "@mui/material/colors";
+import { blue, green } from "@mui/material/colors";
 
 import * as yup from "yup";
 import { Formik } from "formik";
@@ -32,9 +28,26 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
   const [image, setImage] = useState();
   const [file, setFile] = useState();
 
+  const [imageThumb, setImageThumb] = useState("");
+  const [fileThumbnail, setFileThumbnail] = useState();
+  const [palabras, setPalabras] = useState([]);
+
   const doClickOnInput = () => {
     var input = document.getElementById("subirImagen");
     input?.click();
+  };
+
+  const doClickOnThumbnail = () => {
+    var inputThumbnail = document.getElementById("subirThumbnail");
+    inputThumbnail?.click();
+  };
+
+  const handleAddChip = (chip) => {
+    setPalabras((oldArray) => [...oldArray, chip]);
+  };
+
+  const handleDeleteChip = (chip, index) => {
+    setPalabras(palabras.filter((item, i) => i !== index));
   };
 
   useEffect(() => {
@@ -50,10 +63,22 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
       } else {
         setImage();
       }
-    }
+
+      if (nota.foto_thumbnail) {
+        ImagenesService.get(nota.foto_thumbnail)
+          .then((url) => {
+            setImageThumb(url);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        setImageThumb();
+      }
+    } 
   }, [open]);
 
-  const guardarnota = (values) => {
+  const guardarNota = (values) => {
     NotaService.updateNota(values)
       .then((response) => {
         if (response.message) {
@@ -82,6 +107,19 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
         }}
         hidden
       ></TextField>
+      <TextField
+        type="file"
+        accept="image/*"
+        id="subirThumbnail"
+        onChange={(e) => {
+          const fileThumbnail = e.target.files[0];
+          if (fileThumbnail) {
+            setImageThumb(URL.createObjectURL(fileThumbnail));
+            setFileThumbnail(fileThumbnail);
+          }
+        }}
+        hidden
+      ></TextField>
       <DialogTitle>Editar nota</DialogTitle>
       <Box
         position="absolute"
@@ -106,23 +144,34 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
             titulo: yup.string().required("titulo requerido"),
             tema: yup.string().required("tema requerido"),
             contenido: yup.string().required("contenido requerido"),
-            palabras_clave: yup.string().required("Palabras clave requerido"),
         })}
         onSubmit={(values, { setSubmitting }) => {
+          if (palabras.length > 0) {
           if (file) {
             ImagenesService.upload(file)
               .then((response) => {
                 values.foto_principal = response.data;
-                guardarnota(values);
+                guardarNota(values);
               })
               .catch((error) => console.log(error));
-          } else {
-            guardarnota(values);
-          }
+          } 
+
+          if (fileThumbnail) {
+            ImagenesService.upload(fileThumbnail)
+              .then((response) => {
+                values.foto_thumbnail = response.data;
+                guardarNota(values);
+              })
+              .catch((error) => console.log(error));
+          } 
+          
           setFile();
           setImage("");
+          setFileThumbnail();
+          setImageThumb("");
           setSubmitting(false);
           handleClose();
+        }
         }}
       >
         {(props) => (
@@ -131,15 +180,15 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
               <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Divider>
-                  <IconButton onClick={doClickOnInput}>
+                  <IconButton onClick={doClickOnThumbnail}>
                     <Avatar
                       sx={{
-                        bgcolor: deepOrange[500],
+                        bgcolor: blue[500],
                         height: "150px",
                         width: "150px",
                       }}
                       variant="rounded"
-                      src={image}
+                      src={imageThumb}
                     >
                       <PhotoCameraRounded />
                     </Avatar>
@@ -187,7 +236,7 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
                   <IconButton onClick={doClickOnInput}>
                     <Avatar
                       sx={{
-                        bgcolor: deepOrange[500],
+                        bgcolor: green[500],
                         height: "150px",
                         width: "150px",
                       }}
@@ -219,11 +268,11 @@ const EditarNota = ({ open, handleClose, notify, nota }) => {
                 fullWidth
                 label="Palabras clave"
                 name="palabras_clave"
-                variant="outlined" 
+                variant="outlined"
                 placeholder="Escribe y presiona enter para agregar"
-                value={props.values.palabras_clave}
-                error={props.touched.palabras_clave && Boolean(props.errors.palabras_clave)}
-                helperText={props.touched.palabras_clave && props.errors.palabras_clave}
+                value={palabras}
+                onAdd={(chip) => handleAddChip(chip)}
+                onDelete={(chip, index) => handleDeleteChip(chip, index)}
               />
             </Grid>
                 
