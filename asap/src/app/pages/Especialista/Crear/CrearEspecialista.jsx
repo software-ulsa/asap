@@ -250,7 +250,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
           >
             <Button
               variant="contained"
-              color="info"
+              color="secondary"
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
@@ -260,7 +260,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
-                color="secondary"
+                color="info"
                 type={activeStep === steps.length ? "submit" : "button"}
                 onClick={handleNext}
               >

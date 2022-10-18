@@ -1,37 +1,53 @@
+import { useState } from "react";
+
 import * as yup from "yup";
+import { useFormik } from "formik";
 
 import ChipInput from "material-ui-chip-input";
 
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Chip, Grid, IconButton } from "@mui/material";
-import { Close } from "@mui/icons-material";
-import { Box } from "@mui/system";
-import { Field, useFormik } from "formik";
-import NotaService from "../../services/NotaService";
-import { useState } from "react";
-import ImagenesService from "../../services/ImagesService";
 import {
+  Grid,
+  IconButton,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Avatar,
   Divider,
 } from "@mui/material";
-import { blue, green, deepOrange } from "@mui/material/colors";
-import { PhotoCameraRounded } from "@mui/icons-material";
+import { Box } from "@mui/system";
+import { Close, PhotoCameraRounded } from "@mui/icons-material";
+import { blue, green } from "@mui/material/colors";
 
+import NotaService from "../../services/NotaService";
+import ImagenesService from "../../services/ImagesService";
 
 const CrearNota = ({ open, handleClose, notify }) => {
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
 
+  const [thumbnail, setThumbnail] = useState("");
+  const [fileThumbnail, setFileThumbnail] = useState();
+  const [palabras, setPalabras] = useState([]);
+
   const doClickOnInput = () => {
     var input = document.getElementById("subirImagen");
     input?.click();
+  };
+
+  const doClickOnThumbnail = () => {
     var inputThumbnail = document.getElementById("subirThumbnail");
     inputThumbnail?.click();
+  };
+
+  const handleAddChip = (chip) => {
+    setPalabras((oldArray) => [...oldArray, chip]);
+  };
+
+  const handleDeleteChip = (chip, index) => {
+    setPalabras(palabras.filter((item, i) => i !== index));
   };
 
   const guardarNota = (values) => {
@@ -49,54 +65,55 @@ const CrearNota = ({ open, handleClose, notify }) => {
   };
 
   const validationSchema = yup.object({
-    titulo: yup.string().required("titulo requerido"),
-    tema: yup.string().required("tema requerido"),
-    contenido: yup.string().required("contenido requerido"),
-    palabras_clave: yup.string().required("palabras clave requerido"),
+    titulo: yup.string().required("Título requerido"),
+    tema: yup.string().required("Tema requerido"),
+    contenido: yup.string().required("Contenido requerido"),
   });
 
   const formik = useFormik({
-    initialValues: { titulo: "", tema: "", foto_thumbnail: "", foto_principal: "", contenido: "", palabras_clave:"", },
+    initialValues: {
+      titulo: "",
+      tema: "",
+      contenido: "",
+    },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      if (file) {
-        ImagenesService.upload(file)
-          .then((response) => {
-            values.foto_principal = response.data;
-            guardarNota(values);
-          })
-          .catch((error) => console.log(error));
-      } else {
+      if (palabras.length > 0) {
+        if (file) {
+          ImagenesService.upload(file)
+            .then((response) => {
+              values.foto_principal = response.data;
+            })
+            .catch((error) => console.log(error));
+        }
+
+        if (fileThumbnail) {
+          ImagenesService.upload(fileThumbnail)
+            .then((response) => {
+              values.foto_thumbnail = response.data;
+            })
+            .catch((error) => console.log(error));
+        }
+
         guardarNota(values);
+        setFile();
+        setImage("");
+
+        setFileThumbnail();
+        setThumbnail("");
+        setPalabras([]);
+
+        resetForm();
+        setSubmitting(false);
+        handleClose();
       }
-      setFile();
-      setImage("");
-      resetForm();
-      setSubmitting(false);
-      handleClose();
-    },
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      if (file) {
-        ImagenesService.upload(file)
-          .then((response) => {
-            values.foto_thumbnail = response.data;
-            guardarNota(values);
-          })
-          .catch((error) => console.log(error));
-      } else {
-        guardarNota(values);
-      }
-      setFile();
-      setImage("");
-      resetForm();
-      setSubmitting(false);
-      handleClose();
     },
   });
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <TextField
+      <input
+        hidden
         type="file"
         accept="image/*"
         id="subirImagen"
@@ -107,21 +124,20 @@ const CrearNota = ({ open, handleClose, notify }) => {
             setFile(file);
           }
         }}
+      ></input>
+      <input
         hidden
-      ></TextField>
-      <TextField
         type="file"
         accept="image/*"
         id="subirThumbnail"
         onChange={(e) => {
           const file = e.target.files[0];
           if (file) {
-            setImage(URL.createObjectURL(file));
-            setFile(file);
+            setThumbnail(URL.createObjectURL(file));
+            setFileThumbnail(file);
           }
         }}
-        hidden
-      ></TextField>
+      ></input>
       <DialogTitle>Agregar nota</DialogTitle>
       <Box
         position="absolute"
@@ -138,22 +154,22 @@ const CrearNota = ({ open, handleClose, notify }) => {
         <DialogContent>
           <Grid container rowGap={2}>
             <Grid item xs={12}>
-                <Divider>
-                  <IconButton onClick={doClickOnInput}>
-                    <Avatar
-                      sx={{
-                        bgcolor: blue[500],
-                        height: "150px",
-                        width: "150px",
-                      }}
-                      variant="rounded"
-                      src={image}
-                    >
-                      <PhotoCameraRounded />
-                    </Avatar>
-                  </IconButton>
-                </Divider>
-            </Grid> 
+              <Divider>
+                <IconButton onClick={doClickOnThumbnail}>
+                  <Avatar
+                    sx={{
+                      bgcolor: blue[500],
+                      height: "150px",
+                      width: "150px",
+                    }}
+                    variant="rounded"
+                    src={thumbnail}
+                  >
+                    <PhotoCameraRounded />
+                  </Avatar>
+                </IconButton>
+              </Divider>
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 color="info"
@@ -178,35 +194,30 @@ const CrearNota = ({ open, handleClose, notify }) => {
                 value={formik.values.tema}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.tema &&
-                  Boolean(formik.errors.tema)
-                }
-                helperText={
-                  formik.touched.tema && formik.errors.tema
-                }
+                error={formik.touched.tema && Boolean(formik.errors.tema)}
+                helperText={formik.touched.tema && formik.errors.tema}
               />
             </Grid>
             <Grid item xs={12}>
               <Divider>Contenido</Divider>
             </Grid>
             <Grid item xs={12}>
-                <Divider>
-                  <IconButton onClick={doClickOnInput}>
-                    <Avatar
-                      sx={{
-                        bgcolor: green[500],
-                        height: "150px",
-                        width: "150px",
-                      }}
-                      variant="square"
-                      src={image}
-                    >
-                      <PhotoCameraRounded />
-                    </Avatar>
-                  </IconButton>
-                </Divider>
-            </Grid> 
+              <Divider>
+                <IconButton onClick={doClickOnInput}>
+                  <Avatar
+                    sx={{
+                      bgcolor: green[500],
+                      height: "150px",
+                      width: "150px",
+                    }}
+                    variant="square"
+                    src={image}
+                  >
+                    <PhotoCameraRounded />
+                  </Avatar>
+                </IconButton>
+              </Divider>
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 color="info"
@@ -217,7 +228,9 @@ const CrearNota = ({ open, handleClose, notify }) => {
                 value={formik.values.contenido}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.contenido && Boolean(formik.errors.contenido)}
+                error={
+                  formik.touched.contenido && Boolean(formik.errors.contenido)
+                }
                 helperText={formik.touched.contenido && formik.errors.contenido}
               />
             </Grid>
@@ -227,14 +240,13 @@ const CrearNota = ({ open, handleClose, notify }) => {
                 fullWidth
                 label="Palabras clave"
                 name="palabras_clave"
-                variant="outlined" 
+                variant="outlined"
                 placeholder="Escribe y presiona enter para agregar"
-                value={formik.values.palabras_clave}
-                error={formik.touched.palabras_clave && Boolean(formik.errors.palabras_clave)}
-                helperText={formik.touched.palabras_clave && formik.errors.palabras_clave}
+                value={palabras}
+                onAdd={(chip) => handleAddChip(chip)}
+                onDelete={(chip, index) => handleDeleteChip(chip, index)}
               />
             </Grid>
-
           </Grid>
         </DialogContent>
         <DialogActions>
