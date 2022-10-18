@@ -102,7 +102,7 @@ const CrearCurso = ({ open, handleClose, notify }) => {
             alignItems="center"
             pl={2}
           >
-            <TextField
+            <input
               type="file"
               accept="image/*"
               id="subirImagen"
@@ -114,7 +114,7 @@ const CrearCurso = ({ open, handleClose, notify }) => {
                 }
               }}
               hidden
-            ></TextField>
+            ></input>
             <IconButton onClick={doClickOnInput}>
               <Avatar
                 sx={{

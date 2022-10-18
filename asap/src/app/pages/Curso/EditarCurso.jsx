@@ -11,18 +11,22 @@ import {
   Avatar,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { LoadingButton } from "@mui/lab";
+import { grey } from "@mui/material/colors";
+import Carousel from "react-material-ui-carousel";
+import { PhotoCameraRounded } from "@mui/icons-material";
 
 import * as yup from "yup";
 import { Formik } from "formik";
 
 import CursoService from "../../services/CursoService";
+import ImagenesService from "../../services/ImagesService";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
-import { grey } from "@mui/material/colors";
-import { PhotoCameraRounded } from "@mui/icons-material";
-import ImagenesService from "../../services/ImagesService";
-import { LoadingButton } from "@mui/lab";
+
+import CrearActividad from "./Actividad/CrearActividad";
+import ActividadItem from "./Actividad/ActividadItem";
 
 const EditarCurso = () => {
   const navigate = useNavigate();
@@ -35,6 +39,10 @@ const EditarCurso = () => {
 
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
+
+  const [openCreate, setOpenCreate] = useState(false);
+  const handleOpenCreate = () => setOpenCreate(true);
+  const handleCloseCreate = () => setOpenCreate(false);
 
   const doClickOnInput = () => {
     var input = document.getElementById("subirImagen");
@@ -66,6 +74,20 @@ const EditarCurso = () => {
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (!fetched) {
+      CursoService.getCursoById(curso.id)
+        .then((response) => {
+          setCurso(response);
+          setFetched(true);
+          obtenerImagen(response.icono);
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
+  }, [fetched]);
 
   useEffect(() => {
     if (curso.icono !== "no-icon") {
@@ -145,7 +167,7 @@ const EditarCurso = () => {
               gap={2}
             >
               <Box display="flex" justifyContent="center" alignItems="center">
-                <TextField
+                <input
                   type="file"
                   accept="image/*"
                   id="subirImagen"
@@ -157,7 +179,7 @@ const EditarCurso = () => {
                     }
                   }}
                   hidden
-                ></TextField>
+                ></input>
                 <IconButton onClick={doClickOnInput}>
                   <Avatar
                     sx={{
@@ -252,10 +274,46 @@ const EditarCurso = () => {
         <Typography variant="h4" gutterBottom>
           Contenido del curso
         </Typography>
-        <Button variant="contained" color="info">
+        <Button variant="contained" color="info" onClick={handleOpenCreate}>
           Agregar actividad
         </Button>
       </Box>
+
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          py: 3,
+        }}
+        gap={2}
+      >
+        <Carousel
+          fullHeightHover
+          autoPlay={false}
+          animation="slide"
+          navButtonsAlwaysVisible
+          sx={{ width: "100%" }}
+        >
+          {curso &&
+            curso.actividades.map((item, i) => (
+              <ActividadItem
+                actividad={item}
+                setFetched={setFetched}
+                notify={notify}
+              />
+            ))}
+        </Carousel>
+      </Box>
+
+      <CrearActividad
+        handleClose={handleCloseCreate}
+        open={openCreate}
+        notify={notify}
+        curso={curso}
+      />
+
       <ToastContainer />
     </>
   );

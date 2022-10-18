@@ -12,7 +12,7 @@ const ImagenPerfil = ({ image, setImage, setFile }) => {
     <Grid container spacing={2} marginTop={2} px={10}>
       <Grid item xs={12}>
         <Box display="flex" justifyContent="center" alignItems="center">
-          <TextField
+          <input
             type="file"
             accept="image/*"
             id="subirImagen"
@@ -24,7 +24,7 @@ const ImagenPerfil = ({ image, setImage, setFile }) => {
               }
             }}
             hidden
-          ></TextField>
+          ></input>
           <IconButton onClick={doClickOnInput}>
             <Avatar
               sx={{
