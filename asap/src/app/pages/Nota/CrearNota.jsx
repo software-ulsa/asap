@@ -50,8 +50,8 @@ const CrearNota = ({ open, handleClose, notify }) => {
     setPalabras(palabras.filter((item, i) => i !== index));
   };
 
-  const guardarNota = (values) => {
-    NotaService.createNota(values)
+  const guardarNota = async (values) => {
+    await NotaService.createNota(values)
       .then((response) => {
         if (response.message) {
           notify("success", response.message);
@@ -75,12 +75,14 @@ const CrearNota = ({ open, handleClose, notify }) => {
       titulo: "",
       tema: "",
       contenido: "",
+      foto_principal: "",
+      foto_thumbnail: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       if (palabras.length > 0) {
         if (file) {
-          ImagenesService.upload(file)
+          await ImagenesService.upload(file)
             .then((response) => {
               values.foto_principal = response.data;
             })
@@ -88,12 +90,14 @@ const CrearNota = ({ open, handleClose, notify }) => {
         }
 
         if (fileThumbnail) {
-          ImagenesService.upload(fileThumbnail)
+          await ImagenesService.upload(fileThumbnail)
             .then((response) => {
               values.foto_thumbnail = response.data;
             })
             .catch((error) => console.log(error));
         }
+
+        values.palabras_clave = palabras;
 
         guardarNota(values);
         setFile();
