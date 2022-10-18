@@ -21,6 +21,7 @@ const Publicidades = () => {
     { field: "nombre", label: "Nombre" },
     { field: "dot_empresa", label: "Empresa" },
     { field: "email", label: "Correo" },
+
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
