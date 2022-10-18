@@ -8,9 +8,9 @@ import { Button, Grid, Typography } from "@mui/material";
 
 import UsuarioService from "../../services/UsuarioService";
 
-import CrearUsuario from "./CrearUsuario";
+import CrearUsuario from "./Crear/CrearUsuario";
 
-import EditarUsuario from "./EditarUsuario";
+import EditarUsuario from "./Editar/EditarUsuario";
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
