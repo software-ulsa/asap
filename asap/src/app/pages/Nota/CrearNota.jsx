@@ -28,7 +28,7 @@ const CrearNota = ({ open, handleClose, notify }) => {
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
 
-  const [thumbnail, setThumbnail] = useState("");
+  const [imageThumb, setImageThumb] = useState("");
   const [fileThumbnail, setFileThumbnail] = useState();
   const [palabras, setPalabras] = useState([]);
 
@@ -100,7 +100,7 @@ const CrearNota = ({ open, handleClose, notify }) => {
         setImage("");
 
         setFileThumbnail();
-        setThumbnail("");
+        setImageThumb("");
         setPalabras([]);
 
         resetForm();
@@ -133,7 +133,7 @@ const CrearNota = ({ open, handleClose, notify }) => {
         onChange={(e) => {
           const file = e.target.files[0];
           if (file) {
-            setThumbnail(URL.createObjectURL(file));
+            setImageThumb(URL.createObjectURL(file));
             setFileThumbnail(file);
           }
         }}
@@ -163,7 +163,7 @@ const CrearNota = ({ open, handleClose, notify }) => {
                       width: "150px",
                     }}
                     variant="rounded"
-                    src={thumbnail}
+                    src={imageThumb}
                   >
                     <PhotoCameraRounded />
                   </Avatar>
