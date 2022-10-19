@@ -17,11 +17,22 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
   const validationSchema = yup.object({
     nombre: yup.string().required("Nombre requerido"),
     dot_empresa: yup.string().required("Descripción de empresa requerida"),
-    email: yup.string().required("Email requerido"),
+    email: yup.string().email("Correo no válido").required("Correo requerido"),
+    url: yup.string().required("URL requerido"),
+    fecha_inicio: yup.string().required("Fecha de inicio requerido"),
+    fecha_vencimiento: yup.string().required("Fecha de vencimiento requerido"),
   });
 
   const formik = useFormik({
-    initialValues: { nombre: "", dot_empresa: "", email: ""},
+    initialValues: { 
+      id: "",
+      nombre: "",
+      dot_empresa: "",
+      email: "",
+      url: "",
+      fecha_inicio: "",
+      fecha_fin:  "",
+    },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting }) => {
       PublicidadService.createPublicidad(values)

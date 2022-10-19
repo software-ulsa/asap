@@ -9,6 +9,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import PublicidadService from "../../services/PublicidadService";
 
 import CrearPublicidad from "./CrearPublicidad";
+import EditarPublicidad from "./EditarPublicidad";
 
 import { useStyles } from "../../utils/utils";
 
@@ -138,7 +139,7 @@ const Publicidades = () => {
   };
 
   const editAction = (id) => {
-    const found = publicidades.find((rol) => rol.id === Number(id));
+    const found = publicidades.find((publicidad) => publicidad.id === Number(id));
     setItemToEdit(found);
   };
 
@@ -177,7 +178,12 @@ const Publicidades = () => {
         open={openCreate}
         notify={notify}
       />
-
+      <EditarPublicidad
+        handleClose={handleCloseEdit}
+        open={openEdit}
+        notify={notify}
+        publicidad={itemToEdit}
+      />
       <ToastContainer />
     </>
   );
