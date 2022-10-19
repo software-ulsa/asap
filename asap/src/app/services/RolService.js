@@ -15,6 +15,10 @@ export default class RolService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyRol(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async getAllRoles() {
     return (await httpClient.get(`${prefix}/`)).data;
   }

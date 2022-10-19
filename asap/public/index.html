@@ -2,28 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/logo small.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="ASAP" content="ASAP - A Safe Place" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo small.png" />
-    <link href="./assets/extra-libs/c3/c3.min.css" rel="stylesheet" />
-    <link
-      href="./assets/libs/chartist/dist/chartist.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="./assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css"
-      rel="stylesheet"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Logos -->
+    <link rel="icon" href="./assets/images/logo small.png" />
+    <link rel="apple-touch-icon" href="./assets/images/logo small.png" />
+
     <!-- Custom CSS -->
-    <link href="dist/css/style.min.css" rel="stylesheet" />
-    <link href="./style.css" rel="stylesheet" />
+    <link href="./assets/styles/loader.css" rel="stylesheet" />
+    <link href="./assets/styles/styles.css" rel="stylesheet" />
+    <link href="./dist/css/style.min.css" rel="stylesheet" />
     <title>Bienvenido a ASAP</title>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loader-container">
+        <img
+          id="logoASAP"
+          src="./assets/images/logo.png"
+          width="250px"
+          height="auto"
+          style="margin-bottom: 30px"
+          alt=""
+        />
+        <div class="loader">
+          <div class="sk-chase">
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+            <div class="sk-chase-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

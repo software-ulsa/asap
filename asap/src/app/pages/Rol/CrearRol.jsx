@@ -21,7 +21,7 @@ const CrearRol = ({ open, handleClose, notify }) => {
   const formik = useFormik({
     initialValues: { nombre: "", descripcion: "" },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: (values, { setSubmitting, resetForm }) => {
       RolService.createRol(values)
         .then((response) => {
           if (response.message) {
@@ -34,6 +34,7 @@ const CrearRol = ({ open, handleClose, notify }) => {
         .catch((error) => {
           notify("error", error);
         });
+      resetForm();
       handleClose();
     },
   });

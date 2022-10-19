@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import DataTable from "../../components/DataTable";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,18 +11,87 @@ import EspecialistaService from "../../services/EspecialistaService";
 import CrearEspecialista from "./Crear/CrearEspecialista";
 import EditarEspecialista from "./Editar/EditarEspecialista";
 
+import { useStyles } from "../../utils/utils";
+
 const Especialistas = () => {
+  const classes = useStyles();
+
   const [especialistas, setEspecialistas] = useState([]);
   const [itemId, setItemId] = useState(-1);
   const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
-    { field: "id", label: "No." },
-    { field: "nombre", label: "Nombre" },
-    { field: "especialidad", label: "Especialidad" },
-    { field: "cedula", label: "Cédula" },
-    { field: "telefono", label: "Teléfono" },
+    {
+      name: "",
+      label: "No.",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <center>{rowIndex}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "id",
+      label: "Id",
+      options: {
+        display: false,
+        filter: false,
+      },
+    },
+    {
+      name: "nombre",
+      label: "Nombre",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "especialidad",
+      label: "Especialidad",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "cedula",
+      label: "Cédula",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "telefono",
+      label: "Teléfono",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -107,9 +176,10 @@ const Especialistas = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        rows={especialistas}
+      <SuperDataTable
+        data={especialistas}
         headers={headers}
+        fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />

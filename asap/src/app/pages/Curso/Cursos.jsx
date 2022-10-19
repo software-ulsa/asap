@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import DataTable from "../../components/DataTable";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,16 +11,62 @@ import { Button, Grid, Typography } from "@mui/material";
 import CursoService from "../../services/CursoService";
 
 import CrearCurso from "./CrearCurso";
+import { useStyles } from "../../utils/utils";
 
 const Cursos = () => {
   const navigate = useNavigate();
-  const [cursos, setCursos] = useState([]);
+  const classes = useStyles();
 
+  const [cursos, setCursos] = useState([]);
   const [fetched, setFetched] = useState(false);
+
   const headers = [
-    { field: "id", label: "No." },
-    { field: "titulo", label: "Titulo" },
-    { field: "descripcion", label: "Descripción" },
+    {
+      name: "",
+      label: "No.",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <center>{rowIndex}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "id",
+      label: "Id",
+      options: {
+        display: false,
+        filter: false,
+      },
+    },
+    {
+      name: "titulo",
+      label: "Titulo",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "descripcion",
+      label: "Descripción",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -97,9 +143,10 @@ const Cursos = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        rows={cursos}
+      <SuperDataTable
+        data={cursos}
         headers={headers}
+        fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />

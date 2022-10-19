@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import DataTable from "../../components/DataTable";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,16 +11,64 @@ import RolService from "../../services/RolService";
 import CrearRol from "./CrearRol";
 import EditarRol from "./EditarRol";
 
+import { useStyles } from "../../utils/utils";
+
 const Roles = () => {
+  const classes = useStyles();
+
   const [roles, setRoles] = useState([]);
+  const [fetched, setFetched] = useState(false);
+
   const [itemId, setItemId] = useState(-1);
   const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
-  const [fetched, setFetched] = useState(false);
   const headers = [
-    { field: "id", label: "No." },
-    { field: "nombre", label: "Nombre" },
-    { field: "descripcion", label: "Descripción" },
+    {
+      name: "",
+      label: "No.",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <center>{rowIndex}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "id",
+      label: "Id",
+      options: {
+        display: false,
+        filter: false,
+      },
+    },
+    {
+      name: "nombre",
+      label: "Nombre",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "descripcion",
+      label: "Descripción",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -65,25 +113,50 @@ const Roles = () => {
     }
   }, [itemToEdit]);
 
-  const deleteAction = (id) => {
-    RolService.deleteRol(id)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+  const deleteAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => roles[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      RolService.deleteRol(idsToDelete[0])
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    } else if (idsToDelete.length >= 1) {
+      RolService.deleteManyRol(idsToDelete)
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
   };
 
-  const editAction = (id) => {
-    const found = roles.find((rol) => rol.id === Number(id));
-    setItemId(id);
-    setItemToEdit(found);
-    handleOpenEdit();
+  const editAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => roles[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      const found = roles.find((rol) => rol.id === Number(id));
+      setItemId(id);
+      setItemToEdit(found);
+      handleOpenEdit();
+    } else {
+      toast.error("Solo se puede editar un elemento a la vez", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      });
+    }
   };
 
   return (
@@ -109,11 +182,12 @@ const Roles = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        rows={roles}
+      <SuperDataTable
+        data={roles}
         headers={headers}
-        editAction={editAction}
+        fetched={fetched}
         deleteAction={deleteAction}
+        editAction={editAction}
       />
       <CrearRol
         handleClose={handleCloseCreate}

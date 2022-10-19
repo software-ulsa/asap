@@ -5,8 +5,8 @@ import layoutSettings from "./Layout/LayoutSettings";
 // DOC http://demos.ui-lib.com/matx-react-doc/layout.html
 export const MainLayoutSettings = {
   activeLayout: "layout1", // layout1, layout2
-  activeTheme: "whitePurple", // View all valid theme colors inside MatxTheme/themeColors.js
-  perfectScrollbar: true,
+  activeTheme: "blue", // View all valid theme colors inside MatxTheme/themeColors.js
+  perfectScrollbar: false,
 
   themes: themes,
   layoutSettings, // open Layout1/Layout1Settings.js
@@ -15,6 +15,6 @@ export const MainLayoutSettings = {
   footer: {
     show: true,
     fixed: true,
-    theme: "whitePurple", // View all valid theme colors inside MatxTheme/themeColors.js
+    theme: "whiteBlue", // View all valid theme colors inside MatxTheme/themeColors.js
   },
 };

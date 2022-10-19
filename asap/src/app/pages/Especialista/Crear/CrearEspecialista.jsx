@@ -15,6 +15,8 @@ import {
   DialogTitle,
   StepConnector,
   stepConnectorClasses,
+  Popover,
+  Typography,
 } from "@mui/material";
 import {
   Close,
@@ -33,6 +35,7 @@ import InfoBasica from "./InfoBasica";
 import Contacto from "./Contacto";
 import ImagenPerfil from "./ImagenPerfil";
 import Profesion from "./Profesion";
+import { LoadingButton } from "@mui/lab";
 
 const ColorlibConnector = styled(StepConnector)(() => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -99,10 +102,13 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
   const [file, setFile] = useState();
   const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
+  const handleNext = (event) => {
     if (activeStep < steps.length - 1) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
+    // if (true) {
+    //   setAnchorEl(event.currentTarget);
+    // }
   };
 
   const handleBack = () => {
@@ -171,23 +177,29 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
       correo: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      if (file) {
-        ImagenesService.upload(file)
-          .then((response) => {
-            values.foto_especialista = response.data;
-            guardarEspecialista(values);
-          })
-          .catch((error) => console.log(error));
-      } else {
-        guardarEspecialista(values);
-      }
-      setFile();
-      setImage("");
-      resetForm();
-      setSubmitting(false);
-      setActiveStep(0);
-      handleClose();
+    onSubmit: (values, { setSubmitting, resetForm, isValidating }) => {
+      console.log("hola");
+      // if (!isValidating) {
+      //   console.log("hola");
+      // } else {
+      //   if (file) {
+      //     ImagenesService.upload(file)
+      //       .then((response) => {
+      //         values.foto_especialista = response.data;
+      //         guardarEspecialista(values);
+      //       })
+      //       .catch((error) => console.log(error));
+      //   } else {
+      //     guardarEspecialista(values);
+      //   }
+      //   setFile();
+      //   setImage("");
+      //   resetForm();
+      //   setActiveStep(0);
+      //   handleClose();
+
+      //   setSubmitting(false);
+      // }
     },
   });
 
@@ -198,6 +210,14 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
     <Profesion formik={formik} />,
     <ImagenPerfil image={image} setImage={setImage} setFile={setFile} />,
   ];
+
+  const [anchorEl, setAnchorEl] = useState();
+  const openPop = Boolean(anchorEl);
+  const id = openPop ? "simple-popover" : undefined;
+
+  const handleClosePop = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm">
@@ -258,14 +278,29 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
               Anterior
             </Button>
             <Stack direction="row" spacing={2}>
-              <Button
+              <LoadingButton
                 variant="contained"
                 color="info"
+                loading={formik.isSubmitting}
                 type={activeStep === steps.length ? "submit" : "button"}
                 onClick={handleNext}
               >
                 {activeStep === steps.length - 1 ? "Agregar" : "Siguiente"}
-              </Button>
+              </LoadingButton>
+              <Popover
+                id={id}
+                open={openPop}
+                anchorEl={anchorEl}
+                onClose={handleClosePop}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+              >
+                <Typography sx={{ p: 2 }}>
+                  The content of the Popover.
+                </Typography>
+              </Popover>
               <Button
                 variant="contained"
                 color="error"

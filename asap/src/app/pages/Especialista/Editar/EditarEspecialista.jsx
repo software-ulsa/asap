@@ -185,6 +185,16 @@ const EditarEspecialista = ({ open, handleClose, notify, especialista }) => {
     return stepsComponent[activeStep];
   };
 
+  const checkStepComplete = (values, step) => {
+    switch (step) {
+      case 1:
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm">
       <DialogTitle>Agregar especialista</DialogTitle>

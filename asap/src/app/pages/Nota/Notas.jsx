@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import DataTable from "../../components/DataTable";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,16 +11,63 @@ import NotaService from "../../services/NotaService";
 import CrearNota from "./CrearNota";
 import EditarNota from "./EditarNota";
 
+import { useStyles } from "../../utils/utils";
+
 const Notas = () => {
+  const classes = useStyles();
+
   const [notas, setNotas] = useState([]);
   const [itemId, setItemId] = useState(-1);
   const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
-    { field: "id", label: "No." },
-    { field: "titulo", label: "Titulo" },
-    { field: "tema", label: "Tema" },
+    {
+      name: "",
+      label: "No.",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <center>{rowIndex}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "id",
+      label: "Id",
+      options: {
+        display: false,
+        filter: false,
+      },
+    },
+    {
+      name: "titulo",
+      label: "Titulo",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "tema",
+      label: "Tema",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -107,9 +154,10 @@ const Notas = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        rows={notas}
+      <SuperDataTable
+        data={notas}
         headers={headers}
+        fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />

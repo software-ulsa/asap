@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import DataTable from "../../components/DataTable";
+import { useCallback, useEffect, useState, useContext } from "react";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,21 +9,91 @@ import { Button, Grid, Typography } from "@mui/material";
 import UsuarioService from "../../services/UsuarioService";
 
 import CrearUsuario from "./Crear/CrearUsuario";
-
 import EditarUsuario from "./Editar/EditarUsuario";
 
+import { AuthContext } from "../../context/AuthContext";
+import { useStyles } from "../../utils/utils";
+
 const Usuarios = () => {
-  const [usuarios, setUsuarios] = useState([]);
+  const { currentUser } = useContext(AuthContext);
+  const classes = useStyles();
+
   const [itemId, setItemId] = useState(-1);
+  const [usuarios, setUsuarios] = useState([]);
   const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
-    { field: "id", label: "No." },
-    { field: "nombre", label: "Nombre" },
-    { field: "correo", label: "Correo" },
-    { field: "telefono", label: "Teléfono" },
-    { field: "rol", subfield: "nombre", label: "Rol" },
+    {
+      name: "",
+      label: "No.",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <center>{rowIndex}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "id",
+      label: "Id",
+      options: {
+        display: false,
+        filter: false,
+      },
+    },
+    {
+      name: "nombre",
+      label: "Nombre",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "correo",
+      label: "Correo",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "telefono",
+      label: "Teléfono",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "rol",
+      label: "Rol",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data["nombre"]}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -69,17 +139,21 @@ const Usuarios = () => {
   }, [itemToEdit]);
 
   const deleteAction = (id) => {
-    UsuarioService.deleteUser(id)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+    if (currentUser.id === id) {
+      notify("error", "No se puede eliminar este usuario");
+    } else {
+      UsuarioService.deleteUser(id)
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
   };
 
   const editAction = (id) => {
@@ -112,9 +186,10 @@ const Usuarios = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        rows={usuarios}
+      <SuperDataTable
+        data={usuarios}
         headers={headers}
+        fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />
@@ -123,7 +198,7 @@ const Usuarios = () => {
         open={openCreate}
         notify={notify}
       />
-       <EditarUsuario
+      <EditarUsuario
         handleClose={handleCloseEdit}
         open={openEdit}
         notify={notify}

@@ -34,7 +34,7 @@ const Footer = () => {
 
   return (
     <ThemeProvider theme={footerTheme}>
-      <AppBar color="primary" position="static" sx={{ zIndex: 96 }}>
+      <AppBar color="primary" position="static" sx={{ zIndex: 96, bottom: 0 }}>
         <AppFooter>
           <FooterContent>
             <Paragraph sx={{ m: 0 }}>

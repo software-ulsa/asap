@@ -1,6 +1,5 @@
 import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { Box, styled, useTheme } from "@mui/system";
-import { LoadingSuspense } from "../../../components";
 import useSettings from "../../../hooks/useSettings";
 import { sidenavCompactWidth, sideNavWidth } from "../../../utils/constant";
 import React, { useEffect, useRef } from "react";
@@ -106,10 +105,13 @@ const FirstLayout = () => {
                 <LayoutTopbar />
               </ThemeProvider>
             )}
-            <Box flexGrow={1} position="relative" padding={5}>
-              <LoadingSuspense>
-                <Outlet />
-              </LoadingSuspense>
+            <Box
+              flexGrow={1}
+              position="relative"
+              padding={5}
+              sx={{ overflowY: "scroll" }}
+            >
+              <Outlet />
             </Box>
 
             {settings.footer.show && !settings.footer.fixed && <Footer />}
@@ -124,10 +126,13 @@ const FirstLayout = () => {
               </ThemeProvider>
             )}
 
-            <Box flexGrow={1} position="relative">
-              <LoadingSuspense>
-                <Outlet />
-              </LoadingSuspense>
+            <Box
+              flexGrow={1}
+              position="static"
+              padding={5}
+              sx={{ overflowY: "scroll" }}
+            >
+              <Outlet />
             </Box>
 
             {settings.footer.show && !settings.footer.fixed && <Footer />}

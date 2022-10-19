@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import DataTable from "../../components/DataTable";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import { Helmet } from "react-helmet";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,18 +10,75 @@ import PublicidadService from "../../services/PublicidadService";
 
 import CrearPublicidad from "./CrearPublicidad";
 
+import { useStyles } from "../../utils/utils";
+
 const Publicidades = () => {
+  const classes = useStyles();
+
   const [publicidades, setPublicidades] = useState([]);
   const [itemId, setItemId] = useState(-1);
   const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
   const [fetched, setFetched] = useState(false);
   const headers = [
-    { field: "id", label: "No." },
-    { field: "nombre", label: "Nombre" },
-    { field: "dot_empresa", label: "Empresa" },
-    { field: "email", label: "Correo" },
-
+    {
+      name: "",
+      label: "No.",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <center>{rowIndex}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "id",
+      label: "Id",
+      options: {
+        display: false,
+        filter: false,
+      },
+    },
+    {
+      name: "nombre",
+      label: "Nombre",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "dot_empresa",
+      label: "Empresa",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
+    {
+      name: "email",
+      label: "Correo",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: classes.centeredHeader,
+        }),
+      },
+    },
   ];
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -108,9 +165,10 @@ const Publicidades = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        rows={publicidades}
+      <SuperDataTable
+        data={publicidades}
         headers={headers}
+        fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />
