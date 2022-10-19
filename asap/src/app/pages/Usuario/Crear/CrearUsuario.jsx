@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 
@@ -32,7 +32,8 @@ import ImagenesService from "../../../services/ImagesService";
 import InfoBasica from "./InfoBasica";
 import Registro from "./Registro";
 import ImagenPerfil from "./ImagenPerfil";
-import Cargo from "./Cargo";
+import { phoneRegExp } from "../../../utils/utils";
+import RolService from "../../../services/RolService";
 
 const ColorlibConnector = styled(StepConnector)(() => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -93,11 +94,20 @@ function ColorlibStepIcon(props) {
 }
 
 const CrearUsuario = ({ open, handleClose, notify }) => {
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-  const [image, setImage] = useState("");
   const [file, setFile] = useState();
+  const [image, setImage] = useState("");
+  const [roles, setRoles] = useState();
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    if (open) {
+      RolService.getAllRoles()
+        .then((response) => {
+          setRoles(response);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [open]);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -140,13 +150,11 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
       .oneOf(["Masculino", "Femenino"])
       .label("Elegir uno")
       .required("Sexo requerido"),
-    especialidad: yup.string().required("Especialidad requerida"),
     matricula: yup
       .string()
-      .min(9, "Cédula no válida")
-      .max(9, "Cédula no válida")
-      .required("Cédula requerida"),
-    password: yup.string().required("Contraseña Requerida"),
+      .max(9, "Matricula no válida")
+      .required("Matricula requerida"),
+    password: yup.string().required("Contraseña requerida"),
     telefono: yup
       .string()
       .matches(phoneRegExp, "Teléfono no váildo")
@@ -166,7 +174,7 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
       matricula: "",
       password: "",
       telefono: "",
-      id_rol: "",
+      id_rol: 0,
       correo: "",
     },
     validationSchema: validationSchema,
@@ -174,7 +182,7 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
       if (file) {
         ImagenesService.upload(file)
           .then((response) => {
-            values.foto_especialista = response.data;
+            values.foto_perfil = response.data;
             guardarUsuario(values);
           })
           .catch((error) => console.log(error));
@@ -184,8 +192,8 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
       setFile();
       setImage("");
       resetForm();
-      setSubmitting(false);
       setActiveStep(0);
+      setSubmitting(false);
       handleClose();
     },
   });
@@ -193,14 +201,14 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
   const steps = ["Persona", "Registro", "Imagen"];
   const stepsComponent = [
     <InfoBasica formik={formik} />,
-    <Registro formik={formik} />,
+    <Registro formik={formik} roles={roles} />,
     <ImagenPerfil image={image} setImage={setImage} setFile={setFile} />,
   ];
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm">
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>Agregar especialista</DialogTitle>
+        <DialogTitle>Agregar usuario</DialogTitle>
         <Box
           position="absolute"
           top={0}
@@ -258,12 +266,22 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
+                hidden={activeStep < steps.length - 1}
                 color="secondary"
-                type={activeStep === steps.length ? "submit" : "button"}
+                type="submit"
+              >
+                Agregar
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="button"
+                hidden={activeStep === steps.length - 1}
                 onClick={handleNext}
               >
-                {activeStep === steps.length - 1 ? "Agregar" : "Siguiente"}
+                Siguiente
               </Button>
+
               <Button
                 variant="contained"
                 color="error"

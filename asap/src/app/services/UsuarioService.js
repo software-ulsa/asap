@@ -15,6 +15,10 @@ export default class UsuarioService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyUser(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async login(user) {
     return (await httpClient.post(`${prefix}/login`, user)).data;
   }

@@ -1,6 +1,9 @@
 import { makeStyles } from "@mui/styles";
 import { differenceInSeconds } from "date-fns";
 
+export const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
 export const useStyles = makeStyles((theme) => ({
   centeredHeader: {
     "& > span": {

@@ -16,6 +16,10 @@ export default class PublicidadService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyPublicidad(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async getAllPublicidad() {
     return (await httpClient.get(`${prefix}/`)).data;
   }

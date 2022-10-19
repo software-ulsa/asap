@@ -15,6 +15,10 @@ export default class CursoService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyCurso(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async getAllCurso() {
     return (await httpClient.get(`${prefix}/`)).data;
   }

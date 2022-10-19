@@ -15,6 +15,10 @@ export default class ActividadService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyActividad(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async getAllActividad() {
     return (await httpClient.get(`${prefix}/`)).data;
   }

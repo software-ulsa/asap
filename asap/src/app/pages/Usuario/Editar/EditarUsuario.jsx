@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
-import { Formik, useFormik } from "formik";
+import { Formik } from "formik";
 
 import {
   IconButton,
@@ -32,7 +32,8 @@ import ImagenesService from "../../../services/ImagesService";
 import InfoBasica from "./InfoBasica";
 import Registro from "./Registro";
 import ImagenPerfil from "./ImagenPerfil";
-import Cargo from "./Cargo";
+import RolService from "../../../services/RolService";
+import { phoneRegExp } from "../../../utils/utils";
 
 const ColorlibConnector = styled(StepConnector)(() => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -93,16 +94,15 @@ function ColorlibStepIcon(props) {
 }
 
 const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-  const [image, setImage] = useState("");
   const [file, setFile] = useState();
+  const [image, setImage] = useState("");
+  const [roles, setRoles] = useState();
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
     if (open) {
-      if (usuario.foto_usuario) {
-        ImagenesService.get(usuario.foto_usuario)
+      if (usuario.foto_perfil) {
+        ImagenesService.get(usuario.foto_perfil)
           .then((url) => {
             setImage(url);
           })
@@ -112,6 +112,11 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
       } else {
         setImage();
       }
+      RolService.getAllRoles()
+        .then((response) => {
+          setRoles(response);
+        })
+        .catch((error) => console.log(error));
     } else {
       setActiveStep(0);
     }
@@ -158,13 +163,10 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
       .oneOf(["Masculino", "Femenino"])
       .label("Elegir uno")
       .required("Sexo requerido"),
-    especialidad: yup.string().required("Especialidad requerida"),
-    cedula: yup
+    matricula: yup
       .string()
-      .min(8, "Cédula no válida")
-      .max(8, "Cédula no válida")
-      .required("Cédula requerida"),
-    area_especialidad: yup.string().required("Área de especialidad requerida"),
+      .max(9, "Matricula no válida")
+      .required("Matricula requerida"),
     telefono: yup
       .string()
       .matches(phoneRegExp, "Teléfono no váildo")
@@ -177,7 +179,7 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
   const renderSwitch = (props) => {
     const stepsComponent = [
       <InfoBasica formik={props} />,
-      <Registro formik={props} />,
+      <Registro formik={props} roles={roles} />,
       <ImagenPerfil image={image} setImage={setImage} setFile={setFile} />,
     ];
 
@@ -186,7 +188,7 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm">
-      <DialogTitle>Agregar usuario</DialogTitle>
+      <DialogTitle>Editar usuario</DialogTitle>
       <Box
         position="absolute"
         top={0}
@@ -206,12 +208,12 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
           ape_paterno: usuario?.ape_paterno || "",
           ape_materno: usuario?.ape_materno || "",
           correo: usuario?.correo || "",
-          password: usuario?.password || "",
+          password: "",
           telefono: usuario?.telefono || "",
-          edad: usuario?.edad || "",
+          edad: usuario?.edad || 0,
           matricula: usuario?.matricula || "",
-          sexo: usuario?.sexo || "",
-          id_rol: usuario?.id_rol || "",
+          sexo: usuario?.sexo || "Elegir uno",
+          id_rol: usuario?.id_rol || 0,
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
@@ -280,11 +282,20 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
                 <Stack direction="row" spacing={2}>
                   <Button
                     variant="contained"
+                    hidden={activeStep < steps.length - 1}
                     color="secondary"
-                    type={activeStep === steps.length ? "submit" : "button"}
+                    type="submit"
+                  >
+                    Guardar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="button"
+                    hidden={activeStep === steps.length - 1}
                     onClick={handleNext}
                   >
-                    {activeStep === steps.length - 1 ? "Guardar" : "Siguiente"}
+                    Siguiente
                   </Button>
                   <Button
                     variant="contained"

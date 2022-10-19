@@ -1,9 +1,16 @@
-import { Grid, TextField } from "@mui/material";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 
-const Registro = ({ formik }) => {
+const Registro = ({ formik, roles }) => {
   return (
     <Grid container spacing={2} marginTop={2}>
-        <Grid item xs={12}>
+      <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
@@ -51,17 +58,37 @@ const Registro = ({ formik }) => {
         <TextField
           color="info"
           fullWidth
-          label="Contraseña"
+          label="Nueva contraseña"
           name="password"
           type="password"
           variant="outlined"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
         />
       </Grid>
-      <Grid item xs={12}></Grid>
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel id="lblRoles" color="info">
+            Rol
+          </InputLabel>
+          <Select
+            labelId="slRoles"
+            color="info"
+            id="lblRoles"
+            name="id_rol"
+            value={formik.values.id_rol}
+            label="Rol"
+            onChange={formik.handleChange}
+          >
+            <MenuItem disabled value={0}>
+              Elegir uno
+            </MenuItem>
+            {roles?.map((rol) => {
+              return <MenuItem value={rol.id}>{rol.nombre}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+      </Grid>
     </Grid>
   );
 };

@@ -16,6 +16,10 @@ export default class EspecialistaService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyEspecialista(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async getAllEspecialista() {
     return (await httpClient.get(`${prefix}/`)).data;
   }

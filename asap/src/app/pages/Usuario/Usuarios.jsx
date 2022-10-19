@@ -138,11 +138,27 @@ const Usuarios = () => {
     }
   }, [itemToEdit]);
 
-  const deleteAction = (id) => {
-    if (currentUser.id === id) {
-      notify("error", "No se puede eliminar este usuario");
-    } else {
-      UsuarioService.deleteUser(id)
+  const deleteAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => usuarios[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      if (currentUser.id === id) {
+        notify("error", "No se puede eliminar este usuario");
+      } else {
+        UsuarioService.deleteUser(id)
+          .then((response) => {
+            if (response.message) {
+              notify("success", response.message);
+            } else {
+              notify("error", response.error);
+            }
+          })
+          .catch((error) => {
+            notify("error", error);
+          });
+      }
+    } else if (idsToDelete.length >= 1) {
+      UsuarioService.deleteManyUser(idsToDelete)
         .then((response) => {
           if (response.message) {
             notify("success", response.message);
@@ -156,11 +172,21 @@ const Usuarios = () => {
     }
   };
 
-  const editAction = (id) => {
-    const found = usuarios.find((usuario) => usuario.id === Number(id));
-    setItemId(id);
-    setItemToEdit(found);
-    handleOpenEdit();
+  const editAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => usuarios[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      const found = usuarios.find((usuario) => usuario.id === Number(id));
+      setItemId(id);
+      setItemToEdit(found);
+      handleOpenEdit();
+    } else {
+      toast.error("Solo se puede editar un elemento a la vez", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      });
+    }
   };
 
   return (

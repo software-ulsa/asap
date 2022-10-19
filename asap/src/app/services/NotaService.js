@@ -15,6 +15,10 @@ export default class NotaService {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
 
+  static async deleteManyNota(ids) {
+    return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
+  }
+
   static async getAllNotas() {
     return (await httpClient.get(`${prefix}/`)).data;
   }
@@ -24,6 +28,7 @@ export default class NotaService {
   }
 
   static async getNotaByKeyword(palabras_clave) {
-    return (await httpClient.get(`${prefix}/getByKeyword/${palabras_clave}`)).data;
+    return (await httpClient.get(`${prefix}/getByKeyword/${palabras_clave}`))
+      .data;
   }
 }
