@@ -20,10 +20,8 @@ import {
   Close,
   ContactPageRounded,
   ImageRounded,
-  LocalHospitalRounded,
-  PersonRounded,
+  AssignmentRounded,
 } from "@mui/icons-material";
-import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import { Box } from "@mui/system";
 import { styled } from "@mui/material/styles";
 
@@ -74,9 +72,9 @@ const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
 
 function ColorlibStepIcon(props) {
   const { active, completed, className } = props;
-  
+
   const icons = {
-    1: <AssignmentRoundedIcon />,
+    1: <AssignmentRounded />,
     2: <ContactPageRounded />,
     3: <ImageRounded />,
     4: <ImageRounded />,
@@ -93,15 +91,14 @@ function ColorlibStepIcon(props) {
 }
 
 const CrearNota = ({ open, handleClose, notify }) => {
-  
-    const [image, setImage] = useState("");
-    const [file, setFile] = useState();
-  
-    const [imageThumb, setImageThumb] = useState("");
-    const [fileThumbnail, setFileThumbnail] = useState();
-    const [activeStep, setActiveStep] = useState(0);
+  const [image, setImage] = useState("");
+  const [file, setFile] = useState();
 
-    const [palabras, setPalabras] = useState([]);
+  const [imageThumb, setImageThumb] = useState("");
+  const [fileThumbnail, setFileThumbnail] = useState();
+  const [activeStep, setActiveStep] = useState(0);
+
+  const [palabras, setPalabras] = useState([]);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -137,57 +134,61 @@ const CrearNota = ({ open, handleClose, notify }) => {
 
   const formik = useFormik({
     initialValues: {
-        titulo: "",
-        tema: "",
-        contenido: "",
-        foto_principal: "",
-        foto_thumbnail: "",
+      titulo: "",
+      tema: "",
+      contenido: "",
+      foto_principal: "",
+      foto_thumbnail: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-        if (palabras.length > 0) {
-          if (file) {
-            await ImagenesService.upload(file)
-              .then((response) => {
-                values.foto_principal = response.data;
-              })
-              .catch((error) => console.log(error));
-          }
-  
-          if (fileThumbnail) {
-            await ImagenesService.upload(fileThumbnail)
-              .then((response) => {
-                values.foto_thumbnail = response.data;
-              })
-              .catch((error) => console.log(error));
-          }
-  
-          values.palabras_clave = palabras;
-  
-          guardarNota(values);
-          setFile();
-          setImage("");
-  
-          setFileThumbnail();
-          setImageThumb("");
-          setPalabras([]);
-  
-          resetForm();
-          setSubmitting(false);
-          handleClose();
+      if (palabras.length > 0) {
+        if (file) {
+          await ImagenesService.upload(file)
+            .then((response) => {
+              values.foto_principal = response.data;
+            })
+            .catch((error) => console.log(error));
         }
-      },
-    });
+
+        if (fileThumbnail) {
+          await ImagenesService.upload(fileThumbnail)
+            .then((response) => {
+              values.foto_thumbnail = response.data;
+            })
+            .catch((error) => console.log(error));
+        }
+
+        values.palabras_clave = palabras;
+
+        guardarNota(values);
+        setFile();
+        setImage("");
+
+        setFileThumbnail();
+        setImageThumb("");
+        setPalabras([]);
+
+        resetForm();
+        setSubmitting(false);
+        handleClose();
+      }
+    },
+  });
 
   const steps = ["Nota", "Miniatura", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica formik={formik} />,
-    <ImagenThumbnail imageThumb={imageThumb} setImageThumb={setImageThumb} setFileThumbnail={setFileThumbnail} />,
+    <ImagenThumbnail
+      imageThumb={imageThumb}
+      setImageThumb={setImageThumb}
+      setFileThumbnail={setFileThumbnail}
+    />,
     <ImagenPrincipal image={image} setImage={setImage} setFile={setFile} />,
   ];
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm">
+    <Dialog open={open} onClose={handleClose} maxWidth="md">
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle>Agregar nota</DialogTitle>
         <Box

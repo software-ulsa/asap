@@ -13,6 +13,11 @@ export const AuthProvider = ({ children }) => {
     checkUser();
   }, [currentUser]);
 
+  const updateUser = async (user) => {
+    ls.set("currentUser", JSON.stringify(user));
+    setCurrentUser(user);
+  };
+
   const signin = async (user) => {
     const { userFound, token } = user;
 
@@ -37,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, signin, signout }}>
+    <AuthContext.Provider value={{ currentUser, signin, signout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

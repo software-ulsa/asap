@@ -135,13 +135,13 @@ const LayoutTopbar = () => {
           >
             <StyledItem>
               <Link to="/perfil">
-                <Person style={{ marginRight: 10 }} />
+                <Person style={{ marginRight: 10 }} color="primary" />
                 <Span> Perfil </Span>
               </Link>
             </StyledItem>
 
             <StyledItem onClick={signout}>
-              <Logout style={{ marginRight: 10 }} />
+              <Logout style={{ marginRight: 10 }} color="primary" />
               <Span> Cerrar sesi&oacute;n </Span>
             </StyledItem>
           </Menu>

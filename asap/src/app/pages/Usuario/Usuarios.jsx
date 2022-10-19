@@ -15,14 +15,15 @@ import { AuthContext } from "../../context/AuthContext";
 import { useStyles } from "../../utils/utils";
 
 const Usuarios = () => {
-  const { currentUser } = useContext(AuthContext);
   const classes = useStyles();
+  const { currentUser } = useContext(AuthContext);
 
   const [itemId, setItemId] = useState(-1);
-  const [usuarios, setUsuarios] = useState([]);
   const [itemToEdit, setItemToEdit] = useState({ id: -1 });
 
+  const [usuarios, setUsuarios] = useState([]);
   const [fetched, setFetched] = useState(false);
+
   const headers = [
     {
       name: "",

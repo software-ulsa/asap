@@ -27,10 +27,11 @@ const ImagenPrincipal = ({ image, setImage, setFile }) => {
           ></input>
           <IconButton onClick={doClickOnInput}>
             <Avatar
+              variant="rounded"
               sx={{
                 bgcolor: grey[900],
-                height: "300px",
-                width: "300px",
+                height: "480px",
+                width: "640px",
               }}
               src={image}
             >
