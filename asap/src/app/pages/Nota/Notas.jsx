@@ -112,23 +112,49 @@ const Notas = () => {
     }
   }, [itemToEdit]);
 
-  const deleteAction = (id) => {
-    NotaService.deleteNota(id)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+  const deleteAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => notas[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      NotaService.deleteNota(idsToDelete[0])
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    } else if (idsToDelete.length >= 1) {
+      NotaService.deleteManyNota(idsToDelete)
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
   };
 
-  const editAction = (id) => {
-    const found = notas.find((nota) => nota.id === Number(id));
-    setItemToEdit(found);
+  const editAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => notas[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      const found = notas.find((nota) => nota.id === Number(id));
+      setItemToEdit(found);
+      handleOpenEdit();
+    } else {
+      toast.error("Solo se puede editar un elemento a la vez", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      });
+    }
   };
 
   return (
@@ -171,7 +197,7 @@ const Notas = () => {
         open={openEdit}
         notify={notify}
         nota={itemToEdit}
-      />      
+      />
       <ToastContainer />
     </>
   );

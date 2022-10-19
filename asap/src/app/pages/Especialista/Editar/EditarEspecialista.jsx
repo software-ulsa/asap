@@ -282,7 +282,7 @@ const EditarEspecialista = ({ open, handleClose, notify, especialista }) => {
               >
                 <Button
                   variant="contained"
-                  color="info"
+                  color="primary"
                   disabled={activeStep === 0}
                   onClick={handleBack}
                   sx={{ mr: 1 }}
@@ -292,11 +292,20 @@ const EditarEspecialista = ({ open, handleClose, notify, especialista }) => {
                 <Stack direction="row" spacing={2}>
                   <Button
                     variant="contained"
+                    hidden={activeStep < steps.length - 1}
                     color="secondary"
-                    type={activeStep === steps.length ? "submit" : "button"}
+                    type="submit"
+                  >
+                    Guardar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    type="button"
+                    hidden={activeStep === steps.length - 1}
                     onClick={handleNext}
                   >
-                    {activeStep === steps.length - 1 ? "Guardar" : "Siguiente"}
+                    Siguiente
                   </Button>
                   <Button
                     variant="contained"

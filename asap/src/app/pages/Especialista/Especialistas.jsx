@@ -130,27 +130,52 @@ const Especialistas = () => {
     }
   }, [fetched, notify]);
 
-  const deleteAction = (id) => {
-    EspecialistaService.deleteEspecialista(id)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+  const deleteAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => especialistas[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      EspecialistaService.deleteEspecialista(idsToDelete[0])
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    } else if (idsToDelete.length >= 1) {
+      EspecialistaService.deleteManyEspecialista(idsToDelete)
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
   };
 
-  const editAction = (id) => {
-    const found = especialistas.find(
-      (especialista) => especialista.id === Number(id)
-    );
-    setItemId(id);
-    setItemToEdit(found);
-    handleOpenEdit();
+  const editAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => especialistas[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      const found = especialistas.find(
+        (especialista) => especialista.id === Number(id)
+      );
+      setItemId(id);
+      setItemToEdit(found);
+      handleOpenEdit();
+    } else {
+      toast.error("Solo se puede editar un elemento a la vez", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      });
+    }
   };
 
   return (

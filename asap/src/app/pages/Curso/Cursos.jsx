@@ -101,23 +101,48 @@ const Cursos = () => {
     }
   }, [fetched, notify]);
 
-  const deleteAction = (id) => {
-    CursoService.deleteCurso(id)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+  const deleteAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => cursos[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      CursoService.deleteCurso(idsToDelete[0])
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    } else if (idsToDelete.length >= 1) {
+      CursoService.deleteCurso(idsToDelete[0])
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
   };
 
-  const editAction = (id) => {
-    const found = cursos.find((curso) => curso.id === Number(id));
-    navigate("/editar-curso", { state: { item: found } });
+  const editAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => cursos[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      const found = cursos.find((curso) => curso.id === Number(id));
+      navigate("/editar-curso", { state: { item: found } });
+    } else {
+      toast.error("Solo se puede editar un elemento a la vez", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      });
+    }
   };
 
   return (

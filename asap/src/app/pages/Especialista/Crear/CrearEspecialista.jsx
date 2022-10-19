@@ -270,7 +270,7 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
           >
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
@@ -278,15 +278,23 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
               Anterior
             </Button>
             <Stack direction="row" spacing={2}>
-              <LoadingButton
+              <Button
                 variant="contained"
-                color="info"
-                loading={formik.isSubmitting}
-                type={activeStep === steps.length ? "submit" : "button"}
+                hidden={activeStep < steps.length - 1}
+                color="secondary"
+                type="submit"
+              >
+                Guardar
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="button"
+                hidden={activeStep === steps.length - 1}
                 onClick={handleNext}
               >
-                {activeStep === steps.length - 1 ? "Agregar" : "Siguiente"}
-              </LoadingButton>
+                Siguiente
+              </Button>
               <Popover
                 id={id}
                 open={openPop}

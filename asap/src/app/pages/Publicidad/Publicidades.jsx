@@ -124,23 +124,51 @@ const Publicidades = () => {
     }
   }, [itemToEdit]);
 
-  const deleteAction = (id) => {
-    PublicidadService.deletePublicidad(id)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
+  const deleteAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => publicidades[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      PublicidadService.deletePublicidad(idsToDelete[0])
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    } else if (idsToDelete.length >= 1) {
+      PublicidadService.deleteManyPublicidad(idsToDelete)
+        .then((response) => {
+          if (response.message) {
+            notify("success", response.message);
+          } else {
+            notify("error", response.error);
+          }
+        })
+        .catch((error) => {
+          notify("error", error);
+        });
+    }
   };
 
-  const editAction = (id) => {
-    const found = publicidades.find((publicidad) => publicidad.id === Number(id));
-    setItemToEdit(found);
+  const editAction = (ids) => {
+    const idsToDelete = ids.data.map((d) => publicidades[d.dataIndex].id);
+    if (idsToDelete.length === 1) {
+      const id = idsToDelete[0];
+      const found = publicidades.find(
+        (publicidad) => publicidad.id === Number(id)
+      );
+      setItemToEdit(found);
+      handleOpenEdit();
+    } else {
+      toast.error("Solo se puede editar un elemento a la vez", {
+        position: "top-right",
+        autoClose: 1500,
+        theme: "light",
+      });
+    }
   };
 
   return (
