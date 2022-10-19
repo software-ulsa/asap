@@ -30,9 +30,9 @@ import UsuarioService from "../../../services/UsuarioService";
 import ImagenesService from "../../../services/ImagesService";
 
 import InfoBasica from "./InfoBasica";
-import Cargo from "./Cargo";
-import ImagenPerfil from "./ImagenPerfil";
 import Registro from "./Registro";
+import ImagenPerfil from "./ImagenPerfil";
+import Cargo from "./Cargo";
 
 const ColorlibConnector = styled(StepConnector)(() => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -101,8 +101,8 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
 
   useEffect(() => {
     if (open) {
-      if (usuario.foto_especialista) {
-        ImagenesService.get(usuario.foto_especialista)
+      if (usuario.foto_usuario) {
+        ImagenesService.get(usuario.foto_usuario)
           .then((url) => {
             setImage(url);
           })
@@ -118,11 +118,15 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
   }, [open]);
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep > 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
 
   const guardarUsuario = (values) => {
@@ -155,12 +159,12 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
       .label("Elegir uno")
       .required("Sexo requerido"),
     especialidad: yup.string().required("Especialidad requerida"),
-    matricula: yup
+    cedula: yup
       .string()
-      .min(9, "Cédula no válida")
-      .max(9, "Cédula no válida")
+      .min(8, "Cédula no válida")
+      .max(8, "Cédula no válida")
       .required("Cédula requerida"),
-    password: yup.string().required("Contraseña Requerida"),
+    area_especialidad: yup.string().required("Área de especialidad requerida"),
     telefono: yup
       .string()
       .matches(phoneRegExp, "Teléfono no váildo")
@@ -168,13 +172,12 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
     correo: yup.string().email("Correo no válido").required("Correo requerido"),
   });
 
-  const steps = ["Persona", "Registro", "Cargo", "Imagen"];
+  const steps = ["Persona", "Registro", "Imagen"];
 
   const renderSwitch = (props) => {
     const stepsComponent = [
       <InfoBasica formik={props} />,
       <Registro formik={props} />,
-      <Cargo formik={props} />,
       <ImagenPerfil image={image} setImage={setImage} setFile={setFile} />,
     ];
 
@@ -215,7 +218,7 @@ const EditarUsuario = ({ open, handleClose, notify, usuario }) => {
           if (file) {
             ImagenesService.upload(file)
               .then((response) => {
-                values.foto_especialista = response.data;
+                values.foto_usuario = response.data;
                 guardarUsuario(values);
               })
               .catch((error) => console.log(error));

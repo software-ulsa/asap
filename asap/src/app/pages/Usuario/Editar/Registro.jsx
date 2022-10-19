@@ -3,7 +3,7 @@ import { Grid, TextField } from "@mui/material";
 const Registro = ({ formik }) => {
   return (
     <Grid container spacing={2} marginTop={2}>
-      <Grid item xs={12}>
+        <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
@@ -18,7 +18,20 @@ const Registro = ({ formik }) => {
           helperText={formik.touched.matricula && formik.errors.matricula}
         />
       </Grid>
-
+      <Grid item xs={12}>
+        <TextField
+          color="info"
+          fullWidth
+          label="Teléfono móvil"
+          name="telefono"
+          variant="outlined"
+          value={formik.values.telefono}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.telefono && Boolean(formik.errors.telefono)}
+          helperText={formik.touched.telefono && formik.errors.telefono}
+        />
+      </Grid>
       <Grid item xs={12}>
         <TextField
           color="info"
@@ -40,9 +53,8 @@ const Registro = ({ formik }) => {
           fullWidth
           label="Contraseña"
           name="password"
-          variant="outlined"
           type="password"
-          value={formik.values.password}
+          variant="outlined"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.password && Boolean(formik.errors.password)}

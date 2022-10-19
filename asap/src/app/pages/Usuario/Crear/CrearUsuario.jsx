@@ -34,7 +34,6 @@ import Registro from "./Registro";
 import ImagenPerfil from "./ImagenPerfil";
 import Cargo from "./Cargo";
 
-
 const ColorlibConnector = styled(StepConnector)(() => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22,
@@ -101,14 +100,18 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep > 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
 
-  const guardarEspecialista = (values) => {
+  const guardarUsuario = (values) => {
     UsuarioService.createUser(values)
       .then((response) => {
         if (response.message) {
@@ -172,11 +175,11 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
         ImagenesService.upload(file)
           .then((response) => {
             values.foto_especialista = response.data;
-            guardarEspecialista(values);
+            guardarUsuario(values);
           })
           .catch((error) => console.log(error));
       } else {
-        guardarEspecialista(values);
+        guardarUsuario(values);
       }
       setFile();
       setImage("");
@@ -187,18 +190,17 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
     },
   });
 
-  const steps = ["Persona", "Registro", "Cargo", "Imagen"];
+  const steps = ["Persona", "Registro", "Imagen"];
   const stepsComponent = [
     <InfoBasica formik={formik} />,
     <Registro formik={formik} />,
-    <Cargo formik={formik} />,
     <ImagenPerfil image={image} setImage={setImage} setFile={setFile} />,
   ];
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm">
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>Agregar usuario</DialogTitle>
+        <DialogTitle>Agregar especialista</DialogTitle>
         <Box
           position="absolute"
           top={0}

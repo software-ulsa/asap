@@ -1,25 +1,24 @@
-import { Grid, TextField } from "@mui/material";
+import { Grid, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Formik } from "formik";
 
-const Cargo = ({ formik }) => {
+const Cargo = ({ formik, roles }) => {
   return (
-    <Grid container spacing={2} marginTop={2}>
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          label="Rol"
-          name="rol"
-          variant="outlined"
-          value={formik.values.id_rol}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.id_rol && Boolean(formik.errors.id_rol)
-          }
-          helperText={formik.touched.id_rol && formik.errors.id_rol}
-        />
+    <Formik>
+      <Grid container spacing={2} marginTop={2}>
+        <Grid item xs={12}>
+          <TextField
+            color="info"
+            fullWidth
+            label="Rol Id"
+            name="id_rol"
+            variant="outlined"
+            value={formik.values.id_rol}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </Formik>
   );
 };
 

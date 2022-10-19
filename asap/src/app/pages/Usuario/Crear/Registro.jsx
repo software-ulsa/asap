@@ -18,7 +18,6 @@ const Registro = ({ formik }) => {
           helperText={formik.touched.matricula && formik.errors.matricula}
         />
       </Grid>
-
       <Grid item xs={12}>
         <TextField
           color="info"
@@ -31,17 +30,17 @@ const Registro = ({ formik }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.correo && Boolean(formik.errors.correo)}
-          helperText={formik.touched.correo && formik.errors.correo}
+          helperText={formik.touched.correo && formik .errors.correo}
         />
       </Grid>
       <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
-          label="Contraseña"
+          label="Contaseña"
           name="password"
-          variant="outlined"
           type="password"
+          variant="outlined"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
