@@ -73,9 +73,9 @@ const Perfil = () => {
       .then((response) => {
         if (response.message) {
           updateUser(values);
-          notify("success", response.message);
+          notify("success", "Perfil actualizado correctamente");
         } else {
-          notify("error", response.error);
+          notify("error", "No se pudo actualizar el perfil");
         }
       })
       .catch((error) => {
