@@ -8,8 +8,8 @@ import { Button, Grid, Typography } from "@mui/material";
 
 import NotaService from "../../services/NotaService";
 
-import CrearNota from "./CrearNota";
-import EditarNota from "./EditarNota";
+import CrearNota from "./Crear/CrearNota";
+import EditarNota from "./Editar/EditarNota";
 
 import { useStyles } from "../../utils/utils";
 
@@ -171,7 +171,7 @@ const Notas = () => {
         open={openEdit}
         notify={notify}
         nota={itemToEdit}
-      />
+      />      
       <ToastContainer />
     </>
   );
