@@ -170,7 +170,7 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
       ape_materno: "",
       edad: 0,
       sexo: "Elegir uno",
-      foto_perfil: "",
+      foto_usuario: "",
       matricula: "",
       password: "",
       telefono: "",
@@ -182,7 +182,7 @@ const CrearUsuario = ({ open, handleClose, notify }) => {
       if (file) {
         ImagenesService.upload(file)
           .then((response) => {
-            values.foto_perfil = response.data;
+            values.foto_usuario = response.data;
             guardarUsuario(values);
           })
           .catch((error) => console.log(error));

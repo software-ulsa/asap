@@ -50,8 +50,8 @@ const Perfil = () => {
   );
 
   useEffect(() => {
-    if (currentUser.foto_perfil) {
-      ImagenesService.get(currentUser.foto_perfil)
+    if (currentUser.foto_usuario) {
+      ImagenesService.get(currentUser.foto_usuario)
         .then((url) => {
           setImage(url);
         })
@@ -219,7 +219,7 @@ const Perfil = () => {
               </Button>
               <Link to="/">
                 <Button variant="contained" color="error">
-                  Cancelar
+                  Regresar
                 </Button>
               </Link>
             </Box>

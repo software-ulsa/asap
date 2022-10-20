@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Span } from "../../Typography";
@@ -23,6 +23,9 @@ import { topBarHeight } from "../../../utils/constant";
 import useSettings from "../../../hooks/useSettings";
 import { AuthContext } from "../../../context/AuthContext";
 import { themeShadows } from "../../../components/Theme/themeColors";
+import { useState } from "react";
+
+import ImagenesService from "../../../services/ImagesService";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -85,6 +88,8 @@ const LayoutTopbar = () => {
   const { settings, updateSettings } = useSettings();
   const { mode } = settings.layoutSettings.leftSidebar;
 
+  const [image, setImage] = useState();
+
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({
       layoutSettings: { leftSidebar: { ...sidebarSettings } },
@@ -101,6 +106,16 @@ const LayoutTopbar = () => {
     }
     updateSidebarMode({ mode });
   };
+
+  useEffect(() => {
+    if (currentUser.foto_usuario) {
+      ImagenesService.get(currentUser.foto_usuario)
+        .then((url) => {
+          setImage(url);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [currentUser]);
 
   return (
     <TopbarRoot>
@@ -126,10 +141,7 @@ const LayoutTopbar = () => {
                     Bienvenido, <strong>{currentUser.nombre}</strong>
                   </Span>
                 </Hidden>
-                <Avatar
-                  src={currentUser.foto_perfil}
-                  sx={{ cursor: "pointer" }}
-                />
+                <Avatar src={image} sx={{ cursor: "pointer" }} />
               </UserMenu>
             }
           >

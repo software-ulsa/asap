@@ -177,29 +177,24 @@ const CrearEspecialista = ({ open, handleClose, notify }) => {
       correo: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm, isValidating }) => {
-      console.log("hola");
-      // if (!isValidating) {
-      //   console.log("hola");
-      // } else {
-      //   if (file) {
-      //     ImagenesService.upload(file)
-      //       .then((response) => {
-      //         values.foto_especialista = response.data;
-      //         guardarEspecialista(values);
-      //       })
-      //       .catch((error) => console.log(error));
-      //   } else {
-      //     guardarEspecialista(values);
-      //   }
-      //   setFile();
-      //   setImage("");
-      //   resetForm();
-      //   setActiveStep(0);
-      //   handleClose();
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      if (file) {
+        ImagenesService.upload(file)
+          .then((response) => {
+            values.foto_especialista = response.data;
+            guardarEspecialista(values);
+          })
+          .catch((error) => console.log(error));
+      } else {
+        guardarEspecialista(values);
+      }
+      setFile();
+      setImage("");
+      resetForm();
+      setActiveStep(0);
+      handleClose();
 
-      //   setSubmitting(false);
-      // }
+      setSubmitting(false);
     },
   });
 
