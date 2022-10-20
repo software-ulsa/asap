@@ -14,9 +14,11 @@ import PublicidadService from "../../services/PublicidadService";
 
 
 const CrearPublicidad = ({ open, handleClose, notify }) => {
+  
   const validationSchema = yup.object({
     nombre: yup.string().required("Nombre requerido"),
-    dot_empresa: yup.string().required("Descripción de empresa requerida"),
+    descripcion: yup.string().required("Descripción de empresa requerida"),
+    dot_empresa: yup.string().required("Dot de empresa requerida"),
     email: yup.string().email("Correo no válido").required("Correo requerido"),
     url: yup.string().required("URL requerido"),
     fecha_inicio: yup.string().required("Fecha de inicio requerido"),
@@ -27,14 +29,15 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
     initialValues: { 
       id: "",
       nombre: "",
+      descripcion: "",
       dot_empresa: "",
       email: "",
       url: "",
       fecha_inicio: "",
-      fecha_fin:  "",
+      fecha_vencimiento:  "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: (values, { setSubmitting, resetForm }) => {
       PublicidadService.createPublicidad(values)
         .then((response) => {
           if (response.message) {
@@ -47,6 +50,7 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
         .catch((error) => {
           notify("error", error);
         });
+      resetForm();
       handleClose();
     },
   });
@@ -86,8 +90,27 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
               <TextField
                 color="info"
                 fullWidth
-                name="dot_empresa"
+                name="descripcion"
                 label="Descripcion de empresa"
+                variant="outlined"
+                value={formik.values.descripcion}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.descripcion &&
+                  Boolean(formik.errors.descripcion)
+                }
+                helperText={
+                  formik.touched.descripcion && formik.errors.descripcion
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                color="info"
+                fullWidth
+                name="dot_empresa"
+                label="Dot de empresa"
                 variant="outlined"
                 value={formik.values.dot_empresa}
                 onChange={formik.handleChange}

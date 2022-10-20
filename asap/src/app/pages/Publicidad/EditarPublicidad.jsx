@@ -19,7 +19,8 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
 
     const validationSchema = yup.object({
     nombre: yup.string().required("Nombre requerido"),
-    dot_empresa: yup.string().required("Descripción de empresa requerida"),
+    descripcion: yup.string().required("Descripción de empresa requerida"),
+    dot_empresa: yup.string().required("Dot de empresa requerida"),
     email: yup.string().email("Correo no válido").required("Correo requerido"),
     url: yup.string().required("URL requerido"),
     fecha_inicio: yup.string().required("Fecha de inicio requerido"),
@@ -44,11 +45,12 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
       initialValues={{
           id: publicidad?.id || -1,
           nombre: publicidad?.nombre || "",
+          descripcion: publicidad?.descripcion || "",
           dot_empresa: publicidad?.dot_empresa || "",
           email: publicidad?.email || "",
           url: publicidad?.url || "",
           fecha_inicio: publicidad?.fecha_inicio || "",
-          fecha_fin: publicidad?.fecha_vencimiento || "",
+          fecha_vencimiento: publicidad?.fecha_vencimiento || "",
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
@@ -86,12 +88,31 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                         helperText={props.touched.nombre && props.errors.nombre}
                     />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
+                <TextField
+                    color="info"
+                    fullWidth
+                    name="descripcion"
+                    label="Descripcion de empresa"
+                    variant="outlined"
+                    value={props.values.descripcion}
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    error={
+                        props.touched.descripcion &&
+                    Boolean(props.errors.descripcion)
+                    }
+                    helperText={
+                    props.touched.descripcion && props.errors.descripcion
+                    }
+                />
+                </Grid>
+                <Grid item xs={12}>
                 <TextField
                     color="info"
                     fullWidth
                     name="dot_empresa"
-                    label="Descripcion de empresa"
+                    label="Dot de empresa"
                     variant="outlined"
                     value={props.values.dot_empresa}
                     onChange={props.handleChange}
