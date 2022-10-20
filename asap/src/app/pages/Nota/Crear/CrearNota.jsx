@@ -178,7 +178,11 @@ const CrearNota = ({ open, handleClose, notify }) => {
 
   const steps = ["Nota", "Miniatura", "Imagen Principal"];
   const stepsComponent = [
-    <InfoBasica formik={formik} />,
+    <InfoBasica
+      formik={formik}
+      palabras={palabras}
+      setPalabras={setPalabras}
+    />,
     <ImagenThumbnail
       imageThumb={imageThumb}
       setImageThumb={setImageThumb}
@@ -238,7 +242,7 @@ const CrearNota = ({ open, handleClose, notify }) => {
           >
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               disabled={activeStep === 0}
               onClick={handleBack}
               sx={{ mr: 1 }}
@@ -248,11 +252,20 @@ const CrearNota = ({ open, handleClose, notify }) => {
             <Stack direction="row" spacing={2}>
               <Button
                 variant="contained"
-                color="info"
-                type={activeStep === steps.length ? "submit" : "button"}
+                hidden={activeStep < steps.length - 1}
+                color="secondary"
+                type="submit"
+              >
+                Guardar
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="button"
+                hidden={activeStep === steps.length - 1}
                 onClick={handleNext}
               >
-                {activeStep === steps.length - 1 ? "Agregar" : "Siguiente"}
+                Siguiente
               </Button>
               <Button
                 variant="contained"
