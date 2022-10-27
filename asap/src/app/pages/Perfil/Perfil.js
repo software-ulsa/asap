@@ -1,53 +1,41 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import * as yup from "yup";
 import { Formik } from "formik";
 import { Helmet } from "react-helmet";
-import { toast, ToastContainer } from "react-toastify";
-
-import { IconButton, Button, Grid, Typography, Avatar } from "@mui/material";
+import {
+  IconButton,
+  Button,
+  Grid,
+  Typography,
+  Avatar,
+  Divider,
+} from "@mui/material";
 import { PhotoCameraRounded } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
 
-import UsuarioService from "../../services/UsuarioService";
-import ImagenesService from "../../services/ImagesService";
-import RolService from "../../services/RolService";
+import { profileValidationSchema } from "../../utils/validation";
 
-import { phoneRegExp } from "../../utils/utils";
-import { AuthContext } from "../../context/AuthContext";
+import { updateUser } from "../../services/UsuarioService";
+import ImagenesService from "../../services/ImagesService";
 
 import Registro from "./Registro";
 import InfoBasica from "./InfoBasica";
 
 const Perfil = () => {
-  const { currentUser, updateUser } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
+  console.log(currentUser);
 
   const [file, setFile] = useState();
   const [image, setImage] = useState("");
-  const [roles, setRoles] = useState();
-  const [fetched, setFetched] = useState(false);
 
   const doClickOnInput = () => {
     var input = document.getElementById("subirImagen");
     input?.click();
   };
-
-  const notify = useCallback(
-    (action, message) => {
-      setFetched(!fetched);
-      const configuration = {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      };
-      action === "success"
-        ? toast.success(message, configuration)
-        : toast.error(message, configuration);
-    },
-    [fetched]
-  );
 
   useEffect(() => {
     if (currentUser.foto_usuario) {
@@ -58,56 +46,8 @@ const Perfil = () => {
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      setImage();
     }
-    RolService.getAllRoles()
-      .then((response) => {
-        setRoles(response);
-      })
-      .catch((error) => console.log(error));
   }, []);
-
-  const guardarUsuario = (values) => {
-    UsuarioService.updateUser(values)
-      .then((response) => {
-        if (response.message) {
-          updateUser(values);
-          notify("success", "Perfil actualizado correctamente");
-        } else {
-          notify("error", "No se pudo actualizar el perfil");
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
-  };
-
-  const validationSchema = yup.object({
-    nombre: yup.string().required("Nombre requerido"),
-    ape_paterno: yup.string().required("Apellido paterno requerido"),
-    ape_materno: yup.string().required("Apellido materno requerido"),
-    edad: yup
-      .number("La edad debe ser un número")
-      .positive("La edad debe ser mayor a 0")
-      .integer("La edad debe ser un número")
-      .max(120, "Edad no válida")
-      .required("Edad requerida"),
-    sexo: yup
-      .string()
-      .oneOf(["Masculino", "Femenino"])
-      .label("Elegir uno")
-      .required("Sexo requerido"),
-    matricula: yup
-      .string()
-      .max(9, "Matricula no válida")
-      .required("Matricula requerida"),
-    telefono: yup
-      .string()
-      .matches(phoneRegExp, "Teléfono no váildo")
-      .required("Teléfono requerido"),
-    correo: yup.string().email("Correo no válido").required("Correo requerido"),
-  });
 
   return (
     <>
@@ -172,29 +112,33 @@ const Perfil = () => {
           sexo: currentUser?.sexo || "Elegir uno",
           id_rol: currentUser?.id_rol || 0,
         }}
-        validationSchema={validationSchema}
+        validationSchema={profileValidationSchema}
         onSubmit={(values, { setSubmitting }) => {
           if (file) {
             ImagenesService.upload(file)
               .then((response) => {
-                values.foto_usuario = response.data;
-                guardarUsuario(values);
+                values.foto_perfil = response.data;
               })
               .catch((error) => console.log(error));
-          } else {
-            guardarUsuario(values);
           }
+          dispatch(updateUser(values));
           setSubmitting(false);
         }}
       >
         {(props) => (
           <form onSubmit={props.handleSubmit}>
-            <Grid container paddingBottom={2}>
+            <Grid container paddingBottom={2} columnGap={2}>
+              <Grid item xs={12}>
+                <Divider>Informaci&oacute;n b&aacute;sica</Divider>
+              </Grid>
               <Grid item xs={12}>
                 <InfoBasica formik={props} />
               </Grid>
               <Grid item xs={12}>
-                <Registro formik={props} roles={roles} />
+                <Divider>Datos de acceso</Divider>
+              </Grid>
+              <Grid item xs={12}>
+                <Registro formik={props} rol={currentUser?.rol.nombre} />
               </Grid>
             </Grid>
             <Box
@@ -226,7 +170,6 @@ const Perfil = () => {
           </form>
         )}
       </Formik>
-      <ToastContainer />
     </>
   );
 };

@@ -1,30 +1,47 @@
 import httpClient from "./HttpClient";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const prefix = "/publicidad";
 
-export default class PublicidadService {
-  static async createPublicidad(publicidad) {
+export const createPublicidad = createAsyncThunk(
+  "publicidad/createPublicidad",
+  async (publicidad) => {
     return (await httpClient.post(`${prefix}`, publicidad)).data;
   }
+);
 
-  static async updatePublicidad(publicidad) {
+export const updatePublicidad = createAsyncThunk(
+  "publicidad/updatePublicidad",
+  async (publicidad) => {
     return (await httpClient.put(`${prefix}/${publicidad.id}`, publicidad))
       .data;
   }
+);
 
-  static async deletePublicidad(id) {
+export const deletePublicidad = createAsyncThunk(
+  "publicidad/deletePublicidad",
+  async (id) => {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
+);
 
-  static async deleteManyPublicidad(ids) {
+export const deleteManyPublicidad = createAsyncThunk(
+  "publicidad/deleteManyPublicidad",
+  async (ids) => {
     return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
   }
+);
 
-  static async getAllPublicidad() {
+export const getAllPublicidad = createAsyncThunk(
+  "publicidad/getAllPublicidad",
+  async () => {
     return (await httpClient.get(`${prefix}/`)).data;
   }
+);
 
-  static async getPublicidadById(id) {
+export const getPublicidadById = createAsyncThunk(
+  "publicidad/getPublicidadById",
+  async (id) => {
     return (await httpClient.get(`${prefix}/${id}`)).data;
   }
-}
+);

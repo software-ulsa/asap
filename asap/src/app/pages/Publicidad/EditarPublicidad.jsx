@@ -1,31 +1,25 @@
-import * as yup from "yup";
-
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, IconButton } from "@mui/material";
-import { Close, YouTube } from "@mui/icons-material";
-import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
 import { Formik } from "formik";
-import PublicidadService from "../../services/PublicidadService";
 
+import {
+  Grid,
+  IconButton,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import { Close } from "@mui/icons-material";
 
-const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
-    const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+import { updatePublicidad } from "../../services/PublicidadService";
 
-    const validationSchema = yup.object({
-    nombre: yup.string().required("Nombre requerido"),
-    descripcion: yup.string().required("Descripción de empresa requerida"),
-    dot_empresa: yup.string().required("Dot de empresa requerida"),
-    email: yup.string().email("Correo no válido").required("Correo requerido"),
-    url: yup.string().required("URL requerido"),
-    fecha_inicio: yup.string().required("Fecha de inicio requerido"),
-    fecha_vencimiento: yup.string().required("Fecha de vencimiento requerido"),
-  });
+import { publicidadValidationSchema } from "../../utils/validation";
+
+const EditarPublicidad = ({ open, handleClose, publicidad }) => {
+  const dispatch = useDispatch();
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -42,7 +36,7 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
         </IconButton>
       </Box>
       <Formik
-      initialValues={{
+        initialValues={{
           id: publicidad?.id || -1,
           nombre: publicidad?.nombre || "",
           descripcion: publicidad?.descripcion || "",
@@ -52,44 +46,32 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
           fecha_inicio: publicidad?.fecha_inicio || "",
           fecha_vencimiento: publicidad?.fecha_vencimiento || "",
         }}
-        validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-            values.id = publicidad?.id;
-            PublicidadService.updatePublicidad(values)
-              .then((response) => {
-                if (response.message) {
-                  setSubmitting(false);
-                  notify("success", response.message);
-                } else {
-                  notify("error", response.error);
-                }
-              })
-              .catch((error) => {
-                notify("error", error);
-              });
-            handleClose();
-          }}
-        >
-       {(props) => (
-        <form onSubmit={props.handleSubmit}>
+        validationSchema={publicidadValidationSchema}
+        onSubmit={(values) => {
+          dispatch(updatePublicidad(values));
+          handleClose();
+        }}
+      >
+        {(props) => (
+          <form onSubmit={props.handleSubmit}>
             <DialogContent>
-            <Grid container rowGap={2}>
+              <Grid container rowGap={2}>
                 <Grid item xs={12}>
-                    <TextField
-                        color="info"
-                        fullWidth
-                        label="Nombre"
-                        name="nombre"
-                        variant="outlined"
-                        value={props.values.nombre}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
-                        error={props.touched.nombre && Boolean(props.errors.nombre)}
-                        helperText={props.touched.nombre && props.errors.nombre}
-                    />
+                  <TextField
+                    color="info"
+                    fullWidth
+                    label="Nombre"
+                    name="nombre"
+                    variant="outlined"
+                    value={props.values.nombre}
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    error={props.touched.nombre && Boolean(props.errors.nombre)}
+                    helperText={props.touched.nombre && props.errors.nombre}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     color="info"
                     fullWidth
                     name="descripcion"
@@ -99,16 +81,16 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     error={
-                        props.touched.descripcion &&
-                    Boolean(props.errors.descripcion)
+                      props.touched.descripcion &&
+                      Boolean(props.errors.descripcion)
                     }
                     helperText={
-                    props.touched.descripcion && props.errors.descripcion
+                      props.touched.descripcion && props.errors.descripcion
                     }
-                />
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     color="info"
                     fullWidth
                     name="dot_empresa"
@@ -118,16 +100,16 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     error={
-                        props.touched.dot_empresa &&
-                    Boolean(props.errors.dot_empresa)
+                      props.touched.dot_empresa &&
+                      Boolean(props.errors.dot_empresa)
                     }
                     helperText={
-                    props.touched.dot_empresa && props.errors.dot_empresa
+                      props.touched.dot_empresa && props.errors.dot_empresa
                     }
-                />
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     color="info"
                     fullWidth
                     label="Email"
@@ -138,10 +120,10 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                     onBlur={props.handleBlur}
                     error={props.touched.email && Boolean(props.errors.email)}
                     helperText={props.touched.email && props.errors.email}
-                />
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     color="info"
                     fullWidth
                     name="url"
@@ -152,12 +134,12 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                     onBlur={props.handleBlur}
                     error={props.touched.url && Boolean(props.errors.url)}
                     helperText={props.touched.url && props.errors.url}
-                />
+                  />
                 </Grid>
-                
+
                 <Grid item xs={12}>
-                <TextField
-                type="date"
+                  <TextField
+                    type="date"
                     color="info"
                     fullWidth
                     name="fecha_inicio"
@@ -166,13 +148,18 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                     value={props.values.fecha_inicio}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={props.touched.fecha_inicio && Boolean(props.errors.fecha_inicio)}
-                    helperText={props.touched.fecha_inicio && props.errors.fecha_inicio}
-                />
+                    error={
+                      props.touched.fecha_inicio &&
+                      Boolean(props.errors.fecha_inicio)
+                    }
+                    helperText={
+                      props.touched.fecha_inicio && props.errors.fecha_inicio
+                    }
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
-                type="date"
+                  <TextField
+                    type="date"
                     color="info"
                     fullWidth
                     name="fecha_vencimiento"
@@ -181,32 +168,39 @@ const EditarPublicidad = ({ open, handleClose, notify, publicidad }) => {
                     value={props.values.fecha_vencimiento}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={props.touched.fecha_vencimiento && Boolean(props.errors.fecha_vencimiento)}
-                    helperText={props.touched.fecha_vencimiento && props.errors.fecha_vencimiento}
-                />
+                    error={
+                      props.touched.fecha_vencimiento &&
+                      Boolean(props.errors.fecha_vencimiento)
+                    }
+                    helperText={
+                      props.touched.fecha_vencimiento &&
+                      props.errors.fecha_vencimiento
+                    }
+                  />
                 </Grid>
-            </Grid>
+              </Grid>
             </DialogContent>
             <DialogActions>
-            <Box paddingBottom={2} paddingRight={2}>
+              <Box paddingBottom={2} paddingRight={2}>
                 <Button
-                style={{ marginRight: 10 }}
-                variant="contained"
-                color="secondary"
-                type="submit"
+                  style={{ marginRight: 10 }}
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                  disabled={!props.isValid}
                 >
-                Guardar
+                  Guardar
                 </Button>
                 <Button variant="contained" color="error" onClick={handleClose}>
-                Cancelar
+                  Cancelar
                 </Button>
-            </Box>
-        </DialogActions>
-        </form>
+              </Box>
+            </DialogActions>
+          </form>
         )}
-    </Formik>
+      </Formik>
     </Dialog>
- );
+  );
 };
 
 export default EditarPublicidad;

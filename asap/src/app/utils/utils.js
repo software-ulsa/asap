@@ -1,23 +1,19 @@
-import { makeStyles } from "@mui/styles";
 import { differenceInSeconds } from "date-fns";
+import { toast } from "react-toastify";
+
+export const notify = (action, message) => {
+  const configuration = {
+    position: "top-right",
+    autoClose: 1500,
+    theme: "light",
+  };
+  action === "success"
+    ? toast.success(message, configuration)
+    : toast.error(message, configuration);
+};
 
 export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-export const useStyles = makeStyles((theme) => ({
-  centeredHeader: {
-    "& > span": {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      textAlign: "center",
-    },
-    "& > span > button": {
-      margin: 0,
-      fontWeight: "bold",
-    },
-  },
-}));
 
 export const convertHexToRGB = (hex) => {
   // check if it's a rgba

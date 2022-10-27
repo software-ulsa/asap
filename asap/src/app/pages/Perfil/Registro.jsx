@@ -1,13 +1,6 @@
-import {
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 
-const Registro = ({ formik, roles }) => {
+const Registro = ({ formik, rol }) => {
   return (
     <Grid container spacing={2} marginTop={2}>
       <Grid item xs={12}>
@@ -16,7 +9,6 @@ const Registro = ({ formik, roles }) => {
           fullWidth
           label="Matricula"
           name="matricula"
-          type="text"
           variant="outlined"
           value={formik.values.matricula}
           onChange={formik.handleChange}
@@ -41,6 +33,7 @@ const Registro = ({ formik, roles }) => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          InputProps={{ readOnly: true }}
           color="info"
           fullWidth
           label="Correo"
@@ -48,10 +41,6 @@ const Registro = ({ formik, roles }) => {
           type="email"
           variant="outlined"
           value={formik.values.correo}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.correo && Boolean(formik.errors.correo)}
-          helperText={formik.touched.correo && formik.errors.correo}
         />
       </Grid>
       <Grid item xs={12}>
@@ -67,27 +56,15 @@ const Registro = ({ formik, roles }) => {
         />
       </Grid>
       <Grid item xs={12}>
-        <FormControl fullWidth>
-          <InputLabel id="lblRoles" color="info">
-            Rol
-          </InputLabel>
-          <Select
-            labelId="slRoles"
-            color="info"
-            id="lblRoles"
-            name="id_rol"
-            value={formik.values.id_rol}
-            label="Rol"
-            onChange={formik.handleChange}
-          >
-            <MenuItem disabled value={0}>
-              Elegir uno
-            </MenuItem>
-            {roles?.map((rol) => {
-              return <MenuItem value={rol.id}>{rol.nombre}</MenuItem>;
-            })}
-          </Select>
-        </FormControl>
+        <TextField
+          InputProps={{ readOnly: true }}
+          color="info"
+          fullWidth
+          label="Rol"
+          name="rol"
+          variant="outlined"
+          value={rol}
+        />
       </Grid>
     </Grid>
   );

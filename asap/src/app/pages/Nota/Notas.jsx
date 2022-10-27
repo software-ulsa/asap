@@ -1,74 +1,29 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import SuperDataTable from "../../components/SuperDataTable";
+import { notaHeaders } from "../../utils/headers";
 
 import { Helmet } from "react-helmet";
-import { ToastContainer, toast } from "react-toastify";
 
 import { Button, Grid, Typography } from "@mui/material";
 
-import NotaService from "../../services/NotaService";
+import {
+  deleteManyNota,
+  deleteNota,
+  getAllNotas,
+} from "../../services/NotaService";
 
-import CrearNota from "./Crear/CrearNota";
-import EditarNota from "./Editar/EditarNota";
-
-import { useStyles } from "../../utils/utils";
+import CrearNota from "./CrearNota";
+import EditarNota from "./EditarNota";
+import { notify } from "../../utils/utils";
 
 const Notas = () => {
-  const classes = useStyles();
+  const dispatch = useDispatch();
+  const { notas, fetched } = useSelector((state) => state.notas);
 
-  const [notas, setNotas] = useState([]);
   const [itemId, setItemId] = useState(-1);
-  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
-
-  const [fetched, setFetched] = useState(false);
-  const headers = [
-    {
-      name: "",
-      label: "No.",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, update) => {
-          let rowIndex = Number(tableMeta.rowIndex) + 1;
-          return <center>{rowIndex}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "id",
-      label: "Id",
-      options: {
-        display: false,
-        filter: false,
-      },
-    },
-    {
-      name: "titulo",
-      label: "Titulo",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "tema",
-      label: "Tema",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-  ];
+  const itemToEdit = notas.find((nota) => nota.id === Number(itemId));
 
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreate = () => setOpenCreate(true);
@@ -78,82 +33,28 @@ const Notas = () => {
   const handleOpenEdit = () => setOpenEdit(true);
   const handleCloseEdit = () => setOpenEdit(false);
 
-  const notify = useCallback(
-    (action, message) => {
-      setFetched(!fetched);
-      const configuration = {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      };
-      action === "success"
-        ? toast.success(message, configuration)
-        : toast.error(message, configuration);
-    },
-    [fetched]
-  );
-
   useEffect(() => {
     if (!fetched) {
-      NotaService.getAllNotas()
-        .then((response) => {
-          setNotas(response);
-          setFetched(true);
-        })
-        .catch((error) => {
-          setFetched(true);
-        });
+      dispatch(getAllNotas());
     }
-  }, [fetched, notify]);
-
-  useEffect(() => {
-    if (itemToEdit && itemToEdit.id !== -1) {
-      handleOpenEdit();
-    }
-  }, [itemToEdit]);
+  }, [fetched, dispatch]);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => notas[d.dataIndex].id);
     if (idsToDelete.length === 1) {
-      NotaService.deleteNota(idsToDelete[0])
-        .then((response) => {
-          if (response.message) {
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+      dispatch(deleteNota(idsToDelete[0]));
     } else if (idsToDelete.length >= 1) {
-      NotaService.deleteManyNota(idsToDelete)
-        .then((response) => {
-          if (response.message) {
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+      dispatch(deleteManyNota(idsToDelete));
     }
   };
 
   const editAction = (ids) => {
-    const idsToDelete = ids.data.map((d) => notas[d.dataIndex].id);
-    if (idsToDelete.length === 1) {
-      const id = idsToDelete[0];
-      const found = notas.find((nota) => nota.id === Number(id));
-      setItemToEdit(found);
+    const idsToEdit = ids.data.map((d) => notas[d.dataIndex].id);
+    if (idsToEdit.length === 1) {
+      setItemId(idsToEdit[0]);
       handleOpenEdit();
     } else {
-      toast.error("Solo se puede editar un elemento a la vez", {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      });
+      notify("error", "Solo se puede editar un elemento a la vez");
     }
   };
 
@@ -180,25 +81,22 @@ const Notas = () => {
           </Button>
         </Grid>
       </Grid>
+
       <SuperDataTable
         data={notas}
-        headers={headers}
+        headers={notaHeaders}
         fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />
-      <CrearNota
-        handleClose={handleCloseCreate}
-        open={openCreate}
-        notify={notify}
-      />
+
+      <CrearNota handleClose={handleCloseCreate} open={openCreate} />
+
       <EditarNota
         handleClose={handleCloseEdit}
         open={openEdit}
-        notify={notify}
         nota={itemToEdit}
       />
-      <ToastContainer />
     </>
   );
 };

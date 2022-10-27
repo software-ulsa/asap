@@ -1,18 +1,26 @@
+import { Formik } from "formik";
 import * as yup from "yup";
 
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, IconButton } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import {
+  Grid,
+  IconButton,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import { Formik } from "formik";
-import RolService from "../../services/RolService";
+import { Close } from "@mui/icons-material";
+
+import { useDispatch, useSelector } from "react-redux";
+import { updateRol } from "../../services/RolService";
 
 const EditarRol = ({ open, handleClose, notify, rol }) => {
+  const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.roles);
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>Editar rol</DialogTitle>
@@ -39,18 +47,9 @@ const EditarRol = ({ open, handleClose, notify, rol }) => {
         })}
         onSubmit={(values, { setSubmitting }) => {
           values.id = rol?.id;
-          RolService.updateRol(values)
-            .then((response) => {
-              if (response.message) {
-                setSubmitting(false);
-                notify("success", response.message);
-              } else {
-                notify("error", response.error);
-              }
-            })
-            .catch((error) => {
-              notify("error", error);
-            });
+          setSubmitting(true);
+          dispatch(updateRol(values));
+          setSubmitting(false);
           handleClose();
         }}
       >

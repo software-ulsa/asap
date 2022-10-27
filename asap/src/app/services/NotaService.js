@@ -1,34 +1,39 @@
 import httpClient from "./HttpClient";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const prefix = "/notas";
 
-export default class NotaService {
-  static async createNota(nota) {
-    return (await httpClient.post(`${prefix}`, nota)).data;
-  }
+export const createNota = createAsyncThunk("notas/createNota", async (nota) => {
+  return (await httpClient.post(`${prefix}`, nota)).data;
+});
 
-  static async updateNota(nota) {
-    return (await httpClient.put(`${prefix}/${nota.id}`, nota)).data;
-  }
+export const updateNota = createAsyncThunk("notas/updateNota", async (nota) => {
+  return (await httpClient.put(`${prefix}/${nota.id}`, nota)).data;
+});
 
-  static async deleteNota(id) {
-    return (await httpClient.delete(`${prefix}/${id}`)).data;
-  }
+export const deleteNota = createAsyncThunk("notas/deleteNota", async (id) => {
+  return (await httpClient.delete(`${prefix}/${id}`)).data;
+});
 
-  static async deleteManyNota(ids) {
+export const deleteManyNota = createAsyncThunk(
+  "notas/deleteManyNota",
+  async (ids) => {
     return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
   }
+);
 
-  static async getAllNotas() {
-    return (await httpClient.get(`${prefix}/`)).data;
-  }
+export const getAllNotas = createAsyncThunk("notas/getAllNotas", async () => {
+  return (await httpClient.get(`${prefix}/`)).data;
+});
 
-  static async getNotaById(id) {
-    return (await httpClient.get(`${prefix}/${id}`)).data;
-  }
+export const getNotaById = createAsyncThunk("notas/getNotaById", async (id) => {
+  return (await httpClient.get(`${prefix}/${id}`)).data;
+});
 
-  static async getNotaByKeyword(palabras_clave) {
+export const getNotaByKeyword = createAsyncThunk(
+  "notas/getNotaByKeyword",
+  async (palabras_clave) => {
     return (await httpClient.get(`${prefix}/getByKeyword/${palabras_clave}`))
       .data;
   }
-}
+);

@@ -1,55 +1,32 @@
-import * as yup from "yup";
-
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Grid, IconButton } from "@mui/material";
-import { Close } from "@mui/icons-material";
-import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
-import PublicidadService from "../../services/PublicidadService";
 
+import {
+  Grid,
+  IconButton,
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import { Close } from "@mui/icons-material";
 
-const CrearPublicidad = ({ open, handleClose, notify }) => {
-  
-  const validationSchema = yup.object({
-    nombre: yup.string().required("Nombre requerido"),
-    descripcion: yup.string().required("Descripción de empresa requerida"),
-    dot_empresa: yup.string().required("Dot de empresa requerida"),
-    email: yup.string().email("Correo no válido").required("Correo requerido"),
-    url: yup.string().required("URL requerido"),
-    fecha_inicio: yup.string().required("Fecha de inicio requerido"),
-    fecha_vencimiento: yup.string().required("Fecha de vencimiento requerido"),
-  });
+import { createPublicidad } from "../../services/PublicidadService";
+
+import { publicidadValidationSchema } from "../../utils/validation";
+import { emptyPublicidad } from "../../utils/initialStates";
+
+const CrearPublicidad = ({ open, handleClose }) => {
+  const dispatch = useDispatch();
 
   const formik = useFormik({
-    initialValues: { 
-      id: "",
-      nombre: "",
-      descripcion: "",
-      dot_empresa: "",
-      email: "",
-      url: "",
-      fecha_inicio: "",
-      fecha_vencimiento:  "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      PublicidadService.createPublicidad(values)
-        .then((response) => {
-          if (response.message) {
-            setSubmitting(false);
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+    initialValues: { emptyPublicidad },
+    validationSchema: publicidadValidationSchema,
+    onSubmit: (values, { resetForm }) => {
+      dispatch(createPublicidad(values));
       resetForm();
       handleClose();
     },
@@ -152,10 +129,10 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
                 helperText={formik.touched.url && formik.errors.url}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
-               type="date"
+                type="date"
                 color="info"
                 fullWidth
                 name="fecha_inicio"
@@ -164,13 +141,18 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
                 value={formik.values.fecha_inicio}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
-                helperText={formik.touched.fecha_inicio && formik.errors.fecha_inicio}
+                error={
+                  formik.touched.fecha_inicio &&
+                  Boolean(formik.errors.fecha_inicio)
+                }
+                helperText={
+                  formik.touched.fecha_inicio && formik.errors.fecha_inicio
+                }
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-               type="date"
+                type="date"
                 color="info"
                 fullWidth
                 name="fecha_vencimiento"
@@ -179,8 +161,14 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
                 value={formik.values.fecha_vencimiento}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.fecha_vencimiento && Boolean(formik.errors.fecha_vencimiento)}
-                helperText={formik.touched.fecha_vencimiento && formik.errors.fecha_vencimiento}
+                error={
+                  formik.touched.fecha_vencimiento &&
+                  Boolean(formik.errors.fecha_vencimiento)
+                }
+                helperText={
+                  formik.touched.fecha_vencimiento &&
+                  formik.errors.fecha_vencimiento
+                }
               />
             </Grid>
           </Grid>
@@ -192,6 +180,7 @@ const CrearPublicidad = ({ open, handleClose, notify }) => {
               variant="contained"
               color="secondary"
               type="submit"
+              disabled={!(formik.isValid && formik.dirty)}
             >
               Agregar
             </Button>

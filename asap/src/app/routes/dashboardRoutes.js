@@ -9,7 +9,9 @@ import Publicidades from "../pages/Publicidad/Publicidades";
 
 import Cursos from "../pages/Curso/Cursos";
 import EditarCurso from "../pages/Curso/EditarCurso";
+
 import Perfil from "../pages/Perfil/Perfil";
+import NotFound from "../pages/NotFound";
 
 const routes = createBrowserRouter([
   {
@@ -50,8 +52,7 @@ const routes = createBrowserRouter([
       },
     ],
   },
-  { path: "/", element: <Navigate to="/" /> },
-  { path: "*", element: <div>404</div> },
+  { path: "*", element: <NotFound /> },
 ]);
 
 export default routes;

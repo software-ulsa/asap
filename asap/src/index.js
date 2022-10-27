@@ -3,19 +3,21 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 
 import App from "./App";
-import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "./app/context/AuthContext";
+import { Provider } from "react-redux";
 import { CssBaseline, StyledEngineProvider } from "@mui/material";
+
+import "react-toastify/dist/ReactToastify.css";
+import store from "./app/store/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
-      <AuthProvider>
+      <Provider store={store}>
         <CssBaseline />
         <App />
-      </AuthProvider>
+      </Provider>
     </StyledEngineProvider>
   </React.StrictMode>
 );

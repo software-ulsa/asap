@@ -1,37 +1,39 @@
 import httpClient from "./HttpClient";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const prefix = "/users";
 
-export default class UsuarioService {
-  static async createUser(user) {
-    return (await httpClient.post(`${prefix}`, user)).data;
-  }
+export const createUser = createAsyncThunk("users/createUser", async (user) => {
+  return (await httpClient.post(`${prefix}`, user)).data;
+});
 
-  static async updateUser(user) {
-    return (await httpClient.put(`${prefix}/${user.id}`, user)).data;
-  }
+export const updateUser = createAsyncThunk("users/updateUser", async (user) => {
+  return (await httpClient.put(`${prefix}/${user.id}`, user)).data;
+});
 
-  static async deleteUser(id) {
-    return (await httpClient.delete(`${prefix}/${id}`)).data;
-  }
+export const deleteUser = createAsyncThunk("users/deleteUser", async (id) => {
+  return (await httpClient.delete(`${prefix}/${id}`)).data;
+});
 
-  static async deleteManyUser(ids) {
+export const deleteManyUser = createAsyncThunk(
+  "users/deleteManyUser",
+  async (ids) => {
     return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
   }
+);
 
-  static async login(user) {
-    return (await httpClient.post(`${prefix}/login`, user)).data;
-  }
+export const login = createAsyncThunk("users/login", async (user) => {
+  return (await httpClient.post(`${prefix}/login`, user)).data;
+});
 
-  static async getAllUsers() {
-    return (await httpClient.get(`${prefix}/`)).data;
-  }
+export const getAllUsers = createAsyncThunk("users/getAllUsers", async () => {
+  return (await httpClient.get(`${prefix}/`)).data;
+});
 
-  static async getById(id) {
-    return (await httpClient.get(`${prefix}/getById/${id}`)).data;
-  }
+export const getById = createAsyncThunk("users/getById", async (id) => {
+  return (await httpClient.get(`${prefix}/getById/${id}`)).data;
+});
 
-  static async getByRol(rol) {
-    return (await httpClient.get(`${prefix}/getByRol/${rol}`)).data;
-  }
-}
+export const getByRol = createAsyncThunk("users/getByRol", async (rol) => {
+  return (await httpClient.get(`${prefix}/getByRol/${rol}`)).data;
+});

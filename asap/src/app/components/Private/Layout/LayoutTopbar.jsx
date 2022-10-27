@@ -1,9 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { Span } from "../../Typography";
-
-import { Box, styled, useTheme } from "@mui/system";
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -17,15 +15,17 @@ import {
   MenuItem,
   useMediaQuery,
 } from "@mui/material";
+import { Box, styled, useTheme } from "@mui/system";
+
+import { Span } from "../../Typography";
+import useSettings from "../../../hooks/useSettings";
+import { topBarHeight } from "../../../utils/constant";
 
 import { Menu } from "../../../components";
-import { topBarHeight } from "../../../utils/constant";
-import useSettings from "../../../hooks/useSettings";
-import { AuthContext } from "../../../context/AuthContext";
 import { themeShadows } from "../../../components/Theme/themeColors";
-import { useState } from "react";
 
 import ImagenesService from "../../../services/ImagesService";
+import { logout } from "../../../reducers/AuthReducer";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -83,10 +83,12 @@ const StyledItem = styled(MenuItem)(({ theme }) => ({
 
 const LayoutTopbar = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const { signout, currentUser } = useContext(AuthContext);
+
   const { settings, updateSettings } = useSettings();
   const { mode } = settings.layoutSettings.leftSidebar;
+  const { currentUser } = useSelector((state) => state.auth);
 
   const [image, setImage] = useState();
 
@@ -108,8 +110,8 @@ const LayoutTopbar = () => {
   };
 
   useEffect(() => {
-    if (currentUser.foto_usuario) {
-      ImagenesService.get(currentUser.foto_usuario)
+    if (currentUser.foto_perfil) {
+      ImagenesService.get(currentUser.foto_perfil)
         .then((url) => {
           setImage(url);
         })
@@ -152,7 +154,7 @@ const LayoutTopbar = () => {
               </Link>
             </StyledItem>
 
-            <StyledItem onClick={signout}>
+            <StyledItem onClick={() => dispatch(logout())}>
               <Logout style={{ marginRight: 10 }} color="primary" />
               <Span> Cerrar sesi&oacute;n </Span>
             </StyledItem>

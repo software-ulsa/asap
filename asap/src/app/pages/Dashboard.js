@@ -1,5 +1,9 @@
+import { Suspense } from "react";
 import { Helmet } from "react-helmet";
+
 import { MainLayout, MainTheme } from "../components";
+import SuspenseCircle from "../components/SuspenseCircle";
+
 import { SettingsProvider } from "../context/SettingsContext";
 
 export default function Dashboard() {
@@ -10,9 +14,11 @@ export default function Dashboard() {
         <meta name="Tablero" content="Tablero de administración" />
       </Helmet>
       <SettingsProvider>
-        <MainTheme>
-          <MainLayout></MainLayout>
-        </MainTheme>
+        <Suspense fallback={<SuspenseCircle />}>
+          <MainTheme>
+            <MainLayout></MainLayout>
+          </MainTheme>
+        </Suspense>
       </SettingsProvider>
     </>
   );

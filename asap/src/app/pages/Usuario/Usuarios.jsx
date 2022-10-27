@@ -1,101 +1,32 @@
-import { useCallback, useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import SuperDataTable from "../../components/SuperDataTable";
+import { usuarioHeaders } from "../../utils/headers";
 
 import { Helmet } from "react-helmet";
-import { ToastContainer, toast } from "react-toastify";
 
 import { Button, Grid, Typography } from "@mui/material";
 
-import UsuarioService from "../../services/UsuarioService";
+import {
+  deleteManyUser,
+  deleteUser,
+  getAllUsers,
+} from "../../services/UsuarioService";
 
-import CrearUsuario from "./Crear/CrearUsuario";
-import EditarUsuario from "./Editar/EditarUsuario";
+import CrearUsuario from "./CrearUsuario";
+import EditarUsuario from "./EditarUsuario";
 
-import { AuthContext } from "../../context/AuthContext";
-import { useStyles } from "../../utils/utils";
+import { notify } from "../../utils/utils";
+import { emptyUser } from "../../utils/initialStates";
 
 const Usuarios = () => {
-  const classes = useStyles();
-  const { currentUser } = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
+  const { usuarios, fetched } = useSelector((state) => state.usuarios);
 
   const [itemId, setItemId] = useState(-1);
-  const [itemToEdit, setItemToEdit] = useState({ id: -1 });
-
-  const [usuarios, setUsuarios] = useState([]);
-  const [fetched, setFetched] = useState(false);
-
-  const headers = [
-    {
-      name: "",
-      label: "No.",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, update) => {
-          let rowIndex = Number(tableMeta.rowIndex) + 1;
-          return <center>{rowIndex}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "id",
-      label: "Id",
-      options: {
-        display: false,
-        filter: false,
-      },
-    },
-    {
-      name: "nombre",
-      label: "Nombre",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "correo",
-      label: "Correo",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "telefono",
-      label: "Teléfono",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "rol",
-      label: "Rol",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data["nombre"]}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-  ];
+  const itemToEdit = usuarios.find((user) => user.id === Number(itemId));
 
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreate = () => setOpenCreate(true);
@@ -105,39 +36,11 @@ const Usuarios = () => {
   const handleOpenEdit = () => setOpenEdit(true);
   const handleCloseEdit = () => setOpenEdit(false);
 
-  const notify = useCallback(
-    (action, message) => {
-      setFetched(!fetched);
-      const configuration = {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      };
-      action === "success"
-        ? toast.success(message, configuration)
-        : toast.error(message, configuration);
-    },
-    [fetched]
-  );
-
   useEffect(() => {
     if (!fetched) {
-      UsuarioService.getAllUsers()
-        .then((response) => {
-          setUsuarios(response);
-          setFetched(true);
-        })
-        .catch((error) => {
-          setFetched(true);
-        });
+      dispatch(getAllUsers());
     }
-  }, [fetched, notify]);
-
-  useEffect(() => {
-    if (itemToEdit && itemToEdit.id !== -1) {
-      handleOpenEdit();
-    }
-  }, [itemToEdit]);
+  }, [fetched, dispatch]);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => usuarios[d.dataIndex].id);
@@ -146,47 +49,20 @@ const Usuarios = () => {
       if (currentUser.id === id) {
         notify("error", "No se puede eliminar este usuario");
       } else {
-        UsuarioService.deleteUser(id)
-          .then((response) => {
-            if (response.message) {
-              notify("success", response.message);
-            } else {
-              notify("error", response.error);
-            }
-          })
-          .catch((error) => {
-            notify("error", error);
-          });
+        dispatch(deleteUser(idsToDelete[0]));
       }
     } else if (idsToDelete.length >= 1) {
-      UsuarioService.deleteManyUser(idsToDelete)
-        .then((response) => {
-          if (response.message) {
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+      dispatch(deleteManyUser(idsToDelete));
     }
   };
 
   const editAction = (ids) => {
-    const idsToDelete = ids.data.map((d) => usuarios[d.dataIndex].id);
-    if (idsToDelete.length === 1) {
-      const id = idsToDelete[0];
-      const found = usuarios.find((usuario) => usuario.id === Number(id));
-      setItemId(id);
-      setItemToEdit(found);
+    const idsToEdit = ids.data.map((d) => usuarios[d.dataIndex].id);
+    if (idsToEdit.length === 1) {
+      setItemId(idsToEdit[0]);
       handleOpenEdit();
     } else {
-      toast.error("Solo se puede editar un elemento a la vez", {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      });
+      notify("error", "Solo se puede editar un elemento a la vez");
     }
   };
 
@@ -213,25 +89,28 @@ const Usuarios = () => {
           </Button>
         </Grid>
       </Grid>
+
       <SuperDataTable
         data={usuarios}
-        headers={headers}
+        headers={usuarioHeaders}
         fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />
+
       <CrearUsuario
         handleClose={handleCloseCreate}
+        user={emptyUser}
         open={openCreate}
-        notify={notify}
+        mode={true}
       />
+
       <EditarUsuario
         handleClose={handleCloseEdit}
+        user={itemToEdit}
         open={openEdit}
-        notify={notify}
-        usuario={itemToEdit}
+        mode={false}
       />
-      <ToastContainer />
     </>
   );
 };

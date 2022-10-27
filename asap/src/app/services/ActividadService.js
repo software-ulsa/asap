@@ -1,29 +1,53 @@
 import httpClient from "./HttpClient";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const prefix = "/actividades";
 
-export default class ActividadService {
-  static async createActividad(actividad) {
+export const createActividad = createAsyncThunk(
+  "actividades/createActividad",
+  async (actividad) => {
     return (await httpClient.post(`${prefix}`, actividad)).data;
   }
+);
 
-  static async updateActividad(actividad) {
+export const updateActividad = createAsyncThunk(
+  "actividades/updateActividad",
+  async (actividad) => {
     return (await httpClient.put(`${prefix}/${actividad.id}`, actividad)).data;
   }
+);
 
-  static async deleteActividad(id) {
+export const deleteActividad = createAsyncThunk(
+  "actividades/deleteActividad",
+  async (id) => {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
+);
 
-  static async deleteManyActividad(ids) {
+export const deleteManyActividad = createAsyncThunk(
+  "actividades/deleteManyActividad",
+  async (ids) => {
     return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
   }
+);
 
-  static async getAllActividad() {
+export const getAllActividad = createAsyncThunk(
+  "actividades/getAllActividad",
+  async () => {
     return (await httpClient.get(`${prefix}/`)).data;
   }
+);
 
-  static async getActividadById(id) {
+export const getAllActividadByCursoId = createAsyncThunk(
+  "actividades/getAllActividadByCursoId",
+  async (id) => {
+    return (await httpClient.get(`${prefix}/curso/${id}`)).data;
+  }
+);
+
+export const getActividadById = createAsyncThunk(
+  "actividades/getActividadById",
+  async (id) => {
     return (await httpClient.get(`${prefix}/${id}`)).data;
   }
-}
+);

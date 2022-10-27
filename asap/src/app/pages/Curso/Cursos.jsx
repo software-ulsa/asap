@@ -1,147 +1,54 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import SuperDataTable from "../../components/SuperDataTable";
+import { cursoHeaders } from "../../utils/headers";
+import { notify } from "../../utils/utils";
 
 import { Helmet } from "react-helmet";
-import { ToastContainer, toast } from "react-toastify";
 
 import { Button, Grid, Typography } from "@mui/material";
 
-import CursoService from "../../services/CursoService";
+import {
+  deleteCurso,
+  deleteManyCurso,
+  getAllCurso,
+} from "../../services/CursoService";
 
 import CrearCurso from "./CrearCurso";
-import { useStyles } from "../../utils/utils";
 
 const Cursos = () => {
   const navigate = useNavigate();
-  const classes = useStyles();
-
-  const [cursos, setCursos] = useState([]);
-  const [fetched, setFetched] = useState(false);
-
-  const headers = [
-    {
-      name: "",
-      label: "No.",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, update) => {
-          let rowIndex = Number(tableMeta.rowIndex) + 1;
-          return <center>{rowIndex}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "id",
-      label: "Id",
-      options: {
-        display: false,
-        filter: false,
-      },
-    },
-    {
-      name: "titulo",
-      label: "Titulo",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-    {
-      name: "descripcion",
-      label: "Descripción",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: classes.centeredHeader,
-        }),
-      },
-    },
-  ];
+  const dispatch = useDispatch();
+  const { cursos, fetched } = useSelector((state) => state.cursos);
 
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreate = () => setOpenCreate(true);
   const handleCloseCreate = () => setOpenCreate(false);
 
-  const notify = useCallback(
-    (action, message) => {
-      setFetched(!fetched);
-      const configuration = {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      };
-      action === "success"
-        ? toast.success(message, configuration)
-        : toast.error(message, configuration);
-    },
-    [fetched]
-  );
-
   useEffect(() => {
     if (!fetched) {
-      CursoService.getAllCurso()
-        .then((response) => {
-          setCursos(response);
-          setFetched(true);
-        })
-        .catch((error) => {
-          setFetched(true);
-        });
+      dispatch(getAllCurso());
     }
-  }, [fetched, notify]);
+  }, [fetched, dispatch]);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => cursos[d.dataIndex].id);
     if (idsToDelete.length === 1) {
-      CursoService.deleteCurso(idsToDelete[0])
-        .then((response) => {
-          if (response.message) {
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+      dispatch(deleteCurso(idsToDelete[0]));
     } else if (idsToDelete.length >= 1) {
-      CursoService.deleteCurso(idsToDelete[0])
-        .then((response) => {
-          if (response.message) {
-            notify("success", response.message);
-          } else {
-            notify("error", response.error);
-          }
-        })
-        .catch((error) => {
-          notify("error", error);
-        });
+      dispatch(deleteManyCurso(idsToDelete));
     }
   };
 
   const editAction = (ids) => {
-    const idsToDelete = ids.data.map((d) => cursos[d.dataIndex].id);
-    if (idsToDelete.length === 1) {
-      const id = idsToDelete[0];
-      const found = cursos.find((curso) => curso.id === Number(id));
-      navigate("/editar-curso", { state: { item: found } });
+    const idsToEdit = ids.data.map((d) => cursos[d.dataIndex].id);
+    if (idsToEdit.length === 1) {
+      const id = idsToEdit[0];
+      navigate("/editar-curso", { state: { id: id } });
     } else {
-      toast.error("Solo se puede editar un elemento a la vez", {
-        position: "top-right",
-        autoClose: 1500,
-        theme: "light",
-      });
+      notify("error", "Solo se puede editar un elemento a la vez");
     }
   };
 
@@ -168,19 +75,20 @@ const Cursos = () => {
           </Button>
         </Grid>
       </Grid>
+
       <SuperDataTable
         data={cursos}
-        headers={headers}
+        headers={cursoHeaders}
         fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
       />
+
       <CrearCurso
         handleClose={handleCloseCreate}
         open={openCreate}
         notify={notify}
       />
-      <ToastContainer />
     </>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import * as yup from "yup";
+import { useDispatch } from "react-redux";
+
 import { useFormik } from "formik";
 
 import {
@@ -12,57 +13,35 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-
 import { Box } from "@mui/system";
-
-import ActividadService from "../../../services/ActividadService";
-import ImagenesService from "../../../services/ImagesService";
 import { Close } from "@mui/icons-material";
 
-const CrearActividad = ({ open, handleClose, notify, curso }) => {
+import { createActividad } from "../../../services/ActividadService";
+import ImagenesService from "../../../services/ImagesService";
+
+import { emptyActividad } from "../../../utils/initialStates";
+import { actividadValidationSchema } from "../../../utils/validation";
+
+const CrearActividad = ({ open, handleClose, curso }) => {
+  const dispatch = useDispatch();
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
 
-  const guardarActividad = (values) => {
-    ActividadService.createActividad(values)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-          curso.actividades.push(values);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
-  };
-
-  const validationSchema = yup.object({
-    titulo: yup.string().required("Título requerido"),
-    descripcion: yup.string().required("Descripción requerida"),
-  });
-
   const formik = useFormik({
-    initialValues: {
-      titulo: "",
-      descripcion: "",
-      url_media: "a",
-    },
-    validationSchema: validationSchema,
+    initialValues: emptyActividad,
+    validationSchema: actividadValidationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       values.id_curso = curso.id;
       values.peso = Math.floor(1 / (curso.actividades.length + 1)) * 100;
-      if (file) {
-        ImagenesService.upload(file)
-          .then((response) => {
-            values.foto_especialista = response.data;
-            guardarActividad(values);
-          })
-          .catch((error) => console.log(error));
-      } else {
-        guardarActividad(values);
-      }
+      // if (file) {
+      //   ImagenesService.upload(file)
+      //     .then((response) => {
+      //       values.foto_especialista = response.data;
+      //     })
+      //     .catch((error) => console.log(error));
+      // }
+
+      dispatch(createActividad(values));
       setFile();
       setImage("");
       resetForm();

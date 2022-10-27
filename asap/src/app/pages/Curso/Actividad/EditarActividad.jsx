@@ -15,65 +15,43 @@ import {
 
 import { Box } from "@mui/system";
 
-import ActividadService from "../../../services/ActividadService";
+import ActividadService, {
+  updateActividad,
+} from "../../../services/ActividadService";
 import ImagenesService from "../../../services/ImagesService";
 import { Close } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { actividadValidationSchema } from "../../../utils/validation";
 
-const EditarActividad = ({
-  open,
-  handleClose,
-  notify,
-  actividad,
-  setFetched,
-}) => {
+const EditarActividad = ({ open, actividad, handleClose }) => {
+  const dispatch = useDispatch();
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
 
-  const guardarActividad = (values) => {
-    ActividadService.updateActividad(values)
-      .then((response) => {
-        if (response.message) {
-          notify("success", response.message);
-        } else {
-          notify("error", response.error);
-        }
-      })
-      .catch((error) => {
-        notify("error", error);
-      });
-  };
-
-  const validationSchema = yup.object({
-    titulo: yup.string().required("Título requerido"),
-    descripcion: yup.string().required("Descripción requerida"),
-  });
-
   const formik = useFormik({
     initialValues: {
+      id: actividad?.id,
       titulo: actividad?.titulo,
       descripcion: actividad?.descripcion,
-      url_media: "a",
+      url_media: actividad?.url_media,
+      id_curso: actividad?.id_curso,
     },
-    validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      values.id = actividad.id;
-      values.id_curso = actividad.id_curso;
+    validationSchema: actividadValidationSchema,
+    onSubmit: (values, { resetForm }) => {
       values.peso = 100;
+
       if (file) {
         ImagenesService.upload(file)
           .then((response) => {
             values.foto_especialista = response.data;
-            guardarActividad(values);
           })
           .catch((error) => console.log(error));
-      } else {
-        guardarActividad(values);
       }
+
+      dispatch(updateActividad(values));
       setFile();
       setImage("");
       resetForm();
-      setFetched(false);
-      setSubmitting(false);
       handleClose();
     },
   });

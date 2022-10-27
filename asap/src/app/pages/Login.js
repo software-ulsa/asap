@@ -1,17 +1,13 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 
-import Swal from "sweetalert2";
+import { login } from "../services/UsuarioService";
+
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
-import {
-  AccountCircle,
-  Lock,
-  LoginRounded,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
 import {
   FormControl,
   IconButton,
@@ -21,42 +17,44 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import {
+  AccountCircle,
+  Lock,
+  LoginRounded,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 
 import Logo from "../images/logo.png";
-import Background from "../images/background.png";
 import Banner from "../images/banner.png";
-import UsuarioService from "../services/UsuarioService";
-import { AuthContext } from "../context/AuthContext";
+import Background from "../images/background.png";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
-  const { currentUser, signin } = useContext(AuthContext);
+  const { currentUser, loading, error } = useSelector((state) => state.auth);
 
   const iniciarSesion = () => {
-    setLoading(true);
     const user = {
       correo: correo,
       password: password,
     };
 
-    UsuarioService.login(user)
-      .then((response) => {
-        signin(response);
-        setLoading(false);
-        navigate("/");
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          text: error.error ? error.error : "Credenciales inválidas",
-        });
-        setLoading(false);
-      });
+    dispatch(login(user));
+
+    if (!error) {
+      navigate("/");
+    } else {
+      toast.error(
+        "error",
+        error.error ? error.error : "Credenciales inválidas"
+      );
+    }
   };
 
   if (currentUser) return <Navigate to="/" />;

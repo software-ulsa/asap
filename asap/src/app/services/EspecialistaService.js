@@ -1,39 +1,62 @@
 import httpClient from "./HttpClient";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const prefix = "/especialistas";
 
-export default class EspecialistaService {
-  static async createEspecialista(especialista) {
+export const createEspecialista = createAsyncThunk(
+  "especialista/createEspecialista",
+  async (especialista) => {
     return (await httpClient.post(`${prefix}`, especialista)).data;
   }
+);
 
-  static async updateEspecialista(especialista) {
+export const updateEspecialista = createAsyncThunk(
+  "especialista/updateEspecialista",
+  async (especialista) => {
     return (await httpClient.put(`${prefix}/${especialista.id}`, especialista))
       .data;
   }
+);
 
-  static async deleteEspecialista(id) {
+export const deleteEspecialista = createAsyncThunk(
+  "especialista/deleteEspecialista",
+  async (id) => {
     return (await httpClient.delete(`${prefix}/${id}`)).data;
   }
+);
 
-  static async deleteManyEspecialista(ids) {
+export const deleteManyEspecialista = createAsyncThunk(
+  "especialista/deleteManyEspecialista",
+  async (ids) => {
     return (await httpClient.post(`${prefix}/batch`, { ids: ids })).data;
   }
+);
 
-  static async getAllEspecialista() {
+export const getAllEspecialista = createAsyncThunk(
+  "especialista/getAllEspecialista",
+  async () => {
     return (await httpClient.get(`${prefix}/`)).data;
   }
+);
 
-  static async getEspecialistaById(id) {
+export const getEspecialistaById = createAsyncThunk(
+  "especialista/getEspecialistaById",
+  async (id) => {
     return (await httpClient.get(`${prefix}/${id}`)).data;
   }
+);
 
-  static async getEspecialistaByEspecialidad(especialidad) {
+export const getEspecialistaByEspecialidad = createAsyncThunk(
+  "especialista/getEspecialistaByEspecialidad",
+  async (especialidad) => {
     return (await httpClient.get(`${prefix}/getByEspecialidad/${especialidad}`))
       .data;
   }
+);
 
-  static async getEspecialistaByArea(area) {
+export const getEspecialistaByArea = createAsyncThunk(
+  "especialista/getEspecialistaByArea",
+  async (area) => {
     return (await httpClient.get(`${prefix}/getByArea/${area}`)).data;
   }
-}
+);
