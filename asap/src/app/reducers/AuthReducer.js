@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import SecureLS from "secure-ls";
-import { login } from "../services/UsuarioService";
+import { login, updateProfile } from "../services/UsuarioService";
+import { notify } from "../utils/utils";
 
 const ls = new SecureLS({ encodingType: "aes" });
 const initialState = {
@@ -21,7 +22,7 @@ export const authSlice = createSlice({
     },
     checkUser: (state) => {
       let user = null;
-      const auth = ls.get("currentUser");
+      const auth = ls.get("currentASAPUser");
       if (auth !== "") {
         user = JSON.parse(auth);
         if (!state.currentUser) state.currentUser = user;
@@ -36,15 +37,30 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         const { userFound, token } = action.payload;
+        notify(
+          "success",
+          `Bienvenido ${userFound.nombre} ${userFound.ape_paterno}`
+        );
 
         ls.set("token", JSON.stringify(token));
-        ls.set("currentUser", JSON.stringify(userFound));
+        ls.set("currentASAPUser", JSON.stringify(userFound));
         state.loading = false;
         state.currentUser = action.payload;
       })
       .addCase(login.rejected, (state) => {
         state.error = true;
         state.loading = false;
+      });
+    builder
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        notify("success", "Perfil actualizado");
+        ls.set("currentASAPUser", JSON.stringify(action.payload.user));
+        state.loading = false;
+        state.currentUser = action.payload.user;
+      })
+      .addCase(updateProfile.rejected, (state) => {
+        notify("error", "Hubo un error al actualizar el perfil");
+        state.error = true;
       });
   },
 });

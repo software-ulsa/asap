@@ -7,6 +7,7 @@ import {
   getAllActividadByCursoId,
 } from "../services/ActividadService";
 import { getCursoById, updateCurso } from "../services/CursoService";
+import { notify } from "../utils/utils";
 
 const initialState = {
   curso: {},
@@ -34,9 +35,11 @@ export const actividadesSlice = createSlice({
       });
     builder
       .addCase(updateCurso.fulfilled, (state, action) => {
+        notify("success", "Se agregó la actividad");
         state.curso = action.payload;
       })
       .addCase(updateCurso.rejected, (state) => {
+        notify("error", "Hubo un error al agregar la actividad");
         state.error = true;
       });
     builder
@@ -60,12 +63,14 @@ export const actividadesSlice = createSlice({
       });
     builder
       .addCase(updateActividad.fulfilled, (state, action) => {
+        notify("success", "Se actualizó la actividad");
         var foundIndex = state.actividades.findIndex(
           (actividad) => actividad.id === action.payload.actividad.id
         );
         state.actividades[foundIndex] = action.payload.actividad;
       })
       .addCase(updateActividad.rejected, (state) => {
+        notify("error", "Hubo un error al actualizar la actividad");
         state.error = true;
       });
     builder
@@ -73,18 +78,22 @@ export const actividadesSlice = createSlice({
         var foundIndex = state.actividades.findIndex(
           (actividad) => actividad.id === action.payload.id
         );
+        notify("success", "Se eliminó la actividad");
         state.actividades.splice(foundIndex, 1);
       })
       .addCase(deleteActividad.rejected, (state) => {
+        notify("error", "Hubo un error al eliminar la actividad");
         state.error = true;
       });
     builder
       .addCase(deleteManyActividad.fulfilled, (state, action) => {
+        notify("success", "Actividades eliminadas");
         state.actividades = state.actividades.filter(
           (actividad) => !action.payload.ids.find((rm) => rm === actividad.id)
         );
       })
       .addCase(deleteManyActividad.rejected, (state) => {
+        notify("error", "Hubo un error al eliminar las actividades");
         state.error = true;
       });
   },

@@ -140,7 +140,7 @@ const LayoutTopbar = () => {
               <UserMenu>
                 <Hidden xsDown>
                   <Span>
-                    Bienvenido, <strong>{currentUser.nombre}</strong>
+                    <strong>{`${currentUser.nombre} ${currentUser.ape_paterno}`}</strong>
                   </Span>
                 </Hidden>
                 <Avatar src={image} sx={{ cursor: "pointer" }} />

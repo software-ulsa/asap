@@ -28,10 +28,19 @@ const EditarNota = ({ open, handleClose, note }) => {
   const [mainImage, setMainImage] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
 
+  const [palabras, setPalabras] = useState([]);
+  const [contenido, setContenido] = useState("");
+
   const [mainFile, setMainFile] = useState();
   const [thumbnailFile, setThumbnailFile] = useState();
 
   const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    setNota(note);
+    setPalabras(note?.palabras_clave || []);
+    setContenido(note?.contenido || "");
+  }, [note]);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -63,11 +72,25 @@ const EditarNota = ({ open, handleClose, note }) => {
     }
 
     dispatch(updateNota(nota));
+    setActiveStep(0);
+    setPalabras([]);
+    setContenido("");
+    handleClose();
   };
 
   const steps = ["Nota", "Miniatura", "Imagen Principal"];
   const stepsComponent = [
-    <InfoBasica nota={nota} setNota={setNota} handleClose={handleClose} />,
+    <InfoBasica
+      mode={false}
+      nota={nota}
+      setNota={setNota}
+      handleNext={handleNext}
+      handleClose={handleClose}
+      palabras={palabras}
+      setPalabras={setPalabras}
+      contenido={contenido}
+      setContenido={setContenido}
+    />,
 
     <ImagenThumbnail
       thumbnailImage={thumbnailImage}

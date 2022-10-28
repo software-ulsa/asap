@@ -6,6 +6,7 @@ import {
   getAllEspecialista,
   updateEspecialista,
 } from "../services/EspecialistaService";
+import { notify } from "../utils/utils";
 
 const initialState = {
   especialistas: [],
@@ -20,9 +21,11 @@ export const especialistasSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createEspecialista.fulfilled, (state, action) => {
+        notify("success", "Se agregó el especialista");
         state.especialistas.push(action.payload.especialista);
       })
       .addCase(createEspecialista.rejected, (state) => {
+        notify("error", "Hubo un error al agregar el especialista");
         state.error = true;
       });
     builder
@@ -39,12 +42,14 @@ export const especialistasSlice = createSlice({
       });
     builder
       .addCase(updateEspecialista.fulfilled, (state, action) => {
+        notify("success", "Se actualizó el especialista");
         var foundIndex = state.especialistas.findIndex(
           (especialista) => especialista.id === action.payload.especialista.id
         );
         state.especialistas[foundIndex] = action.payload.especialista;
       })
       .addCase(updateEspecialista.rejected, (state) => {
+        notify("error", "Hubo un error al actualizar el especialista");
         state.error = true;
       });
     builder
@@ -52,19 +57,23 @@ export const especialistasSlice = createSlice({
         var foundIndex = state.especialistas.findIndex(
           (especialista) => especialista.id === action.payload.id
         );
+        notify("success", "Se eliminó el especialista");
         state.especialistas.splice(foundIndex, 1);
       })
       .addCase(deleteEspecialista.rejected, (state) => {
+        notify("error", "Hubo un error al eliminar el especialista");
         state.error = true;
       });
     builder
       .addCase(deleteManyEspecialista.fulfilled, (state, action) => {
+        notify("success", "Especialistas eliminados");
         state.especialistas = state.especialistas.filter(
           (especialista) =>
             !action.payload.ids.find((rm) => rm === especialista.id)
         );
       })
       .addCase(deleteManyEspecialista.rejected, (state) => {
+        notify("error", "Hubo un error al eliminar los especialistas");
         state.error = true;
       });
   },

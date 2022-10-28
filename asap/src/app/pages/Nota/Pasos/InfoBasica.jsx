@@ -9,9 +9,17 @@ import { emptyNote } from "../../../utils/initialStates";
 import ChipInput from "material-ui-chip-input";
 import MUIRichTextEditor from "mui-rte";
 
-const InfoBasica = ({ nota, setNota, handleClose }) => {
-  const [palabras, setPalabras] = useState([]);
-  const [contenido, setContenido] = useState("");
+const InfoBasica = ({
+  mode,
+  nota,
+  setNota,
+  handleNext,
+  handleClose,
+  palabras,
+  setPalabras,
+  contenido,
+  setContenido,
+}) => {
   const [isComplete, setComplete] = useState(false);
 
   useEffect(() => {
@@ -28,7 +36,13 @@ const InfoBasica = ({ nota, setNota, handleClose }) => {
 
   return (
     <Formik
-      initialValues={nota}
+      enableReinitialize
+      initialValues={{
+        titulo: nota?.titulo || "",
+        tema: nota?.tema || "",
+        contenido: contenido,
+        palabras_clave: palabras,
+      }}
       validationSchema={notaValidationSchema}
       onSubmit={(values) => {
         setNota((prev) => ({
@@ -38,6 +52,7 @@ const InfoBasica = ({ nota, setNota, handleClose }) => {
           contenido: contenido,
           palabras_clave: palabras,
         }));
+        handleNext();
       }}
     >
       {(props) => (
@@ -71,13 +86,7 @@ const InfoBasica = ({ nota, setNota, handleClose }) => {
                 helperText={props.touched.tema && props.errors.tema}
               />
             </Grid>
-            <Grid item xs={12}>
-              <MUIRichTextEditor
-                label="Escribe el contenido de la nota aquí"
-                inlineToolbar={true}
-                onSave={(data) => setContenido(data)}
-              />
-            </Grid>
+
             <Grid item xs={12}>
               <ChipInput
                 color="info"
@@ -90,6 +99,16 @@ const InfoBasica = ({ nota, setNota, handleClose }) => {
                 onAdd={(chip) => handleAddChip(chip)}
                 onDelete={(chip, index) => handleDeleteChip(chip, index)}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Box sx={{ marginBottom: 5 }}>
+                <MUIRichTextEditor
+                  defaultValue={contenido}
+                  inlineToolbar={true}
+                  label="Escribe el contenido de la nota aquí"
+                  onSave={(data) => setContenido(data)}
+                />
+              </Box>
             </Grid>
           </Grid>
           <Box
@@ -115,7 +134,9 @@ const InfoBasica = ({ nota, setNota, handleClose }) => {
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  setNota(emptyNote);
+                  if (mode) {
+                    setNota(emptyNote);
+                  }
                   handleClose();
                 }}
               >

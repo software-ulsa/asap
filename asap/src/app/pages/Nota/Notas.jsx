@@ -24,6 +24,7 @@ const Notas = () => {
 
   const [itemId, setItemId] = useState(-1);
   const itemToEdit = notas.find((nota) => nota.id === Number(itemId));
+  console.log(itemToEdit);
 
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreate = () => setOpenCreate(true);
@@ -95,7 +96,7 @@ const Notas = () => {
       <EditarNota
         handleClose={handleCloseEdit}
         open={openEdit}
-        nota={itemToEdit}
+        note={itemToEdit}
       />
     </>
   );

@@ -6,6 +6,7 @@ import {
   getAllNotas,
   updateNota,
 } from "../services/NotaService";
+import { notify } from "../utils/utils";
 
 const initialState = {
   notas: [],
@@ -20,9 +21,11 @@ export const notasSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createNota.fulfilled, (state, action) => {
+        notify("success", "Se agregó la nota");
         state.notas.push(action.payload.nota);
       })
       .addCase(createNota.rejected, (state) => {
+        notify("error", "Hubo un error al agregar la nota");
         state.error = true;
       });
     builder
@@ -39,12 +42,14 @@ export const notasSlice = createSlice({
       });
     builder
       .addCase(updateNota.fulfilled, (state, action) => {
+        notify("success", "Se actualizó la nota");
         var foundIndex = state.notas.findIndex(
           (nota) => nota.id === action.payload.nota.id
         );
         state.notas[foundIndex] = action.payload.nota;
       })
       .addCase(updateNota.rejected, (state) => {
+        notify("error", "Hubo un error al actualizar la nota");
         state.error = true;
       });
     builder
@@ -52,18 +57,22 @@ export const notasSlice = createSlice({
         var foundIndex = state.notas.findIndex(
           (nota) => nota.id === action.payload.id
         );
+        notify("success", "Se eliminó la nota");
         state.notas.splice(foundIndex, 1);
       })
       .addCase(deleteNota.rejected, (state) => {
+        notify("error", "Hubo un error al eliminar la nota");
         state.error = true;
       });
     builder
       .addCase(deleteManyNota.fulfilled, (state, action) => {
+        notify("success", "Notas eliminadas");
         state.notas = state.notas.filter(
           (nota) => !action.payload.ids.find((rm) => rm === nota.id)
         );
       })
       .addCase(deleteManyNota.rejected, (state) => {
+        notify("error", "Hubo un error al eliminar las notas");
         state.error = true;
       });
   },

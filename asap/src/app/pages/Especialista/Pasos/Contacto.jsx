@@ -26,7 +26,7 @@ const Contacto = ({
         setEspecialista((prev) => ({
           ...prev,
           correo: values.correo,
-          telefono: values.matricula,
+          telefono: values.telefono,
           telefono_casa: values.telefono_casa,
         }));
         handleNext();

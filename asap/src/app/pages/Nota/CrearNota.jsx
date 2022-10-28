@@ -29,6 +29,9 @@ const CrearNota = ({ open, handleClose }) => {
   const [mainImage, setMainImage] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
 
+  const [palabras, setPalabras] = useState([]);
+  const [contenido, setContenido] = useState("");
+
   const [mainFile, setMainFile] = useState();
   const [thumbnailFile, setThumbnailFile] = useState();
 
@@ -64,11 +67,23 @@ const CrearNota = ({ open, handleClose }) => {
     }
 
     dispatch(createNota(nota));
+    setNota(emptyNote);
+    handleClose();
   };
 
   const steps = ["Nota", "Miniatura", "Imagen Principal"];
   const stepsComponent = [
-    <InfoBasica nota={nota} setNota={setNota} handleClose={handleClose} />,
+    <InfoBasica
+      mode={false}
+      nota={nota}
+      setNota={setNota}
+      handleNext={handleNext}
+      handleClose={handleClose}
+      palabras={palabras}
+      setPalabras={setPalabras}
+      contenido={contenido}
+      setContenido={setContenido}
+    />,
 
     <ImagenThumbnail
       thumbnailImage={thumbnailImage}

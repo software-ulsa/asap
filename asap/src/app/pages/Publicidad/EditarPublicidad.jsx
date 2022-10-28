@@ -20,6 +20,14 @@ import { publicidadValidationSchema } from "../../utils/validation";
 
 const EditarPublicidad = ({ open, handleClose, publicidad }) => {
   const dispatch = useDispatch();
+  const dateInicio = new Date(publicidad?.fecha_inicio)
+    .toISOString()
+    .split("T")[0]
+    .replaceAll("/", "-");
+  const dateFin = new Date(publicidad?.fecha_vencimiento)
+    .toISOString()
+    .split("T")[0]
+    .replaceAll("/", "-");
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -43,8 +51,8 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
           dot_empresa: publicidad?.dot_empresa || "",
           email: publicidad?.email || "",
           url: publicidad?.url || "",
-          fecha_inicio: publicidad?.fecha_inicio || "",
-          fecha_vencimiento: publicidad?.fecha_vencimiento || "",
+          fecha_inicio: dateInicio || "",
+          fecha_vencimiento: dateFin || "",
         }}
         validationSchema={publicidadValidationSchema}
         onSubmit={(values) => {
@@ -143,7 +151,7 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     color="info"
                     fullWidth
                     name="fecha_inicio"
-                    label=""
+                    label="Fecha de inicio"
                     variant="outlined"
                     value={props.values.fecha_inicio}
                     onChange={props.handleChange}
@@ -163,7 +171,7 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     color="info"
                     fullWidth
                     name="fecha_vencimiento"
-                    label=""
+                    label="Fecha de vencimiento"
                     variant="outlined"
                     value={props.values.fecha_vencimiento}
                     onChange={props.handleChange}

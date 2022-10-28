@@ -11,6 +11,13 @@ export const updateUser = createAsyncThunk("users/updateUser", async (user) => {
   return (await httpClient.put(`${prefix}/${user.id}`, user)).data;
 });
 
+export const updateProfile = createAsyncThunk(
+  "users/updateProfile",
+  async (user) => {
+    return (await httpClient.put(`${prefix}/${user.id}`, user)).data;
+  }
+);
+
 export const deleteUser = createAsyncThunk("users/deleteUser", async (id) => {
   return (await httpClient.delete(`${prefix}/${id}`)).data;
 });

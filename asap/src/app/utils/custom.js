@@ -91,9 +91,8 @@ export function NotaStepIcon(props) {
 
   const icons = {
     1: <AssignmentRounded />,
-    2: <ContactPageRounded />,
-    3: <LandscapeRounded />,
-    4: <ImageRounded />,
+    2: <LandscapeRounded />,
+    3: <ImageRounded />,
   };
 
   return (

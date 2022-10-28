@@ -3,7 +3,10 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { Formik } from "formik";
 
 import { emptyEspecialista } from "../../../utils/initialStates";
-import { especialistaContactValidationSchema } from "../../../utils/validation";
+import {
+  especialistaContactValidationSchema,
+  especialistaProfessionValidationSchema,
+} from "../../../utils/validation";
 
 const Profesion = ({
   especialista,
@@ -21,7 +24,7 @@ const Profesion = ({
         area_especialidad: especialista?.area_especialidad || "",
         cedula: especialista?.cedula || "",
       }}
-      validationSchema={especialistaContactValidationSchema}
+      validationSchema={especialistaProfessionValidationSchema}
       onSubmit={(values) => {
         setEspecialista((prev) => ({
           ...prev,
