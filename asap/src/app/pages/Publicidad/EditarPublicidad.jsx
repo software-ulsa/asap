@@ -20,11 +20,11 @@ import { publicidadValidationSchema } from "../../utils/validation";
 
 const EditarPublicidad = ({ open, handleClose, publicidad }) => {
   const dispatch = useDispatch();
-  const dateInicio = new Date(publicidad?.fecha_inicio)
+  const dateInicio = new Date(publicidad?.fecha_inicio || "2022-10-28")
     .toISOString()
     .split("T")[0]
     .replaceAll("/", "-");
-  const dateFin = new Date(publicidad?.fecha_vencimiento)
+  const dateFin = new Date(publicidad?.fecha_vencimiento || "2022-10-28")
     .toISOString()
     .split("T")[0]
     .replaceAll("/", "-");
