@@ -8,40 +8,18 @@ import { emptyNote } from "../../../utils/initialStates";
 
 import ChipInput from "material-ui-chip-input";
 import MUIRichTextEditor from "mui-rte";
+import InputArray from "../../../components/InputArray";
+import InputField from "../../../components/InputField";
 
-const InfoBasica = ({
-  mode,
-  nota,
-  setNota,
-  handleNext,
-  handleClose,
-  palabras,
-  setPalabras,
-  contenido,
-  setContenido,
-}) => {
-  const [isComplete, setComplete] = useState(false);
-
-  useEffect(() => {
-    setComplete(palabras.length !== 0 && contenido !== "");
-  }, [palabras, contenido]);
-
-  const handleAddChip = (chip) => {
-    setPalabras((oldArray) => [...oldArray, chip]);
-  };
-
-  const handleDeleteChip = (chip, index) => {
-    setPalabras(palabras.filter((item, i) => i !== index));
-  };
-
+const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
   return (
     <Formik
-      enableReinitialize
+      enableReinitialize={!mode}
       initialValues={{
         titulo: nota?.titulo || "",
         tema: nota?.tema || "",
-        contenido: contenido,
-        palabras_clave: palabras,
+        contenido: nota?.contenido || "",
+        palabras_clave: nota?.palabras_clave || [],
       }}
       validationSchema={notaValidationSchema}
       onSubmit={(values) => {
@@ -49,8 +27,8 @@ const InfoBasica = ({
           ...prev,
           titulo: values.titulo,
           tema: values.tema,
-          contenido: contenido,
-          palabras_clave: palabras,
+          contenido: values.contenido,
+          palabras_clave: values.palabras_clave,
         }));
         handleNext();
       }}
@@ -58,55 +36,27 @@ const InfoBasica = ({
       {(props) => (
         <form onSubmit={props.handleSubmit}>
           <Grid container spacing={2} marginTop={2}>
-            <Grid item xs={12}>
-              <TextField
-                color="info"
-                fullWidth
-                label="Titulo"
-                name="titulo"
-                variant="outlined"
-                value={props.values.titulo}
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-                error={props.touched.titulo && Boolean(props.errors.titulo)}
-                helperText={props.touched.titulo && props.errors.titulo}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                color="info"
-                fullWidth
-                name="tema"
-                label="Tema"
-                variant="outlined"
-                value={props.values.tema}
-                onChange={props.handleChange}
-                onBlur={props.handleBlur}
-                error={props.touched.tema && Boolean(props.errors.tema)}
-                helperText={props.touched.tema && props.errors.tema}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <ChipInput
-                color="info"
-                fullWidth
-                label="Palabras clave"
-                name="palabras_clave"
-                variant="outlined"
-                placeholder="Escribe y presiona enter para agregar"
-                value={palabras}
-                onAdd={(chip) => handleAddChip(chip)}
-                onDelete={(chip, index) => handleDeleteChip(chip, index)}
-              />
-            </Grid>
+            <InputField formik={props} label="Tema" field="tema" type="text" />
+            <InputField
+              formik={props}
+              label="Titulo"
+              field="titulo"
+              type="text"
+            />
+            <InputArray
+              formik={props}
+              field="palabras_clave"
+              label="Palabras clave"
+            />
             <Grid item xs={12}>
               <Box sx={{ marginBottom: 5 }}>
                 <MUIRichTextEditor
-                  defaultValue={contenido}
+                  defaultValue={props.values.contenido}
                   inlineToolbar={true}
                   label="Escribe el contenido de la nota aquí"
-                  onSave={(data) => setContenido(data)}
+                  onSave={(data) => {
+                    props.setFieldValue("contenido", data);
+                  }}
                 />
               </Box>
             </Grid>
@@ -125,7 +75,7 @@ const InfoBasica = ({
                 variant="contained"
                 color="secondary"
                 type="submit"
-                disabled={!(props.isValid && isComplete)}
+                disabled={!props.isValid}
               >
                 Siguiente
               </Button>

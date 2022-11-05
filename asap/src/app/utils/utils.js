@@ -12,6 +12,13 @@ export const notify = (action, message) => {
     : toast.error(message, configuration);
 };
 
+export const parseDate = (date) => {
+  if (date) {
+    return new Date(date).toISOString().split("T")[0].replaceAll("/", "-");
+  }
+  return new Date().toISOString().split("T")[0].replaceAll("/", "-");
+};
+
 export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 

@@ -14,12 +14,11 @@ import {
 import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { updateRol } from "../../services/RolService";
 
-const EditarRol = ({ open, handleClose, notify, rol }) => {
+const EditarRol = ({ open, handleClose, rol }) => {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.roles);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>

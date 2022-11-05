@@ -33,7 +33,7 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [correo, setCorreo] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Login() {
 
   const iniciarSesion = () => {
     const user = {
-      correo: correo,
+      username: username,
       password: password,
     };
 
@@ -108,10 +108,10 @@ export default function Login() {
                       <div className="form-outline mb-4">
                         <TextField
                           fullWidth
-                          label="Correo electrónico"
+                          label="Nombre de usuario"
                           variant="outlined"
-                          value={correo}
-                          onChange={(event) => setCorreo(event.target.value)}
+                          value={username}
+                          onChange={(event) => setUsername(event.target.value)}
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">

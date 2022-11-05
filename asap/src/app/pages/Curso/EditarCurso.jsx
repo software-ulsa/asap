@@ -8,12 +8,13 @@ import { Box } from "@mui/system";
 
 import ImagenesService from "../../services/ImagesService";
 
-import IconCurso from "./IconCurso";
-import Actividades from "./Actividad/Actividades";
-import CrearActividad from "./Actividad/CrearActividad";
-import InfoCurso from "./InfoCurso";
+import Actividades from "../Actividad/Actividades";
+import CrearActividad from "../Actividad/CrearActividad";
+import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getCursoById } from "../../services/CursoService";
+import InfoBasica from "./Pasos/InfoBasica";
 
 const EditarCurso = () => {
   const navigate = useNavigate();
@@ -74,8 +75,8 @@ const EditarCurso = () => {
         }}
         gap={2}
       >
-        <IconCurso image={image} setImage={setImage} setFile={setFile} />
-        <InfoCurso
+        <ImagenPrincipal image={image} setImage={setImage} setFile={setFile} />
+        <InfoBasica
           file={file}
           curso={curso}
           mode={false}

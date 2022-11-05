@@ -76,9 +76,31 @@ export const notaValidationSchema = yup.object({
   tema: yup.string().required("Tema requerido"),
 });
 
-export const cursoValidationSchema = yup.object({
+export const cursoBasicInfoValidationSchema = yup.object({
   titulo: yup.string().required("Titulo requerido"),
   descripcion: yup.string().required("Descripción requerida"),
+  objetivo: yup.string().required("Objetivo requerido"),
+  duracion: yup
+    .number("La duracion debe ser un número")
+    .positive("La duracion debe ser mayor a 0")
+    .integer("La duracion debe ser un número")
+    .max(120, "Duracion no válida")
+    .required("Duracion requerida"),
+});
+
+export const cursoDetailValidationSchema = yup.object({
+  fecha_inicio: yup.date().default(() => new Date()),
+  fecha_vencimiento: yup
+    .date()
+    .when(
+      "fecha_inicio",
+      (fecha_inicio, schema) =>
+        fecha_inicio &&
+        schema.min(
+          fecha_inicio,
+          "La fecha de cierre no puede ser antes que la fecha de inicio"
+        )
+    ),
 });
 
 export const especialistaContactValidationSchema = yup.object({

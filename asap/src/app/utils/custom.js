@@ -6,6 +6,7 @@ import {
   LandscapeRounded,
   LocalHospitalRounded,
   PersonRounded,
+  SettingsSuggestRounded,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 
@@ -92,6 +93,25 @@ export function NotaStepIcon(props) {
   const icons = {
     1: <AssignmentRounded />,
     2: <LandscapeRounded />,
+    3: <ImageRounded />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+
+export function CursoStepIcon(props) {
+  const { active, completed, className } = props;
+
+  const icons = {
+    1: <AssignmentRounded />,
+    2: <SettingsSuggestRounded />,
     3: <ImageRounded />,
   };
 

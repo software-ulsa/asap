@@ -37,15 +37,14 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         const { userFound, token } = action.payload;
-        notify(
-          "success",
-          `Bienvenido ${userFound.nombre} ${userFound.ape_paterno}`
-        );
-
         ls.set("token", JSON.stringify(token));
         ls.set("currentASAPUser", JSON.stringify(userFound));
+        notify(
+          "success",
+          `Bienvenido ${userFound.persona.nombre} ${userFound.persona.ape_paterno}`
+        );
         state.loading = false;
-        state.currentUser = action.payload;
+        state.currentUser = userFound;
       })
       .addCase(login.rejected, (state) => {
         state.error = true;

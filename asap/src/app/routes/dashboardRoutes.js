@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 import Dashboard from "../pages/Dashboard";
 import Roles from "../pages/Rol/Roles";
@@ -11,48 +11,52 @@ import Cursos from "../pages/Curso/Cursos";
 import EditarCurso from "../pages/Curso/EditarCurso";
 
 import Perfil from "../pages/Perfil/Perfil";
-import NotFound from "../pages/NotFound";
+import Error from "../pages/Error";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <Dashboard />,
+    errorElement: <Error />,
     children: [
       {
+        path: "/",
+        element: <div key={1}>hola</div>,
+      },
+      {
         path: "/perfil",
-        element: <Perfil />,
+        element: <Perfil key={2} />,
       },
       {
         path: "/usuarios",
-        element: <Usuarios />,
+        element: <Usuarios key={3} />,
       },
       {
         path: "/roles",
-        element: <Roles />,
+        element: <Roles key={4} />,
       },
       {
         path: "/especialistas",
-        element: <Especialistas />,
+        element: <Especialistas key={5} />,
       },
       {
         path: "/notas",
-        element: <Notas />,
+        element: <Notas key={6} />,
       },
       {
         path: "/publicidad",
-        element: <Publicidades />,
+        element: <Publicidades key={7} />,
       },
       {
         path: "/cursos",
-        element: <Cursos />,
+        element: <Cursos key={8} />,
       },
       {
         path: "/editar-curso",
-        element: <EditarCurso />,
+        element: <EditarCurso key={9} />,
       },
     ],
   },
-  { path: "*", element: <NotFound /> },
 ]);
 
 export default routes;

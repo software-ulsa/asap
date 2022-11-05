@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   KeyboardArrowLeft,
@@ -84,6 +84,7 @@ const StyledItem = styled(MenuItem)(({ theme }) => ({
 const LayoutTopbar = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const { settings, updateSettings } = useSettings();
@@ -110,8 +111,8 @@ const LayoutTopbar = () => {
   };
 
   useEffect(() => {
-    if (currentUser.foto_perfil) {
-      ImagenesService.get(currentUser.foto_perfil)
+    if (currentUser.imagen) {
+      ImagenesService.get(currentUser.imagen)
         .then((url) => {
           setImage(url);
         })
@@ -140,7 +141,8 @@ const LayoutTopbar = () => {
               <UserMenu>
                 <Hidden xsDown>
                   <Span>
-                    <strong>{`${currentUser.nombre} ${currentUser.ape_paterno}`}</strong>
+                    Vienvenido,
+                    <strong>{` ${currentUser.persona.nombre}`}</strong>
                   </Span>
                 </Hidden>
                 <Avatar src={image} sx={{ cursor: "pointer" }} />
@@ -154,7 +156,12 @@ const LayoutTopbar = () => {
               </Link>
             </StyledItem>
 
-            <StyledItem onClick={() => dispatch(logout())}>
+            <StyledItem
+              onClick={() => {
+                dispatch(logout());
+                navigate("/");
+              }}
+            >
               <Logout style={{ marginRight: 10 }} color="primary" />
               <Span> Cerrar sesi&oacute;n </Span>
             </StyledItem>

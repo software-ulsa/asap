@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import SuperDataTable from "../../../components/SuperDataTable";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import {
   deleteActividad,
   deleteManyActividad,
-} from "../../../services/ActividadService";
+} from "../../services/ActividadService";
 
 import EditarActividad from "./EditarActividad";
 
-import { notify } from "../../../utils/utils";
-import { actividadHeaders } from "../../../utils/headers";
+import { notify } from "../../utils/utils";
+import { actividadHeaders } from "../../utils/headers";
 
 const ActividadItem = ({ actividades, fetched }) => {
   const dispatch = useDispatch();

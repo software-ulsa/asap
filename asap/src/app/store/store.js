@@ -7,12 +7,14 @@ import PublicidadReducer from "../reducers/PublicidadReducer";
 import EspecialistaReducer from "../reducers/EspecialistaReducer";
 import CursoReducer from "../reducers/CursoReducer";
 import ActividadesReducer from "../reducers/ActividadesReducer";
+import ModalReducer from "../reducers/ModalReducer";
 
 export default configureStore({
   reducer: {
     auth: AuthReducer,
-    usuarios: UsuarioReducer,
+    modal: ModalReducer,
     roles: RolesReducer,
+    usuarios: UsuarioReducer,
     notas: NotaReducer,
     publicidades: PublicidadReducer,
     especialistas: EspecialistaReducer,

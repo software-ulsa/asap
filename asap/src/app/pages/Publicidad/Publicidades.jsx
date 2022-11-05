@@ -26,7 +26,6 @@ const Publicidades = () => {
   const itemToEdit = publicidades.find(
     (publicidad) => publicidad.id === Number(itemId)
   );
-  console.log(itemToEdit);
 
   const [openCreate, setOpenCreate] = useState(false);
   const handleOpenCreate = () => setOpenCreate(true);
@@ -84,6 +83,7 @@ const Publicidades = () => {
           </Button>
         </Grid>
       </Grid>
+
       <SuperDataTable
         data={publicidades}
         headers={publicidadHeaders}
@@ -92,16 +92,11 @@ const Publicidades = () => {
         editAction={editAction}
       />
 
-      <CrearPublicidad
-        handleClose={handleCloseCreate}
-        open={openCreate}
-        notify={notify}
-      />
+      <CrearPublicidad handleClose={handleCloseCreate} open={openCreate} />
 
       <EditarPublicidad
         handleClose={handleCloseEdit}
         open={openEdit}
-        notify={notify}
         publicidad={itemToEdit}
       />
     </>

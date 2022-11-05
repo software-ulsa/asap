@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { handleOpenCreate } from "../../reducers/ModalReducer";
 
 import SuperDataTable from "../../components/SuperDataTable";
 import { cursoHeaders } from "../../utils/headers";
@@ -22,10 +23,6 @@ const Cursos = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cursos, fetched } = useSelector((state) => state.cursos);
-
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleOpenCreate = () => setOpenCreate(true);
-  const handleCloseCreate = () => setOpenCreate(false);
 
   useEffect(() => {
     if (!fetched) {
@@ -69,7 +66,7 @@ const Cursos = () => {
             fullWidth
             variant="contained"
             color="success"
-            onClick={handleOpenCreate}
+            onClick={() => dispatch(handleOpenCreate())}
           >
             Agregar
           </Button>
@@ -84,11 +81,7 @@ const Cursos = () => {
         editAction={editAction}
       />
 
-      <CrearCurso
-        handleClose={handleCloseCreate}
-        open={openCreate}
-        notify={notify}
-      />
+      <CrearCurso />
     </>
   );
 };

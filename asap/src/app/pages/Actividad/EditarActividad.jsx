@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-
+import * as yup from "yup";
 import { useFormik } from "formik";
 
 import {
@@ -13,39 +12,44 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+
 import { Box } from "@mui/system";
+
+import { updateActividad } from "../../services/ActividadService";
+import ImagenesService from "../../services/ImagesService";
 import { Close } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { actividadValidationSchema } from "../../utils/validation";
 
-import { createActividad } from "../../../services/ActividadService";
-import ImagenesService from "../../../services/ImagesService";
-
-import { emptyActividad } from "../../../utils/initialStates";
-import { actividadValidationSchema } from "../../../utils/validation";
-
-const CrearActividad = ({ open, handleClose, curso }) => {
+const EditarActividad = ({ open, actividad, handleClose }) => {
   const dispatch = useDispatch();
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
 
   const formik = useFormik({
-    initialValues: emptyActividad,
+    initialValues: {
+      id: actividad?.id,
+      titulo: actividad?.titulo,
+      descripcion: actividad?.descripcion,
+      url_media: actividad?.url_media,
+      id_curso: actividad?.id_curso,
+    },
     validationSchema: actividadValidationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      values.id_curso = curso.id;
-      values.peso = Math.floor(1 / (curso.actividades.length + 1)) * 100;
-      // if (file) {
-      //   ImagenesService.upload(file)
-      //     .then((response) => {
-      //       values.foto_especialista = response.data;
-      //     })
-      //     .catch((error) => console.log(error));
-      // }
+    onSubmit: (values, { resetForm }) => {
+      values.peso = 100;
 
-      dispatch(createActividad(values));
+      if (file) {
+        ImagenesService.upload(file)
+          .then((response) => {
+            values.foto_especialista = response.data;
+          })
+          .catch((error) => console.log(error));
+      }
+
+      dispatch(updateActividad(values));
       setFile();
       setImage("");
       resetForm();
-      setSubmitting(false);
       handleClose();
     },
   });
@@ -53,7 +57,7 @@ const CrearActividad = ({ open, handleClose, curso }) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm">
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>Agregar actividad</DialogTitle>
+        <DialogTitle>Editar actividad</DialogTitle>
         <Box
           position="absolute"
           top={0}
@@ -115,7 +119,7 @@ const CrearActividad = ({ open, handleClose, curso }) => {
             gap={2}
           >
             <Button variant="contained" color="secondary" type="submit">
-              Agregar
+              Guardar
             </Button>
             <Button
               variant="contained"
@@ -134,4 +138,4 @@ const CrearActividad = ({ open, handleClose, curso }) => {
   );
 };
 
-export default CrearActividad;
+export default EditarActividad;
