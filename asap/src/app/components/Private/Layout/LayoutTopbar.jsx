@@ -6,7 +6,9 @@ import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   Logout,
+  MenuOpenRounded,
   Person,
+  Settings,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -128,7 +130,7 @@ const LayoutTopbar = () => {
             {mode === "compact" ? (
               <Hidden />
             ) : mode === "full" ? (
-              <KeyboardArrowLeft />
+              <MenuOpenRounded />
             ) : (
               <KeyboardArrowRight />
             )}
@@ -141,7 +143,6 @@ const LayoutTopbar = () => {
               <UserMenu>
                 <Hidden xsDown>
                   <Span>
-                    Vienvenido,
                     <strong>{` ${currentUser.persona.nombre}`}</strong>
                   </Span>
                 </Hidden>
@@ -153,6 +154,13 @@ const LayoutTopbar = () => {
               <Link to="/perfil">
                 <Person style={{ marginRight: 10 }} color="primary" />
                 <Span> Perfil </Span>
+              </Link>
+            </StyledItem>
+
+            <StyledItem>
+              <Link to="/configuracion">
+                <Settings style={{ marginRight: 10 }} color="primary" />
+                <Span> Configuraci&oacute;n </Span>
               </Link>
             </StyledItem>
 

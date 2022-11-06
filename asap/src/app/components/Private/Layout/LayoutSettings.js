@@ -1,7 +1,7 @@
 const LayoutSettings = {
   leftSidebar: {
     show: true,
-    mode: "full", // full, close, compact, mobile,
+    mode: "compact", // full, close, compact, mobile,
     theme: "blue", // View all valid theme colors inside MatxTheme/themeColors.js
   },
   topbar: {

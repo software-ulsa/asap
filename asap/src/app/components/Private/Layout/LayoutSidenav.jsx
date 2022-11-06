@@ -8,7 +8,7 @@ import { Span } from "../../../components/Typography";
 import React from "react";
 import Brand from "../../Brand";
 import Sidenav from "../../MainSidebar";
-import { Close, Menu } from "@mui/icons-material";
+import { Close, JoinLeftRounded, Menu } from "@mui/icons-material";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 0,
@@ -86,10 +86,12 @@ const LayoutSidenav = () => {
           ) : (
             <>
               <ButtonBase name="child" sx={{ width: "100%" }}>
-                <Close sx={{ width: 24, height: "auto", fontSize: 15 }} />
+                <JoinLeftRounded
+                  sx={{ width: 24, height: "auto", fontSize: 15 }}
+                />
 
                 <StyledText mode={mode} className="sidenavHoverShow">
-                  Cerrar
+                  Contraer
                 </StyledText>
               </ButtonBase>
             </>

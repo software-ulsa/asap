@@ -12,6 +12,7 @@ import EditarCurso from "../pages/Curso/EditarCurso";
 
 import Perfil from "../pages/Perfil/Perfil";
 import Error from "../pages/Error";
+import Opciones from "../pages/Configuracion/Opciones";
 
 const routes = createBrowserRouter([
   {
@@ -32,28 +33,28 @@ const routes = createBrowserRouter([
         element: <Usuarios key={3} />,
       },
       {
-        path: "/roles",
-        element: <Roles key={4} />,
-      },
-      {
         path: "/especialistas",
-        element: <Especialistas key={5} />,
+        element: <Especialistas key={4} />,
       },
       {
         path: "/notas",
-        element: <Notas key={6} />,
+        element: <Notas key={5} />,
       },
       {
         path: "/publicidad",
-        element: <Publicidades key={7} />,
+        element: <Publicidades key={6} />,
       },
       {
         path: "/cursos",
-        element: <Cursos key={8} />,
+        element: <Cursos key={7} />,
       },
       {
         path: "/editar-curso",
-        element: <EditarCurso key={9} />,
+        element: <EditarCurso key={8} />,
+      },
+      {
+        path: "/configuracion",
+        element: <Opciones key={9} />,
       },
     ],
   },

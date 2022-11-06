@@ -1,13 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
+
+import ModalReducer from "../reducers/ModalReducer";
 import AuthReducer from "../reducers/AuthReducer";
+
 import RolesReducer from "../reducers/RolesReducer";
 import UsuarioReducer from "../reducers/UsuarioReducer";
+import EspecialistaReducer from "../reducers/EspecialistaReducer";
+
 import NotaReducer from "../reducers/NotaReducer";
 import PublicidadReducer from "../reducers/PublicidadReducer";
-import EspecialistaReducer from "../reducers/EspecialistaReducer";
+
 import CursoReducer from "../reducers/CursoReducer";
 import ActividadesReducer from "../reducers/ActividadesReducer";
-import ModalReducer from "../reducers/ModalReducer";
 
 export default configureStore({
   reducer: {
@@ -15,10 +19,10 @@ export default configureStore({
     modal: ModalReducer,
     roles: RolesReducer,
     usuarios: UsuarioReducer,
-    notas: NotaReducer,
-    publicidades: PublicidadReducer,
     especialistas: EspecialistaReducer,
     cursos: CursoReducer,
     actividades: ActividadesReducer,
+    notas: NotaReducer,
+    publicidades: PublicidadReducer,
   },
 });

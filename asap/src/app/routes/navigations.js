@@ -13,7 +13,6 @@ export const navigations = [
     path: "/usuarios",
     icon: <PersonRounded />,
   },
-  { name: "Roles", path: "/roles", icon: <ManageAccountsRounded /> },
   {
     name: "Especialistas",
     path: "/especialistas",
