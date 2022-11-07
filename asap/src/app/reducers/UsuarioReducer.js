@@ -33,7 +33,8 @@ export const usuariosSlice = createSlice({
         state.fetched = false;
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.fetched = true;
+        state.fetched = true;      
+
         state.usuarios = action.payload;
       })
       .addCase(getAllUsers.rejected, (state) => {

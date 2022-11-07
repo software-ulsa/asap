@@ -171,11 +171,11 @@ export const usuarioHeaders = [
   noHeader,
   idHeader,
   {
-    name: "nombre",
+    name: "persona",
     label: "Nombre",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{data["nombre"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -183,11 +183,11 @@ export const usuarioHeaders = [
     },
   },
   {
-    name: "correo",
+    name: "persona",
     label: "Correo",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{data["correo"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -195,11 +195,11 @@ export const usuarioHeaders = [
     },
   },
   {
-    name: "telefono",
+    name: "persona",
     label: "Teléfono",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{data["telefono"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
