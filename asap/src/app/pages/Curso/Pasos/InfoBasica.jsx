@@ -6,7 +6,7 @@ import { handleClose, handleNext } from "../../../reducers/ModalReducer";
 import { Grid, Button } from "@mui/material";
 import { Box } from "@mui/system";
 
-import InputField from "../../../components/InputField";
+import InputField from "../../../components/Input/InputField";
 
 import { cursoBasicInfoValidationSchema } from "../../../utils/validation";
 

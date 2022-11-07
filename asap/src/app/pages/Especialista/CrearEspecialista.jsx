@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleClose,
+  rebootActiveStep,
+  setStepSize,
+} from "../../reducers/ModalReducer";
 
 import {
   IconButton,
@@ -9,70 +15,65 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
+import { Close } from "@mui/icons-material";
 
-import { emptyEspecialista } from "../../utils/initialStates";
+import { especialistaInitialState } from "../../utils/initialStates";
 import { ColorlibConnector, EspecialistaStepIcon } from "../../utils/custom";
 
-import InfoBasica from "./Pasos/InfoBasica";
-import Contacto from "./Pasos/Contacto";
-import Profesion from "./Pasos/Profesion";
+import Persona from "../../components/Steps/Persona";
+import UsuarioEspecialista from "../../components/Steps/UsuarioEspecialista";
+
+import Domicilio from "./Pasos/Domicilio";
 import ImagenPerfil from "./Pasos/ImagenPerfil";
 
-const CrearEspecialista = ({ open, handleClose }) => {
-  const [especialista, setEspecialista] = useState(emptyEspecialista);
-  const [activeStep, setActiveStep] = useState(0);
+const CrearEspecialista = () => {
+  const dispatch = useDispatch();
+  const { activeStep, openCreate } = useSelector((state) => state.modal);
+  const [especialista, setEspecialista] = useState(
+    especialistaInitialState(null)
+  );
 
-  const handleNext = () => {
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
+  const cancelAction = () => {
+    setEspecialista(especialistaInitialState(null));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
-  const handleBack = () => {
-    if (activeStep > 0) {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
-  };
-
-  const steps = ["Persona", "Contacto", "Profesión", "Imagen"];
-
+  const steps = ["Persona", "Usuario", "Domicilio", "Imagen"];
   const stepsComponent = [
-    <InfoBasica
-      especialista={especialista}
-      setEspecialista={setEspecialista}
-      handleNext={handleNext}
-      handleClose={handleClose}
+    <Persona
+      item={especialista}
+      setItem={setEspecialista}
+      cancelAction={cancelAction}
     />,
-    <Contacto
-      especialista={especialista}
-      setEspecialista={setEspecialista}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
+    <UsuarioEspecialista
+      item={especialista}
+      setItem={setEspecialista}
+      cancelAction={cancelAction}
     />,
-    <Profesion
+    <Domicilio
       especialista={especialista}
       setEspecialista={setEspecialista}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
+      cancelAction={cancelAction}
     />,
     <ImagenPerfil
-      mode={true}
       especialista={especialista}
       setEspecialista={setEspecialista}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleClose={handleClose}
+      cancelAction={cancelAction}
     />,
   ];
 
+  useEffect(() => {
+    dispatch(setStepSize(steps.length));
+  }, []);
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm">
+    <Dialog
+      open={openCreate}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="sm"
+    >
       <DialogTitle>Agregar especialista</DialogTitle>
       <Box
         position="absolute"
@@ -81,7 +82,7 @@ const CrearEspecialista = ({ open, handleClose }) => {
         paddingTop={1}
         paddingRight={1}
       >
-        <IconButton onClick={handleClose}>
+        <IconButton onClick={cancelAction}>
           <Close />
         </IconButton>
       </Box>

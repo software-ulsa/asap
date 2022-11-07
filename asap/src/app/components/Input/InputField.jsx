@@ -5,12 +5,12 @@ const InputField = ({ formik, label, field, type }) => {
   return (
     <Grid item xs={12}>
       <TextField
-        color="info"
         fullWidth
+        color="info"
+        variant="outlined"
         type={type}
         label={label}
         name={field}
-        variant="outlined"
         value={formik.values[field]}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}

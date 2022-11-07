@@ -7,19 +7,25 @@ import { Avatar, Box, Button, Grid, IconButton, Stack } from "@mui/material";
 
 import ImagenesService from "../../../services/ImagesService";
 
-import { emptyEspecialista } from "../../../utils/initialStates";
+import {
+  emptyEspecialista,
+  especialistaInitialState,
+} from "../../../utils/initialStates";
 import {
   createEspecialista,
   updateEspecialista,
 } from "../../../services/EspecialistaService";
-
-const ImagenPerfil = ({
-  mode,
-  especialista,
-  setEspecialista,
-  setActiveStep,
+import {
   handleBack,
   handleClose,
+  rebootActiveStep,
+} from "../../../reducers/ModalReducer";
+
+const ImagenPerfil = ({
+  isUpdate = false,
+  especialista,
+  setEspecialista,
+  cancelAction,
 }) => {
   const dispatch = useDispatch();
 
@@ -35,21 +41,20 @@ const ImagenPerfil = ({
     if (file) {
       ImagenesService.upload(file)
         .then((response) => {
-          especialista.foto_perfil = response.data;
+          especialista.imagen = response.data;
         })
         .catch((error) => console.log(error));
     }
-
-    if (mode) {
-      dispatch(createEspecialista(especialista));
-      setEspecialista(emptyEspecialista);
-    } else {
+    if (isUpdate) {
       dispatch(updateEspecialista(especialista));
+    } else {
+      dispatch(createEspecialista(especialista));
+      setEspecialista(especialistaInitialState(null));
     }
     setFile();
     setImage("");
-    setActiveStep(0);
-    handleClose();
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
   return (
@@ -98,7 +103,7 @@ const ImagenPerfil = ({
         <Button
           variant="contained"
           color="info"
-          onClick={handleBack}
+          onClick={() => dispatch(handleBack())}
           sx={{ mr: 1 }}
         >
           Anterior
@@ -112,15 +117,7 @@ const ImagenPerfil = ({
             Guardar
           </Button>
 
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              setEspecialista(emptyEspecialista);
-              setActiveStep(0);
-              handleClose();
-            }}
-          >
+          <Button variant="contained" color="error" onClick={cancelAction}>
             Cancelar
           </Button>
         </Stack>

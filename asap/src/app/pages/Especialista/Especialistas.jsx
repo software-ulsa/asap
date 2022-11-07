@@ -7,7 +7,7 @@ import { notify } from "../../utils/utils";
 
 import { Helmet } from "react-helmet";
 
-import { Button, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import {
   deleteEspecialista,
@@ -18,9 +18,11 @@ import {
 import CrearEspecialista from "./CrearEspecialista";
 import EditarEspecialista from "./EditarEspecialista";
 
+import { handleOpenEdit } from "../../reducers/ModalReducer";
+
 const Especialistas = () => {
   const dispatch = useDispatch();
-  const { especialistas, fetched, error } = useSelector(
+  const { especialistas, fetched } = useSelector(
     (state) => state.especialistas
   );
 
@@ -29,32 +31,20 @@ const Especialistas = () => {
     (especialista) => especialista.id === Number(itemId)
   );
 
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleOpenCreate = () => setOpenCreate(true);
-  const handleCloseCreate = () => setOpenCreate(false);
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
+  const refreshAction = () => {
+    dispatch(getAllEspecialista());
+  };
 
   useEffect(() => {
-    if (!fetched) {
-      dispatch(getAllEspecialista());
-    }
-  }, [fetched, dispatch]);
+    refreshAction();
+  }, []);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => especialistas[d.dataIndex].id);
     if (idsToDelete.length === 1) {
       dispatch(deleteEspecialista(idsToDelete[0]));
-      error
-        ? notify("error", "No se eliminó el especialista")
-        : notify("success", "Se eliminó el especialista");
-    } else if (idsToDelete.length >= 1) {
-      dispatch(deleteManyEspecialista(idsToDelete));
-      error
-        ? notify("error", "No se eliminaron los especialistas")
-        : notify("success", "Especialistas eliminados");
+    } else {
+      notify("error", "Solo se puede eliminar un elemento a la vez");
     }
   };
 
@@ -62,7 +52,7 @@ const Especialistas = () => {
     const idsToEdit = ids.data.map((d) => especialistas[d.dataIndex].id);
     if (idsToEdit.length === 1) {
       setItemId(idsToEdit[0]);
-      handleOpenEdit();
+      dispatch(handleOpenEdit());
     } else {
       notify("error", "Solo se puede editar un elemento a la vez");
     }
@@ -73,39 +63,20 @@ const Especialistas = () => {
         <title>Especialistas - ASAP</title>
         <meta name="Especialistas" content="Especialistas registrados" />
       </Helmet>
-      <Grid container paddingBottom={2}>
-        <Grid item xs={10}>
-          <Typography variant="h4" fontWeight="bold">
-            Especialistas
-          </Typography>
-        </Grid>
-        <Grid item xs={2} justifyContent="center">
-          <Button
-            fullWidth
-            variant="contained"
-            color="success"
-            onClick={handleOpenCreate}
-          >
-            Agregar
-          </Button>
-        </Grid>
-      </Grid>
 
       <SuperDataTable
         data={especialistas}
-        headers={especialistaHeaders}
+        title={"Especialistas"}
         fetched={fetched}
-        deleteAction={deleteAction}
+        headers={especialistaHeaders}
+        refreshAction={refreshAction}
         editAction={editAction}
+        deleteAction={deleteAction}
       />
 
-      <CrearEspecialista handleClose={handleCloseCreate} open={openCreate} />
+      <CrearEspecialista />
 
-      <EditarEspecialista
-        handleClose={handleCloseEdit}
-        open={openEdit}
-        specialist={itemToEdit}
-      />
+      <EditarEspecialista specialist={itemToEdit} />
     </>
   );
 };

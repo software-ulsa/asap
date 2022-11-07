@@ -1,6 +1,5 @@
 import {
   BookmarksRounded,
-  ManageAccountsRounded,
   MedicationRounded,
   PagesRounded,
   PersonRounded,

@@ -43,7 +43,7 @@ export const categoriasSlice = createSlice({
     builder
       .addCase(updateCategoria.fulfilled, (state, action) => {
         notify("success", "Categoria actualizada");
-        var foundIndex = state.categorias.findIndex(
+        const foundIndex = state.categorias.findIndex(
           (categoria) => categoria.id === action.payload.categoria.id
         );
         state.categorias[foundIndex] = action.payload.categoria;
@@ -55,9 +55,10 @@ export const categoriasSlice = createSlice({
     builder
       .addCase(deleteCategoria.fulfilled, (state, action) => {
         notify("success", "Se eliminó la categoria");
-        var foundIndex = state.categorias.findIndex(
-          (categoria) => categoria.id === action.payload.id
+        const foundIndex = state.categorias.findIndex(
+          (categoria) => categoria.id === Number(action.payload.id)
         );
+        console.log(foundIndex);
         state.categorias.splice(foundIndex, 1);
       })
       .addCase(deleteCategoria.rejected, (state) => {

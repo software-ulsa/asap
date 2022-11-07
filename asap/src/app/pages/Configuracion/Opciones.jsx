@@ -9,7 +9,10 @@ import {
 import { Box, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
-import Roles from "../Rol/Roles";
+import Roles from "./Rol/Roles";
+import Carreras from "./Carrera/Carreras";
+import Categorias from "./Categoria/Categorias";
+import Especialidades from "./Especialidad/Especialidades";
 
 const Opciones = () => {
   const [opcion, setOpcion] = useState("roles");
@@ -53,9 +56,15 @@ const Opciones = () => {
           <TabPanel value="roles">
             <Roles />
           </TabPanel>
-          <TabPanel value="categorias">Item 2</TabPanel>
-          <TabPanel value="carreras">Item 3</TabPanel>
-          <TabPanel value="especialidades">Item 4</TabPanel>
+          <TabPanel value="categorias">
+            <Categorias />
+          </TabPanel>
+          <TabPanel value="carreras">
+            <Carreras />
+          </TabPanel>
+          <TabPanel value="especialidades">
+            <Especialidades />
+          </TabPanel>
         </Box>
       </Box>
     </TabContext>

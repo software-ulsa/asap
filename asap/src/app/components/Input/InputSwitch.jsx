@@ -9,7 +9,9 @@ const InputSwitch = ({ formik, label, field }) => {
             <Switch
               name={field}
               checked={formik.values[field]}
-              onChange={formik.handleChange}
+              onChange={(event) =>
+                formik.setFieldValue(field, event.target.checked)
+              }
             />
           }
           label={label}

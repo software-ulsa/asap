@@ -68,6 +68,105 @@ export const rolHeaders = [
   },
 ];
 
+export const carreraHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "nombre",
+    label: "Nombre",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "abreviatura",
+    label: "Abreviatura",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+];
+
+export const categoriaHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "nombre",
+    label: "Nombre",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "descripcion",
+    label: "Descripcion",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "tipo",
+    label: "Tipo",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+];
+
+export const especialidadHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "nombre",
+    label: "Nombre",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "tipo",
+    label: "Tipo",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+];
+
 export const usuarioHeaders = [
   noHeader,
   idHeader,
@@ -183,11 +282,11 @@ export const especialistaHeaders = [
   noHeader,
   idHeader,
   {
-    name: "nombre",
+    name: "usuario",
     label: "Nombre",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{data["persona"]["nombre"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -199,7 +298,7 @@ export const especialistaHeaders = [
     label: "Especialidad",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{data["nombre"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -207,8 +306,8 @@ export const especialistaHeaders = [
     },
   },
   {
-    name: "cedula",
-    label: "Cédula",
+    name: "cedula_prof",
+    label: "Cédula profesional",
     options: {
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
@@ -219,11 +318,11 @@ export const especialistaHeaders = [
     },
   },
   {
-    name: "telefono",
+    name: "usuario",
     label: "Teléfono",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{data["persona"]["telefono"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,

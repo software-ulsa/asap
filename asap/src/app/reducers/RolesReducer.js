@@ -43,7 +43,7 @@ export const rolesSlice = createSlice({
     builder
       .addCase(updateRol.fulfilled, (state, action) => {
         notify("success", "Rol actualizado");
-        var foundIndex = state.roles.findIndex(
+        const foundIndex = state.roles.findIndex(
           (rol) => rol.id === action.payload.rol.id
         );
         state.roles[foundIndex] = action.payload.rol;
@@ -55,8 +55,8 @@ export const rolesSlice = createSlice({
     builder
       .addCase(deleteRol.fulfilled, (state, action) => {
         notify("success", "Se eliminó el rol");
-        var foundIndex = state.roles.findIndex(
-          (rol) => rol.id === action.payload.id
+        const foundIndex = state.roles.findIndex(
+          (rol) => rol.id === Number(action.payload.id)
         );
         state.roles.splice(foundIndex, 1);
       })

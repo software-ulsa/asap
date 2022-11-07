@@ -43,7 +43,7 @@ export const notasSlice = createSlice({
     builder
       .addCase(updateNota.fulfilled, (state, action) => {
         notify("success", "Se actualizó la nota");
-        var foundIndex = state.notas.findIndex(
+        const foundIndex = state.notas.findIndex(
           (nota) => nota.id === action.payload.nota.id
         );
         state.notas[foundIndex] = action.payload.nota;
@@ -54,8 +54,8 @@ export const notasSlice = createSlice({
       });
     builder
       .addCase(deleteNota.fulfilled, (state, action) => {
-        var foundIndex = state.notas.findIndex(
-          (nota) => nota.id === action.payload.id
+        const foundIndex = state.notas.findIndex(
+          (nota) => nota.id === Number(action.payload.id)
         );
         notify("success", "Se eliminó la nota");
         state.notas.splice(foundIndex, 1);

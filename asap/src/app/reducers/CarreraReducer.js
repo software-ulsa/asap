@@ -43,7 +43,7 @@ export const carrerasSlice = createSlice({
     builder
       .addCase(updateCarrera.fulfilled, (state, action) => {
         notify("success", "Carrera actualizada");
-        var foundIndex = state.carreras.findIndex(
+        const foundIndex = state.carreras.findIndex(
           (carrera) => carrera.id === action.payload.carrera.id
         );
         state.carreras[foundIndex] = action.payload.carrera;
@@ -55,8 +55,8 @@ export const carrerasSlice = createSlice({
     builder
       .addCase(deleteCarrera.fulfilled, (state, action) => {
         notify("success", "Se eliminó la carrera");
-        var foundIndex = state.carreras.findIndex(
-          (carrera) => carrera.id === action.payload.id
+        const foundIndex = state.carreras.findIndex(
+          (carrera) => carrera.id === Number(action.payload.id)
         );
         state.carreras.splice(foundIndex, 1);
       })

@@ -13,9 +13,9 @@ import { Box } from "@mui/system";
 import { parseDate } from "../../../utils/utils";
 import { cursoDetailValidationSchema } from "../../../utils/validation";
 
-import InputField from "../../../components/InputField";
-import InputSwitch from "../../../components/InputSwitch";
-import InputArray from "../../../components/InputArray";
+import InputField from "../../../components/Input/InputField";
+import InputSwitch from "../../../components/Input/InputSwitch";
+import InputArray from "../../../components/Input/InputArray";
 
 const Detalles = ({ curso, setCurso }) => {
   const dispatch = useDispatch();

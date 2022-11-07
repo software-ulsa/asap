@@ -43,7 +43,7 @@ export const usuariosSlice = createSlice({
     builder
       .addCase(updateUser.fulfilled, (state, action) => {
         notify("success", "Se actualizó el usuario");
-        var foundIndex = state.usuarios.findIndex(
+        const foundIndex = state.usuarios.findIndex(
           (usuario) => usuario.id === action.payload.user.id
         );
         state.usuarios[foundIndex] = action.payload.user;
@@ -54,8 +54,8 @@ export const usuariosSlice = createSlice({
       });
     builder
       .addCase(deleteUser.fulfilled, (state, action) => {
-        var foundIndex = state.usuarios.findIndex(
-          (usuario) => usuario.id === action.payload.id
+        const foundIndex = state.usuarios.findIndex(
+          (usuario) => usuario.id === Number(action.payload.id)
         );
         notify("success", "Se eliminó el usuario");
         state.usuarios.splice(foundIndex, 1);

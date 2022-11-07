@@ -1,4 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleClose,
+  rebootActiveStep,
+  setStepSize,
+} from "../../reducers/ModalReducer";
 
 import {
   IconButton,
@@ -14,68 +20,65 @@ import { Box } from "@mui/system";
 
 import { ColorlibConnector, EspecialistaStepIcon } from "../../utils/custom";
 
-import InfoBasica from "./Pasos/InfoBasica";
-import Contacto from "./Pasos/Contacto";
-import Profesion from "./Pasos/Profesion";
+import Persona from "../../components/Steps/Persona";
+import UsuarioEspecialista from "../../components/Steps/UsuarioEspecialista";
+
+import Domicilio from "./Pasos/Domicilio";
 import ImagenPerfil from "./Pasos/ImagenPerfil";
 
-const EditarEspecialista = ({ open, handleClose, specialist }) => {
-  const [activeStep, setActiveStep] = useState(0);
+import { especialistaInitialState } from "../../utils/initialStates";
+
+const EditarEspecialista = ({ specialist }) => {
+  const dispatch = useDispatch();
+  const { activeStep, openEdit } = useSelector((state) => state.modal);
   const [especialista, setEspecialista] = useState();
 
   useEffect(() => {
-    setEspecialista(specialist);
+    setEspecialista(especialistaInitialState(specialist));
   }, [specialist]);
 
-  const handleNext = () => {
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
+  const cancelAction = () => {
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
-  const handleBack = () => {
-    if (activeStep > 0) {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
-  };
-
-  const steps = ["Persona", "Contacto", "Profesión", "Imagen"];
-
+  const steps = ["Persona", "Usuario", "Domicilio", "Imagen"];
   const stepsComponent = [
-    <InfoBasica
-      especialista={especialista}
-      setEspecialista={setEspecialista}
-      handleNext={handleNext}
-      handleClose={handleClose}
+    <Persona
+      isUpdating={true}
+      item={especialista}
+      setItem={setEspecialista}
+      cancelAction={cancelAction}
     />,
-    <Contacto
-      especialista={especialista}
-      setEspecialista={setEspecialista}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
+    <UsuarioEspecialista
+      isUpdating={true}
+      item={especialista}
+      setItem={setEspecialista}
+      cancelAction={cancelAction}
     />,
-    <Profesion
+    <Domicilio
       especialista={especialista}
       setEspecialista={setEspecialista}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
+      cancelAction={cancelAction}
     />,
     <ImagenPerfil
-      mode={false}
+      isUpdate={true}
       especialista={especialista}
       setEspecialista={setEspecialista}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleClose={handleClose}
+      cancelAction={cancelAction}
     />,
   ];
 
+  useEffect(() => {
+    dispatch(setStepSize(steps.length));
+  }, []);
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm">
+    <Dialog
+      open={openEdit}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="sm"
+    >
       <DialogTitle>Editar usuario</DialogTitle>
       <Box
         position="absolute"
@@ -84,7 +87,7 @@ const EditarEspecialista = ({ open, handleClose, specialist }) => {
         paddingTop={1}
         paddingRight={1}
       >
-        <IconButton onClick={handleClose}>
+        <IconButton onClick={cancelAction}>
           <Close />
         </IconButton>
       </Box>

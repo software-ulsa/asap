@@ -6,10 +6,10 @@ import {
   rebootActiveStep,
 } from "../../../reducers/ModalReducer";
 
-import { IconButton, Avatar, Button, Stack } from "@mui/material";
-import { PhotoCameraRounded } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import { grey } from "@mui/material/colors";
+import { PhotoCameraRounded } from "@mui/icons-material";
+import { IconButton, Avatar, Button, Stack } from "@mui/material";
 
 const IconCurso = ({ image, setImage, setFile, guardarCurso }) => {
   const dispatch = useDispatch();

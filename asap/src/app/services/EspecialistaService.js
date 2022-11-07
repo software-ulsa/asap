@@ -53,10 +53,3 @@ export const getEspecialistaByEspecialidad = createAsyncThunk(
       .data;
   }
 );
-
-export const getEspecialistaByArea = createAsyncThunk(
-  "especialista/getEspecialistaByArea",
-  async (area) => {
-    return (await httpClient.get(`${prefix}/getByArea/${area}`)).data;
-  }
-);

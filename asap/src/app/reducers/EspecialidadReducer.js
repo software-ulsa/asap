@@ -43,7 +43,7 @@ export const especialidadesSlice = createSlice({
     builder
       .addCase(updateEspecialidad.fulfilled, (state, action) => {
         notify("success", "Rol actualizada");
-        var foundIndex = state.especialidades.findIndex(
+        const foundIndex = state.especialidades.findIndex(
           (especialidad) => especialidad.id === action.payload.especialidad.id
         );
         state.especialidades[foundIndex] = action.payload.especialidad;
@@ -55,8 +55,8 @@ export const especialidadesSlice = createSlice({
     builder
       .addCase(deleteEspecialidad.fulfilled, (state, action) => {
         notify("success", "Se eliminó la especialidad");
-        var foundIndex = state.especialidades.findIndex(
-          (especialidad) => especialidad.id === action.payload.id
+        const foundIndex = state.especialidades.findIndex(
+          (especialidad) => especialidad.id === Number(action.payload.id)
         );
         state.especialidades.splice(foundIndex, 1);
       })

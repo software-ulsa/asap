@@ -55,7 +55,7 @@ export const especialistasSlice = createSlice({
     builder
       .addCase(deleteEspecialista.fulfilled, (state, action) => {
         var foundIndex = state.especialistas.findIndex(
-          (especialista) => especialista.id === action.payload.id
+          (especialista) => especialista.id === Number(action.payload.id)
         );
         notify("success", "Se eliminó el especialista");
         state.especialistas.splice(foundIndex, 1);

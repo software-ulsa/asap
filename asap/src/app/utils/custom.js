@@ -1,11 +1,16 @@
 import { StepConnector, stepConnectorClasses } from "@mui/material";
 import {
+  AddHomeWorkRounded,
   AssignmentRounded,
+  ContactMailRounded,
   ContactPageRounded,
+  ContactPhoneRounded,
+  FaceRetouchingNaturalRounded,
   ImageRounded,
   LandscapeRounded,
   LocalHospitalRounded,
   PersonRounded,
+  SchoolRounded,
   SettingsSuggestRounded,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
@@ -67,14 +72,34 @@ export function UserStepIcon(props) {
   );
 }
 
+export function PacienteStepIcon(props) {
+  const { active, completed, className } = props;
+
+  const icons = {
+    1: <ContactPhoneRounded />,
+    2: <ContactMailRounded />,
+    3: <SchoolRounded />,
+    4: <FaceRetouchingNaturalRounded />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+
 export function EspecialistaStepIcon(props) {
   const { active, completed, className } = props;
 
   const icons = {
-    1: <PersonRounded />,
-    2: <ContactPageRounded />,
-    3: <LocalHospitalRounded />,
-    4: <ImageRounded />,
+    1: <ContactPhoneRounded />,
+    2: <ContactMailRounded />,
+    3: <AddHomeWorkRounded />,
+    4: <FaceRetouchingNaturalRounded />,
   };
 
   return (

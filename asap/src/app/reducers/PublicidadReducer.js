@@ -43,7 +43,7 @@ export const publicidadesSlice = createSlice({
     builder
       .addCase(updatePublicidad.fulfilled, (state, action) => {
         notify("success", "Se actualizó la publicidad");
-        var foundIndex = state.publicidades.findIndex(
+        const foundIndex = state.publicidades.findIndex(
           (publicidad) => publicidad.id === action.payload.publicidad.id
         );
         state.publicidades[foundIndex] = action.payload.publicidad;
@@ -54,8 +54,8 @@ export const publicidadesSlice = createSlice({
       });
     builder
       .addCase(deletePublicidad.fulfilled, (state, action) => {
-        var foundIndex = state.publicidades.findIndex(
-          (publicidad) => publicidad.id === action.payload.id
+        const foundIndex = state.publicidades.findIndex(
+          (publicidad) => publicidad.id === Number(action.payload.id)
         );
         notify("success", "Se eliminó la publicidad");
         state.publicidades.splice(foundIndex, 1);

@@ -15,7 +15,7 @@ export const modalSlice = createSlice({
       state.openCreate = true;
     },
     handleOpenEdit: (state) => {
-      state.openCreate = true;
+      state.openEdit = true;
     },
     handleClose: (state) => {
       state.openCreate = false;

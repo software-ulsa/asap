@@ -8,7 +8,7 @@ import { Span } from "../../../components/Typography";
 import React from "react";
 import Brand from "../../Brand";
 import Sidenav from "../../MainSidebar";
-import { Close, JoinLeftRounded, Menu } from "@mui/icons-material";
+import { JoinLeftRounded, Menu } from "@mui/icons-material";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 0,

@@ -43,7 +43,7 @@ export const cursosSlice = createSlice({
     builder
       .addCase(updateCurso.fulfilled, (state, action) => {
         notify("success", "Se actualizó el curso");
-        var foundIndex = state.cursos.findIndex(
+        const foundIndex = state.cursos.findIndex(
           (curso) => curso.id === action.payload.curso.id
         );
         state.cursos[foundIndex] = action.payload.curso;
@@ -54,8 +54,8 @@ export const cursosSlice = createSlice({
       });
     builder
       .addCase(deleteCurso.fulfilled, (state, action) => {
-        var foundIndex = state.cursos.findIndex(
-          (curso) => curso.id === action.payload.id
+        const foundIndex = state.cursos.findIndex(
+          (curso) => curso.id === Number(action.payload.id)
         );
         notify("success", "Se eliminó el curso");
         state.cursos.splice(foundIndex, 1);

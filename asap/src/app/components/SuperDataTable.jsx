@@ -1,22 +1,40 @@
-import React, { useState } from "react";
-import MUIDataTable from "mui-datatables";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { handleOpenCreate } from "../reducers/ModalReducer";
+
 import { Box } from "@mui/system";
-import { CircularProgress, IconButton } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
+import MUIDataTable from "mui-datatables";
+import { Add, Delete, Edit, Refresh } from "@mui/icons-material";
+import { CircularProgress, IconButton, Typography } from "@mui/material";
 
 const SuperDataTable = ({
   data,
+  title,
+  fetched,
   headers,
+  refreshAction,
   deleteAction,
   editAction,
-  fetched,
 }) => {
+  const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
   const options = {
     viewColumns: false,
     filterType: "checkbox",
     rowsSelected: selected,
     rowsPerPageOptions: [10, 15, 20],
+    customToolbar: () => {
+      return (
+        <>
+          <IconButton onClick={refreshAction}>
+            <Refresh />
+          </IconButton>
+          <IconButton onClick={() => dispatch(handleOpenCreate())}>
+            <Add />
+          </IconButton>
+        </>
+      );
+    },
     customToolbarSelect: (selectedRows) => {
       return (
         <Box paddingRight="2em">
@@ -87,7 +105,11 @@ const SuperDataTable = ({
         </Box>
       ) : (
         <MUIDataTable
-          title={"Registros"}
+          title={
+            <Typography variant="h6" fontWeight="bold">
+              {title}
+            </Typography>
+          }
           data={data}
           columns={headers}
           options={options}

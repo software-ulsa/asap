@@ -13,6 +13,10 @@ import PublicidadReducer from "../reducers/PublicidadReducer";
 import CursoReducer from "../reducers/CursoReducer";
 import ActividadesReducer from "../reducers/ActividadesReducer";
 
+import CarreraReducer from "../reducers/CarreraReducer";
+import CategoriaReducer from "../reducers/CategoriaReducer";
+import EspecialidadReducer from "../reducers/EspecialidadReducer";
+
 export default configureStore({
   reducer: {
     auth: AuthReducer,
@@ -24,5 +28,8 @@ export default configureStore({
     actividades: ActividadesReducer,
     notas: NotaReducer,
     publicidades: PublicidadReducer,
+    carreras: CarreraReducer,
+    categorias: CategoriaReducer,
+    especialidades: EspecialidadReducer,
   },
 });

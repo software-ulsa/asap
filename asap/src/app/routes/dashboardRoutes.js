@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Dashboard from "../pages/Dashboard";
-import Roles from "../pages/Rol/Roles";
+import Opciones from "../pages/Configuracion/Opciones";
+
 import Usuarios from "../pages/Usuario/Usuarios";
+
 import Especialistas from "../pages/Especialista/Especialistas";
 import Notas from "../pages/Nota/Notas";
 import Publicidades from "../pages/Publicidad/Publicidades";
@@ -12,7 +14,6 @@ import EditarCurso from "../pages/Curso/EditarCurso";
 
 import Perfil from "../pages/Perfil/Perfil";
 import Error from "../pages/Error";
-import Opciones from "../pages/Configuracion/Opciones";
 
 const routes = createBrowserRouter([
   {

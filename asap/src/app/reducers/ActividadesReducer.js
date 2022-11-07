@@ -76,7 +76,7 @@ export const actividadesSlice = createSlice({
     builder
       .addCase(deleteActividad.fulfilled, (state, action) => {
         var foundIndex = state.actividades.findIndex(
-          (actividad) => actividad.id === action.payload.id
+          (actividad) => actividad.id === Number(action.payload.id)
         );
         notify("success", "Se eliminó la actividad");
         state.actividades.splice(foundIndex, 1);

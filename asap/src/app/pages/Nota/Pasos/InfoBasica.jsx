@@ -8,8 +8,8 @@ import { emptyNote } from "../../../utils/initialStates";
 
 import ChipInput from "material-ui-chip-input";
 import MUIRichTextEditor from "mui-rte";
-import InputArray from "../../../components/InputArray";
-import InputField from "../../../components/InputField";
+import InputArray from "../../../components/Input/InputArray";
+import InputField from "../../../components/Input/InputField";
 
 const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
   return (

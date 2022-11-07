@@ -1,5 +1,39 @@
 import * as yup from "yup";
-import { phoneRegExp } from "./utils";
+import { phoneRegExp, numberRegExp } from "./utils";
+
+export const personaValidationSchema = yup.object({
+  nombre: yup.string().required("Nombre requerido"),
+  ape_paterno: yup.string().required("Apellido paterno requerido"),
+  ape_materno: yup.string().required("Apellido materno requerido"),
+  sexo: yup
+    .string()
+    .oneOf(["Masculino", "Femenino"])
+    .label("Elegir uno")
+    .required("Sexo requerido"),
+  telefono: yup
+    .string()
+    .matches(phoneRegExp, "Teléfono no váildo")
+    .required("Teléfono requerido"),
+  correo: yup.string().email("Correo no válido").required("Correo requerido"),
+});
+
+export const usuarioValidationSchema = (isUpdate) => {
+  return yup.object({
+    username: yup.string().required("Nombre de usuario requerido"),
+    password: isUpdate
+      ? yup.string()
+      : yup.string().required("Contraseña requerida"),
+  });
+};
+
+export const domicilioValidationSchema = yup.object({
+  calle: yup.string().required("Calle requerida"),
+  colonia: yup.string().required("Colonia requerida"),
+  codigo_postal: yup
+    .string()
+    .matches(numberRegExp, "Código postal no váildo")
+    .required("Código postal requerido"),
+});
 
 export const basicInfoValidationSchema = yup.object({
   nombre: yup.string().required("Nombre requerido"),
@@ -129,13 +163,11 @@ export const especialistaBasicInfoValidationSchema = yup.object({
 });
 
 export const especialistaProfessionValidationSchema = yup.object({
-  especialidad: yup.string().required("Especialidad requerida"),
   cedula: yup
     .string()
     .min(8, "Cédula no válida")
     .max(8, "Cédula no válida")
     .required("Cédula requerida"),
-  area_especialidad: yup.string().required("Área de especialidad requerida"),
 });
 
 export const actividadValidationSchema = yup.object({
