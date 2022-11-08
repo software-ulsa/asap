@@ -78,7 +78,7 @@ const EditarNota = ({ open, handleClose, note }) => {
     handleClose();
   };
 
-  const steps = ["Nota", "Miniatura", "Imagen Principal"];
+  const steps = ["Nota", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica
       mode={false}
@@ -90,17 +90,6 @@ const EditarNota = ({ open, handleClose, note }) => {
       setPalabras={setPalabras}
       contenido={contenido}
       setContenido={setContenido}
-    />,
-
-    <ImagenThumbnail
-      thumbnailImage={thumbnailImage}
-      setThumbnailImage={setThumbnailImage}
-      setThumbnailFile={setThumbnailFile}
-      setActiveStep={setActiveStep}
-      setNota={setNota}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
     />,
 
     <ImagenPrincipal

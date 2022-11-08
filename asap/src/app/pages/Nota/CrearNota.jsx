@@ -50,28 +50,29 @@ const CrearNota = ({ open, handleClose }) => {
   };
 
   const guardarNota = () => {
-    if (thumbnailFile) {
-      ImagenesService.upload(thumbnailFile)
-        .then((response) => {
-          nota.foto_thumbnail = response.data;
-        })
-        .catch((error) => console.log(error));
-    }
+    // if (thumbnailFile) {
+    //   ImagenesService.upload(thumbnailFile)
+    //     .then((response) => {
+    //       nota.foto_thumbnail = response.data;
+    //     })
+    //     .catch((error) => console.log(error));
+    // }
 
     if (mainFile) {
       ImagenesService.upload(mainFile)
         .then((response) => {
-          nota.foto_principal = response.data;
+          nota.imagen = response.data;
         })
         .catch((error) => console.log(error));
+    }else{
+      nota.imagen = "";
     }
-
     dispatch(createNota(nota));
     setNota(emptyNote);
     handleClose();
   };
 
-  const steps = ["Nota", "Miniatura", "Imagen Principal"];
+  const steps = ["Nota", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica
       mode={true}
@@ -85,16 +86,16 @@ const CrearNota = ({ open, handleClose }) => {
       setContenido={setContenido}
     />,
 
-    <ImagenThumbnail
-      thumbnailImage={thumbnailImage}
-      setThumbnailImage={setThumbnailImage}
-      setThumbnailFile={setThumbnailFile}
-      setActiveStep={setActiveStep}
-      setNota={setNota}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
-    />,
+    // <ImagenThumbnail
+    //   thumbnailImage={thumbnailImage}
+    //   setThumbnailImage={setThumbnailImage}
+    //   setThumbnailFile={setThumbnailFile}
+    //   setActiveStep={setActiveStep}
+    //   setNota={setNota}
+    //   handleBack={handleBack}
+    //   handleNext={handleNext}
+    //   handleClose={handleClose}
+    // />,
 
     <ImagenPrincipal
       mainImage={mainImage}

@@ -17,28 +17,23 @@ import {
 import CrearNota from "./CrearNota";
 import EditarNota from "./EditarNota";
 import { notify } from "../../utils/utils";
+import { handleOpenCreate, handleOpenEdit, handleClose } from "../../reducers/ModalReducer";
 
 const Notas = () => {
   const dispatch = useDispatch();
   const { notas, fetched } = useSelector((state) => state.notas);
+  const { openCreate, openEdit } = useSelector((state) => state.modal);
 
   const [itemId, setItemId] = useState(-1);
-  const itemToEdit = notas.find((nota) => nota.id === Number(itemId));
-  console.log(itemToEdit);
+  const itemToEdit = notas.find((nota) => nota.id === Number(itemId));    
 
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleOpenCreate = () => setOpenCreate(true);
-  const handleCloseCreate = () => setOpenCreate(false);
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
+  const refreshAction = () => {
+    dispatch(getAllNotas());
+  }
 
   useEffect(() => {
-    if (!fetched) {
-      dispatch(getAllNotas());
-    }
-  }, [fetched, dispatch]);
+    refreshAction();
+  }, []);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => notas[d.dataIndex].id);
@@ -53,7 +48,7 @@ const Notas = () => {
     const idsToEdit = ids.data.map((d) => notas[d.dataIndex].id);
     if (idsToEdit.length === 1) {
       setItemId(idsToEdit[0]);
-      handleOpenEdit();
+      dispatch(handleOpenEdit());
     } else {
       notify("error", "Solo se puede editar un elemento a la vez");
     }
@@ -65,36 +60,21 @@ const Notas = () => {
         <title>Notas - ASAP</title>
         <meta name="Notas" content="Notas registradas" />
       </Helmet>
-      <Grid container paddingBottom={2}>
-        <Grid item xs={10}>
-          <Typography variant="h4" fontWeight="bold">
-            Notas
-          </Typography>
-        </Grid>
-        <Grid item xs={2} justifyContent="center">
-          <Button
-            fullWidth
-            variant="contained"
-            color="success"
-            onClick={handleOpenCreate}
-          >
-            Agregar
-          </Button>
-        </Grid>
-      </Grid>
-
+      
       <SuperDataTable
         data={notas}
+        title={'Notas'}        
         headers={notaHeaders}
         fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
+        refreshAction={refreshAction}
       />
 
-      <CrearNota handleClose={handleCloseCreate} open={openCreate} />
+      <CrearNota handleClose={() => dispatch(handleClose())} open={openCreate} />
 
       <EditarNota
-        handleClose={handleCloseEdit}
+        handleClose={() => dispatch(handleClose())}
         open={openEdit}
         note={itemToEdit}
       />

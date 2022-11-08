@@ -7,6 +7,8 @@ import { notaValidationSchema } from "../../../utils/validation";
 import { emptyNote } from "../../../utils/initialStates";
 
 import ChipInput from "material-ui-chip-input";
+import InputSwitch from "../../../components/Input/InputSwitch";
+import EstadoNotaSelect from "../../../components/Select/EstadoNotaSelect";
 import MUIRichTextEditor from "mui-rte";
 import InputArray from "../../../components/Input/InputArray";
 import InputField from "../../../components/Input/InputField";
@@ -18,6 +20,7 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
       initialValues={{
         titulo: nota?.titulo || "",
         tema: nota?.tema || "",
+        estado: nota?.estado || "Elegir uno",
         contenido: nota?.contenido || "",
         palabras_clave: nota?.palabras_clave || [],
       }}
@@ -28,6 +31,7 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
           titulo: values.titulo,
           tema: values.tema,
           contenido: values.contenido,
+          estado: values.estado,
           palabras_clave: values.palabras_clave,
         }));
         handleNext();
@@ -47,6 +51,11 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
               formik={props}
               field="palabras_clave"
               label="Palabras clave"
+            />
+            <EstadoNotaSelect
+              formik={props}
+              label="Estado"
+              field="estado"
             />
             <Grid item xs={12}>
               <Box sx={{ marginBottom: 5 }}>
