@@ -74,7 +74,7 @@ const CrearNota = ({ open, handleClose }) => {
   const steps = ["Nota", "Miniatura", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica
-      mode={true}
+      mode={false}
       nota={nota}
       setNota={setNota}
       handleNext={handleNext}
