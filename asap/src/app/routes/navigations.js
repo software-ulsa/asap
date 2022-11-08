@@ -4,6 +4,7 @@ import {
   PagesRounded,
   PersonRounded,
   SellRounded,
+  Task,
 } from "@mui/icons-material";
 
 export const navigations = [
@@ -31,5 +32,10 @@ export const navigations = [
     name: "Cursos",
     path: "/cursos",
     icon: <BookmarksRounded />,
+  },
+  {
+    name: "Seleccionar Notas",
+    path: "/seleccionar-nota",
+    icon: <Task />,
   },
 ];

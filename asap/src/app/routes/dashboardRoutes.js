@@ -8,7 +8,7 @@ import Usuarios from "../pages/Usuario/Usuarios";
 import Especialistas from "../pages/Especialista/Especialistas";
 import Notas from "../pages/Nota/Notas";
 import Publicidades from "../pages/Publicidad/Publicidades";
-
+import SeleccionarNota from "../pages/SeleccionarNota/SeleccionarNota";
 import Cursos from "../pages/Curso/Cursos";
 import EditarCurso from "../pages/Curso/EditarCurso";
 
@@ -56,6 +56,10 @@ const routes = createBrowserRouter([
       {
         path: "/configuracion",
         element: <Opciones key={9} />,
+      },
+      {
+        path: "/seleccionar-nota",
+        element: <SeleccionarNota />,
       },
     ],
   },
