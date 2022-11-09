@@ -7,11 +7,8 @@ import { notify } from "../../utils/utils";
 
 import { Helmet } from "react-helmet";
 
-import { Grid, Typography } from "@mui/material";
-
 import {
   deleteEspecialista,
-  deleteManyEspecialista,
   getAllEspecialista,
 } from "../../services/EspecialistaService";
 

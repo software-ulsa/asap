@@ -20,10 +20,11 @@ const EspecialidadesSelect = ({ formik }) => {
   return (
     <Grid item xs={12}>
       <FormControl fullWidth>
-        <InputLabel color="info" id="lblEspecialidadId">
+        <InputLabel color="info" id="lblEspecialidadId" required>
           Especialidad
         </InputLabel>
         <Select
+          required
           labelId="lblEspecialidadId"
           name="especialidad_id"
           color="info"

@@ -14,6 +14,7 @@ import EditarCurso from "../pages/Curso/EditarCurso";
 
 import Perfil from "../pages/Perfil/Perfil";
 import Error from "../pages/Error";
+import Pacientes from "../pages/Paciente/Pacientes";
 
 const routes = createBrowserRouter([
   {
@@ -59,7 +60,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "/seleccionar-nota",
-        element: <SeleccionarNota />,
+        element: <SeleccionarNota key={10} />,
+      },
+      {
+        path: "/pacientes",
+        element: <Pacientes key={11} />,
       },
     ],
   },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   handleClose,
@@ -15,35 +15,50 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
+import { Box } from "@mui/system";
 
-import { usuarioInitialState } from "../../utils/initialStates";
-import { ColorlibConnector, UsuarioStepIcon } from "../../utils/custom";
+import { ColorlibConnector, PacienteStepIcon } from "../../utils/custom";
 
 import Persona from "../../components/Steps/Persona";
-import Usuario from "../../components/Steps/Usuario";
+import UsuarioPaciente from "../../components/Steps/UsuarioPaciente";
 
 import ImagenPerfil from "./Pasos/ImagenPerfil";
 
-const CrearUsuario = () => {
+import { pacienteInitialState } from "../../utils/initialStates";
+
+const EditarPaciente = ({ pacient }) => {
   const dispatch = useDispatch();
-  const { activeStep, openCreate } = useSelector((state) => state.modal);
-  const [usuario, setUsuario] = useState(usuarioInitialState(null));
+  const { activeStep, openEdit } = useSelector((state) => state.modal);
+  const [paciente, setPaciente] = useState();
+
+  useEffect(() => {
+    setPaciente(pacienteInitialState(pacient));
+  }, [pacient]);
 
   const cancelAction = () => {
-    setUsuario(usuarioInitialState(null));
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
 
   const steps = ["Persona", "Usuario", "Imagen"];
   const stepsComponent = [
-    <Persona item={usuario} setItem={setUsuario} cancelAction={cancelAction} />,
-    <Usuario item={usuario} setItem={setUsuario} cancelAction={cancelAction} />,
+    <Persona
+      isUpdating={true}
+      item={paciente}
+      setItem={setPaciente}
+      cancelAction={cancelAction}
+    />,
+    <UsuarioPaciente
+      isUpdating={true}
+      item={paciente}
+      setItem={setPaciente}
+      cancelAction={cancelAction}
+    />,
     <ImagenPerfil
-      usuario={usuario}
-      setUsuario={setUsuario}
+      isUpdate={true}
+      paciente={paciente}
+      setPaciente={setPaciente}
       cancelAction={cancelAction}
     />,
   ];
@@ -54,11 +69,11 @@ const CrearUsuario = () => {
 
   return (
     <Dialog
-      open={openCreate}
+      open={openEdit}
       onClose={() => dispatch(handleClose())}
       maxWidth="sm"
     >
-      <DialogTitle>Agregar usuario</DialogTitle>
+      <DialogTitle>Editar usuario</DialogTitle>
       <Box
         position="absolute"
         top={0}
@@ -81,7 +96,7 @@ const CrearUsuario = () => {
             const labelProps = {};
             return (
               <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps} StepIconComponent={UsuarioStepIcon}>
+                <StepLabel {...labelProps} StepIconComponent={PacienteStepIcon}>
                   {label}
                 </StepLabel>
               </Step>
@@ -94,4 +109,4 @@ const CrearUsuario = () => {
   );
 };
 
-export default CrearUsuario;
+export default EditarPaciente;

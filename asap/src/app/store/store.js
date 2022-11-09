@@ -5,6 +5,7 @@ import AuthReducer from "../reducers/AuthReducer";
 
 import RolesReducer from "../reducers/RolesReducer";
 import UsuarioReducer from "../reducers/UsuarioReducer";
+import PacienteReducer from "../reducers/PacienteReducer";
 import EspecialistaReducer from "../reducers/EspecialistaReducer";
 
 import NotaReducer from "../reducers/NotaReducer";
@@ -21,13 +22,17 @@ export default configureStore({
   reducer: {
     auth: AuthReducer,
     modal: ModalReducer,
+    // Usuarios y relacionados
     roles: RolesReducer,
     usuarios: UsuarioReducer,
+    pacientes: PacienteReducer,
     especialistas: EspecialistaReducer,
+    // Caracteristicas
     cursos: CursoReducer,
     actividades: ActividadesReducer,
     notas: NotaReducer,
     publicidades: PublicidadReducer,
+    // Catalogos
     carreras: CarreraReducer,
     categorias: CategoriaReducer,
     especialidades: EspecialidadReducer,

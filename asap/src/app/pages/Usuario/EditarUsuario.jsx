@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { ColorlibConnector, UserStepIcon } from "../../utils/custom";
+import {
+  handleClose,
+  rebootActiveStep,
+  setStepSize,
+} from "../../reducers/ModalReducer";
 
 import {
   IconButton,
@@ -15,68 +18,61 @@ import {
 import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
-import { getAllRoles } from "../../services/RolService";
+import { ColorlibConnector, UsuarioStepIcon } from "../../utils/custom";
 
-import InfoBasica from "./Pasos/InfoBasica";
-import Registro from "./Pasos/Registro";
+import Persona from "../../components/Steps/Persona";
+import Usuario from "../../components/Steps/Usuario";
+
 import ImagenPerfil from "./Pasos/ImagenPerfil";
 
-const EditarUsuario = ({ open, handleClose, user, mode }) => {
-  const dispatch = useDispatch();
-  const { roles, fetched } = useSelector((state) => state.roles);
+import { usuarioInitialState } from "../../utils/initialStates";
 
-  const [activeStep, setActiveStep] = useState(0);
+const EditarUsuario = ({ user }) => {
+  const dispatch = useDispatch();
+  const { activeStep, openEdit } = useSelector((state) => state.modal);
   const [usuario, setUsuario] = useState();
 
   useEffect(() => {
-    setUsuario(Object.assign({ password: "" }, user));
-    if (!fetched) {
-      dispatch(getAllRoles());
-    }
+    setUsuario(usuarioInitialState(user));
   }, [user]);
 
-  const handleNext = () => {
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
+  const cancelAction = () => {
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
-  const handleBack = () => {
-    if (activeStep > 0) {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
-  };
-
-  const steps = ["Persona", "Registro", "Imagen"];
+  const steps = ["Persona", "Usuario", "Imagen"];
   const stepsComponent = [
-    <InfoBasica
-      usuario={usuario}
-      setUsuario={setUsuario}
-      handleNext={handleNext}
-      handleClose={handleClose}
+    <Persona
+      isUpdating={true}
+      item={usuario}
+      setItem={setUsuario}
+      cancelAction={cancelAction}
     />,
-    <Registro
-      mode={mode}
-      roles={roles}
-      usuario={usuario}
-      setUsuario={setUsuario}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleNext={handleNext}
-      handleClose={handleClose}
+    <Usuario
+      isUpdating={true}
+      item={usuario}
+      setItem={setUsuario}
+      cancelAction={cancelAction}
     />,
     <ImagenPerfil
-      mode={mode}
+      isUpdate={true}
       usuario={usuario}
       setUsuario={setUsuario}
-      setActiveStep={setActiveStep}
-      handleBack={handleBack}
-      handleClose={handleClose}
+      cancelAction={cancelAction}
     />,
   ];
 
+  useEffect(() => {
+    dispatch(setStepSize(steps.length));
+  }, []);
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm">
+    <Dialog
+      open={openEdit}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="sm"
+    >
       <DialogTitle>Editar usuario</DialogTitle>
       <Box
         position="absolute"
@@ -85,7 +81,7 @@ const EditarUsuario = ({ open, handleClose, user, mode }) => {
         paddingTop={1}
         paddingRight={1}
       >
-        <IconButton onClick={handleClose}>
+        <IconButton onClick={cancelAction}>
           <Close />
         </IconButton>
       </Box>
@@ -100,7 +96,7 @@ const EditarUsuario = ({ open, handleClose, user, mode }) => {
             const labelProps = {};
             return (
               <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps} StepIconComponent={UserStepIcon}>
+                <StepLabel {...labelProps} StepIconComponent={UsuarioStepIcon}>
                   {label}
                 </StepLabel>
               </Step>

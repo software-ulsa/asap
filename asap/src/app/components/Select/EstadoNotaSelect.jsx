@@ -11,10 +11,12 @@ const EstadoNotaSelect = ({ formik }) => {
               : "info"
           }
           id="lblEstado"
+          required
         >
           Estado
         </InputLabel>
         <Select
+          required
           labelId="lblEstado"
           name="estado"
           color="info"

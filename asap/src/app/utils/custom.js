@@ -8,7 +8,6 @@ import {
   FaceRetouchingNaturalRounded,
   ImageRounded,
   LandscapeRounded,
-  LocalHospitalRounded,
   PersonRounded,
   SchoolRounded,
   SettingsSuggestRounded,
@@ -53,7 +52,7 @@ export const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   alignItems: "center",
 }));
 
-export function UserStepIcon(props) {
+export function UsuarioStepIcon(props) {
   const { active, completed, className } = props;
 
   const icons = {

@@ -47,6 +47,7 @@ const Usuario = ({ isUpdating, item, setItem, cancelAction }) => {
               field="password"
               label={isUpdating ? "Nueva contraseña" : "Contraseña"}
               type="password"
+              required={!isUpdating}
             />
 
             <InputField
