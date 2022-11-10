@@ -75,8 +75,8 @@ export const publicidadValidationSchema = yup.object({
   empresa: yup.string().required("Nombre de empresa requerida"),
   correo_empresa: yup.string().email("Correo no válido").required("Correo requerido"),
   url_empresa: yup.string().required("URL requerido"),
-  fecha_inicio: yup.string().required("Fecha de inicio requerido"),
-  fecha_fin: yup.string().required("Fecha de vencimiento requerido"),
+  fecha_inicio: yup.date().default(() => new Date()).required('Fecha de inicio requerido'),
+  fecha_fin: yup.date().when("fecha_inicio",(fecha_inicio, schema) => fecha_inicio && schema.min(fecha_inicio, "La fecha de fin debe ser posterior a la de inicio")).required('Fecha de fin requerido'),
 });
 
 export const profileValidationSchema = yup.object({

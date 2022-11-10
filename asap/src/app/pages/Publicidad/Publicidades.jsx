@@ -18,28 +18,24 @@ import {
 import CrearPublicidad from "./CrearPublicidad";
 import EditarPublicidad from "./EditarPublicidad";
 
+import { handleOpenCreate, handleOpenEdit, handleClose } from "../../reducers/ModalReducer";
+
 const Publicidades = () => {
   const dispatch = useDispatch();
   const { publicidades, fetched } = useSelector((state) => state.publicidades);
 
   const [itemId, setItemId] = useState(-1);
-  const itemToEdit = publicidades.find(
-    (publicidad) => publicidad.id === Number(itemId)
-  );
+  const itemToEdit = publicidades.find((publicidad) => publicidad.id === Number(itemId));
 
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleOpenCreate = () => setOpenCreate(true);
-  const handleCloseCreate = () => setOpenCreate(false);
+  const { openCreate, openEdit } = useSelector((state) => state.modal);
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
+  const refreshAction = () => {
+    dispatch(getAllPublicidad());
+  };
 
   useEffect(() => {
-    if (!fetched) {
-      dispatch(getAllPublicidad());
-    }
-  }, [fetched, dispatch]);
+    refreshAction();
+  }, []);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => publicidades[d.dataIndex].id);
@@ -54,7 +50,7 @@ const Publicidades = () => {
     const idsToEdit = ids.data.map((d) => publicidades[d.dataIndex].id);
     if (idsToEdit.length === 1) {
       setItemId(idsToEdit[0]);
-      handleOpenEdit();
+      dispatch(handleOpenEdit());
     } else {
       notify("error", "Solo se puede editar un elemento a la vez");
     }
@@ -66,36 +62,21 @@ const Publicidades = () => {
         <title>Publicidades - ASAP</title>
         <meta name="Publicidades" content="Publicidades registradas" />
       </Helmet>
-      <Grid container paddingBottom={2}>
-        <Grid item xs={10}>
-          <Typography variant="h4" fontWeight="bold">
-            Publicidades
-          </Typography>
-        </Grid>
-        <Grid item xs={2} justifyContent="center">
-          <Button
-            fullWidth
-            variant="contained"
-            color="success"
-            onClick={handleOpenCreate}
-          >
-            Agregar
-          </Button>
-        </Grid>
-      </Grid>
 
       <SuperDataTable
         data={publicidades}
+        title={"Publicidades"}
         headers={publicidadHeaders}
         fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
+        refreshAction={refreshAction}
       />
 
-      <CrearPublicidad handleClose={handleCloseCreate} open={openCreate} />
+      <CrearPublicidad handleClose={() => dispatch(handleClose())} open={openCreate} />
 
       <EditarPublicidad
-        handleClose={handleCloseEdit}
+        handleClose={() => dispatch(handleClose())}
         open={openEdit}
         publicidad={itemToEdit}
       />

@@ -10,13 +10,17 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Avatar,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { Close } from "@mui/icons-material";
+import { Close, PhotoCameraRounded } from "@mui/icons-material";
 
 import { updatePublicidad } from "../../services/PublicidadService";
 
 import { publicidadValidationSchema } from "../../utils/validation";
+import { useState } from "react";
+import { grey } from "@mui/material/colors";
 
 const EditarPublicidad = ({ open, handleClose, publicidad }) => {
   const dispatch = useDispatch();
@@ -29,16 +33,18 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
     .split("T")[0]
     .replaceAll("/", "-");
 
+  const [mainImage, setMainImage] = useState("");
+  const [mainFile, setMainFile] = useState();
+
+  const doClickOnInput = () => {
+    var input = document.getElementById("subirImagen");
+    input?.click();
+  };
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>Editar publicidad</DialogTitle>
-      <Box
-        position="absolute"
-        top={0}
-        right={0}
-        paddingTop={1}
-        paddingRight={1}
-      >
+      <Box position="absolute" top={0} right={0} paddingTop={1} paddingRight={1}>
         <IconButton onClick={handleClose}>
           <Close />
         </IconButton>
@@ -88,13 +94,8 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     value={props.values.descripcion}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={
-                      props.touched.descripcion &&
-                      Boolean(props.errors.descripcion)
-                    }
-                    helperText={
-                      props.touched.descripcion && props.errors.descripcion
-                    }
+                    error={props.touched.descripcion && Boolean(props.errors.descripcion)}
+                    helperText={props.touched.descripcion && props.errors.descripcion}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -102,18 +103,13 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     color="info"
                     fullWidth
                     name="empresa"
-                    label="Dot de empresa"
+                    label="Nombre de empresa"
                     variant="outlined"
                     value={props.values.empresa}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={
-                      props.touched.empresa &&
-                      Boolean(props.errors.empresa)
-                    }
-                    helperText={
-                      props.touched.empresa && props.errors.empresa
-                    }
+                    error={props.touched.empresa && Boolean(props.errors.empresa)}
+                    helperText={props.touched.empresa && props.errors.empresa}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -144,7 +140,6 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     helperText={props.touched.url_empresa && props.errors.url_empresa}
                   />
                 </Grid>
-
                 <Grid item xs={12}>
                   <TextField
                     type="date"
@@ -156,13 +151,8 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     value={props.values.fecha_inicio}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={
-                      props.touched.fecha_inicio &&
-                      Boolean(props.errors.fecha_inicio)
-                    }
-                    helperText={
-                      props.touched.fecha_inicio && props.errors.fecha_inicio
-                    }
+                    error={props.touched.fecha_inicio && Boolean(props.errors.fecha_inicio)}
+                    helperText={props.touched.fecha_inicio && props.errors.fecha_inicio}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -176,15 +166,44 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     value={props.values.fecha_fin}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={
-                      props.touched.fecha_fin &&
-                      Boolean(props.errors.fecha_fin)
-                    }
-                    helperText={
-                      props.touched.fecha_fin &&
-                      props.errors.fecha_fin
-                    }
+                    error={props.touched.fecha_fin && Boolean(props.errors.fecha_fin)}
+                    helperText={props.touched.fecha_fin && props.errors.fecha_fin}
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="label">Imagen de publicidad</Typography>
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="subirImagen"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setMainImage(URL.createObjectURL(file));
+                          setMainFile(file);
+                        }
+                      }}
+                      hidden
+                    ></input>
+                    <IconButton
+                      onClick={doClickOnInput}
+                      disableFocusRipple
+                      disableTouchRipple
+                      disableRipple
+                    >
+                      <Avatar
+                        sx={{
+                          bgcolor: grey[900],
+                          height: "300px",
+                          width: "300px",
+                        }}
+                        src={mainImage}
+                      >
+                        <PhotoCameraRounded />
+                      </Avatar>
+                    </IconButton>
+                  </Box>
                 </Grid>
               </Grid>
             </DialogContent>
