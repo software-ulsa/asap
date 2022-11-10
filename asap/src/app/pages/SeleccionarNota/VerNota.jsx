@@ -6,7 +6,7 @@ import { Box } from "@mui/system";
 
 import ImagenesService from "../../services/ImagesService";
 
-import { cursoValidationSchema } from "../../utils/validation";
+// import { cursoValidationSchema } from "../../utils/validation";
 import { useDispatch } from "react-redux";
 import { createNota, updateNota } from "../../services/NotaService";
 
@@ -22,7 +22,7 @@ const InfoCurso = ({ curso, file, cancelAction, mode }) => {
         descripcion: curso?.descripcion || "",
         icono: curso?.icono || "",
       }}
-      validationSchema={cursoValidationSchema}
+      // validationSchema={cursoValidationSchema}
       onSubmit={(values) => {
         if (file) {
           ImagenesService.upload(file)
@@ -33,9 +33,9 @@ const InfoCurso = ({ curso, file, cancelAction, mode }) => {
         }
 
         if (mode) {
-          dispatch(createCurso(values));
+          // dispatch(createCurso(values));
         } else {
-          dispatch(updateCurso(values));
+          // dispatch(updateCurso(values));
         }
       }}
     >

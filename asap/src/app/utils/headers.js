@@ -347,7 +347,7 @@ export const publicidadHeaders = [
     },
   },
   {
-    name: "dot_empresa",
+    name: "empresa",
     label: "Empresa",
     options: {
       customBodyRender: (data, type, row) => {
@@ -359,7 +359,7 @@ export const publicidadHeaders = [
     },
   },
   {
-    name: "email",
+    name: "correo_empresa",
     label: "Correo",
     options: {
       customBodyRender: (data, type, row) => {

@@ -72,11 +72,11 @@ export const registerUserValidationSchema = (isCreate) => {
 export const publicidadValidationSchema = yup.object({
   nombre: yup.string().required("Nombre requerido"),
   descripcion: yup.string().required("Descripción de empresa requerida"),
-  dot_empresa: yup.string().required("Dot de empresa requerida"),
-  email: yup.string().email("Correo no válido").required("Correo requerido"),
-  url: yup.string().required("URL requerido"),
+  empresa: yup.string().required("Nombre de empresa requerida"),
+  correo_empresa: yup.string().email("Correo no válido").required("Correo requerido"),
+  url_empresa: yup.string().required("URL requerido"),
   fecha_inicio: yup.string().required("Fecha de inicio requerido"),
-  fecha_vencimiento: yup.string().required("Fecha de vencimiento requerido"),
+  fecha_fin: yup.string().required("Fecha de vencimiento requerido"),
 });
 
 export const profileValidationSchema = yup.object({

@@ -10,38 +10,45 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Typography,
+  Avatar,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { Close } from "@mui/icons-material";
+import { Close, PhotoCameraRounded } from "@mui/icons-material";
 
 import { createPublicidad } from "../../services/PublicidadService";
 
 import { publicidadValidationSchema } from "../../utils/validation";
 import { emptyPublicidad } from "../../utils/initialStates";
+import { useState } from "react";
+import { grey } from "@mui/material/colors";
 
 const CrearPublicidad = ({ open, handleClose }) => {
   const dispatch = useDispatch();
+
+  const [mainImage, setMainImage] = useState("");
+  const [mainFile, setMainFile] = useState();
 
   const formik = useFormik({
     initialValues: { emptyPublicidad },
     validationSchema: publicidadValidationSchema,
     onSubmit: (values, { resetForm }) => {
+      values.imagen="null";
       dispatch(createPublicidad(values));
       resetForm();
       handleClose();
     },
   });
 
+  const doClickOnInput = () => {
+    var input = document.getElementById("subirImagen");
+    input?.click();
+  };
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>Agregar publicidad</DialogTitle>
-      <Box
-        position="absolute"
-        top={0}
-        right={0}
-        paddingTop={1}
-        paddingRight={1}
-      >
+      <Box position="absolute" top={0} right={0} paddingTop={1} paddingRight={1}>
         <IconButton onClick={handleClose}>
           <Close />
         </IconButton>
@@ -68,69 +75,59 @@ const CrearPublicidad = ({ open, handleClose }) => {
                 color="info"
                 fullWidth
                 name="descripcion"
-                label="Descripcion de empresa"
+                label="Descripcion de la publicidad"
                 variant="outlined"
                 value={formik.values.descripcion}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.descripcion &&
-                  Boolean(formik.errors.descripcion)
-                }
-                helperText={
-                  formik.touched.descripcion && formik.errors.descripcion
-                }
+                error={formik.touched.descripcion && Boolean(formik.errors.descripcion)}
+                helperText={formik.touched.descripcion && formik.errors.descripcion}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
-                name="dot_empresa"
-                label="Dot de empresa"
+                name="empresa"
+                label="Empresa"
                 variant="outlined"
-                value={formik.values.dot_empresa}
+                value={formik.values.empresa}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.dot_empresa &&
-                  Boolean(formik.errors.dot_empresa)
-                }
-                helperText={
-                  formik.touched.dot_empresa && formik.errors.dot_empresa
-                }
+                error={formik.touched.empresa && Boolean(formik.errors.empresa)}
+                helperText={formik.touched.empresa && formik.errors.empresa}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
-                label="Email"
-                name="email"
+                name="correo_empresa"
+                label="Correo de la empresa"
                 variant="outlined"
-                value={formik.values.email}
+                value={formik.values.correo_empresa}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                error={formik.touched.correo_empresa && Boolean(formik.errors.correo_empresa)}
+                helperText={formik.touched.correo_empresa && formik.errors.correo_empresa}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 color="info"
                 fullWidth
-                name="url"
-                label="URL"
+                label="Url a la empresa"
+                name="url_empresa"
                 variant="outlined"
-                value={formik.values.url}
+                value={formik.values.url_empresa}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.url && Boolean(formik.errors.url)}
-                helperText={formik.touched.url && formik.errors.url}
+                error={formik.touched.url_empresa && Boolean(formik.errors.url_empresa)}
+                helperText={formik.touched.url_empresa && formik.errors.url_empresa}
               />
             </Grid>
-
             <Grid item xs={12}>
+              <Typography variant="label">Fecha inicio</Typography>
               <TextField
                 type="date"
                 color="info"
@@ -141,35 +138,60 @@ const CrearPublicidad = ({ open, handleClose }) => {
                 value={formik.values.fecha_inicio}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.fecha_inicio &&
-                  Boolean(formik.errors.fecha_inicio)
-                }
-                helperText={
-                  formik.touched.fecha_inicio && formik.errors.fecha_inicio
-                }
+                error={formik.touched.fecha_inicio && Boolean(formik.errors.fecha_inicio)}
+                helperText={formik.touched.fecha_inicio && formik.errors.fecha_inicio}
               />
             </Grid>
             <Grid item xs={12}>
+              <Typography variant="label">Fecha fin</Typography>
               <TextField
                 type="date"
                 color="info"
                 fullWidth
-                name="fecha_vencimiento"
+                name="fecha_fin"
                 label=""
                 variant="outlined"
-                value={formik.values.fecha_vencimiento}
+                value={formik.values.fecha_fin}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.fecha_vencimiento &&
-                  Boolean(formik.errors.fecha_vencimiento)
-                }
-                helperText={
-                  formik.touched.fecha_vencimiento &&
-                  formik.errors.fecha_vencimiento
-                }
+                error={formik.touched.fecha_fin && Boolean(formik.errors.fecha_fin)}
+                helperText={formik.touched.fecha_fin && formik.errors.fecha_fin}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="label">Imagen de publicidad</Typography>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="subirImagen"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setMainImage(URL.createObjectURL(file));
+                      setMainFile(file);
+                    }
+                  }}
+                  hidden
+                ></input>
+                <IconButton
+                  onClick={doClickOnInput}
+                  disableFocusRipple
+                  disableTouchRipple
+                  disableRipple
+                >
+                  <Avatar
+                    sx={{
+                      bgcolor: grey[900],
+                      height: "300px",
+                      width: "300px",
+                    }}
+                    src={mainImage}
+                  >
+                    <PhotoCameraRounded />
+                  </Avatar>
+                </IconButton>
+              </Box>
             </Grid>
           </Grid>
         </DialogContent>

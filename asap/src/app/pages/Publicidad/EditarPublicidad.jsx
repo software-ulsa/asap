@@ -24,7 +24,7 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
     .toISOString()
     .split("T")[0]
     .replaceAll("/", "-");
-  const dateFin = new Date(publicidad?.fecha_vencimiento || "2022-10-28")
+  const dateFin = new Date(publicidad?.fecha_fin || "2022-10-28")
     .toISOString()
     .split("T")[0]
     .replaceAll("/", "-");
@@ -48,11 +48,11 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
           id: publicidad?.id || -1,
           nombre: publicidad?.nombre || "",
           descripcion: publicidad?.descripcion || "",
-          dot_empresa: publicidad?.dot_empresa || "",
-          email: publicidad?.email || "",
-          url: publicidad?.url || "",
+          empresa: publicidad?.empresa || "",
+          correo_empresa: publicidad?.correo_empresa || "",
+          url_empresa: publicidad?.url_empresa || "",
           fecha_inicio: dateInicio || "",
-          fecha_vencimiento: dateFin || "",
+          fecha_fin: dateFin || "",
         }}
         validationSchema={publicidadValidationSchema}
         onSubmit={(values) => {
@@ -101,18 +101,18 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                   <TextField
                     color="info"
                     fullWidth
-                    name="dot_empresa"
+                    name="empresa"
                     label="Dot de empresa"
                     variant="outlined"
-                    value={props.values.dot_empresa}
+                    value={props.values.empresa}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     error={
-                      props.touched.dot_empresa &&
-                      Boolean(props.errors.dot_empresa)
+                      props.touched.empresa &&
+                      Boolean(props.errors.empresa)
                     }
                     helperText={
-                      props.touched.dot_empresa && props.errors.dot_empresa
+                      props.touched.empresa && props.errors.empresa
                     }
                   />
                 </Grid>
@@ -121,27 +121,27 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     color="info"
                     fullWidth
                     label="Email"
-                    name="email"
+                    name="correo_empresa"
                     variant="outlined"
-                    value={props.values.email}
+                    value={props.values.correo_empresa}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={props.touched.email && Boolean(props.errors.email)}
-                    helperText={props.touched.email && props.errors.email}
+                    error={props.touched.correo_empresa && Boolean(props.errors.correo_empresa)}
+                    helperText={props.touched.correo_empresa && props.errors.correo_empresa}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     color="info"
                     fullWidth
-                    name="url"
-                    label="URL"
+                    name="url_empresa"
+                    label="Url de la empresa"
                     variant="outlined"
-                    value={props.values.url}
+                    value={props.values.url_empresa}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    error={props.touched.url && Boolean(props.errors.url)}
-                    helperText={props.touched.url && props.errors.url}
+                    error={props.touched.url_empresa && Boolean(props.errors.url_empresa)}
+                    helperText={props.touched.url_empresa && props.errors.url_empresa}
                   />
                 </Grid>
 
@@ -170,19 +170,19 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     type="date"
                     color="info"
                     fullWidth
-                    name="fecha_vencimiento"
+                    name="fecha_fin"
                     label="Fecha de vencimiento"
                     variant="outlined"
-                    value={props.values.fecha_vencimiento}
+                    value={props.values.fecha_fin}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     error={
-                      props.touched.fecha_vencimiento &&
-                      Boolean(props.errors.fecha_vencimiento)
+                      props.touched.fecha_fin &&
+                      Boolean(props.errors.fecha_fin)
                     }
                     helperText={
-                      props.touched.fecha_vencimiento &&
-                      props.errors.fecha_vencimiento
+                      props.touched.fecha_fin &&
+                      props.errors.fecha_fin
                     }
                   />
                 </Grid>
