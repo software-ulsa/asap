@@ -7,10 +7,7 @@ import { Avatar, Box, Button, Grid, IconButton, Stack } from "@mui/material";
 
 import ImagenesService from "../../../services/ImagesService";
 
-import {
-  emptyEspecialista,
-  especialistaInitialState,
-} from "../../../utils/initialStates";
+import { especialistaInitialState } from "../../../utils/initialStates";
 import {
   createEspecialista,
   updateEspecialista,

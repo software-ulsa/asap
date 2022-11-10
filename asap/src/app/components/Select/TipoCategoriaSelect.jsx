@@ -10,11 +10,13 @@ const TipoCategoriaSelect = ({ formik }) => {
               ? "error"
               : "info"
           }
+          required
           id="lblTipo"
         >
           Tipo de categoria
         </InputLabel>
         <Select
+          required
           labelId="lblTipo"
           name="tipo"
           color="info"

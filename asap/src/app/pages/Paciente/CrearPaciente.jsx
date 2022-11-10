@@ -18,32 +18,40 @@ import {
 import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
 
-import { usuarioInitialState } from "../../utils/initialStates";
-import { ColorlibConnector, UsuarioStepIcon } from "../../utils/custom";
+import { pacienteInitialState } from "../../utils/initialStates";
+import { ColorlibConnector, PacienteStepIcon } from "../../utils/custom";
 
 import Persona from "../../components/Steps/Persona";
-import Usuario from "../../components/Steps/Usuario";
+import UsuarioPaciente from "../../components/Steps/UsuarioPaciente";
 
 import ImagenPerfil from "./Pasos/ImagenPerfil";
 
-const CrearUsuario = () => {
+const CrearPaciente = () => {
   const dispatch = useDispatch();
   const { activeStep, openCreate } = useSelector((state) => state.modal);
-  const [usuario, setUsuario] = useState(usuarioInitialState(null));
+  const [paciente, setPaciente] = useState(pacienteInitialState(null));
 
   const cancelAction = () => {
-    setUsuario(usuarioInitialState(null));
+    setPaciente(pacienteInitialState(null));
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
 
   const steps = ["Persona", "Usuario", "Imagen"];
   const stepsComponent = [
-    <Persona item={usuario} setItem={setUsuario} cancelAction={cancelAction} />,
-    <Usuario item={usuario} setItem={setUsuario} cancelAction={cancelAction} />,
+    <Persona
+      item={paciente}
+      setItem={setPaciente}
+      cancelAction={cancelAction}
+    />,
+    <UsuarioPaciente
+      item={paciente}
+      setItem={setPaciente}
+      cancelAction={cancelAction}
+    />,
     <ImagenPerfil
-      usuario={usuario}
-      setUsuario={setUsuario}
+      paciente={paciente}
+      setPaciente={setPaciente}
       cancelAction={cancelAction}
     />,
   ];
@@ -58,7 +66,7 @@ const CrearUsuario = () => {
       onClose={() => dispatch(handleClose())}
       maxWidth="sm"
     >
-      <DialogTitle>Agregar usuario</DialogTitle>
+      <DialogTitle>Agregar paciente</DialogTitle>
       <Box
         position="absolute"
         top={0}
@@ -81,7 +89,7 @@ const CrearUsuario = () => {
             const labelProps = {};
             return (
               <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps} StepIconComponent={UsuarioStepIcon}>
+                <StepLabel {...labelProps} StepIconComponent={PacienteStepIcon}>
                   {label}
                 </StepLabel>
               </Step>
@@ -94,4 +102,4 @@ const CrearUsuario = () => {
   );
 };
 
-export default CrearUsuario;
+export default CrearPaciente;

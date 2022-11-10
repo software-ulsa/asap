@@ -18,10 +18,11 @@ const RolSelect = ({ formik }) => {
   return (
     <Grid item xs={12}>
       <FormControl fullWidth>
-        <InputLabel color="info" id="lblRolId">
+        <InputLabel color="info" id="lblRolId" required>
           Rol
         </InputLabel>
         <Select
+          required
           labelId="lblRolId"
           name="rol_id"
           color="info"

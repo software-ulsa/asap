@@ -24,11 +24,13 @@ const CarreraSelect = ({ formik }) => {
               ? "error"
               : "info"
           }
+          required
           id="lblCarreraId"
         >
           Carrera
         </InputLabel>
         <Select
+          required
           labelId="lblCarreraId"
           name="carrera_id"
           color="info"

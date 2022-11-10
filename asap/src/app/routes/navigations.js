@@ -1,5 +1,6 @@
 import {
   BookmarksRounded,
+  Face4Rounded,
   MedicationRounded,
   PagesRounded,
   PersonRounded,
@@ -12,6 +13,11 @@ export const navigations = [
     name: "Usuarios",
     path: "/usuarios",
     icon: <PersonRounded />,
+  },
+  {
+    name: "Pacientes",
+    path: "/pacientes",
+    icon: <Face4Rounded />,
   },
   {
     name: "Especialistas",

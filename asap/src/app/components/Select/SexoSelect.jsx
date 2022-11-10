@@ -10,11 +10,13 @@ const SexoSelect = ({ formik }) => {
               ? "error"
               : "info"
           }
+          required
           id="lblSexo"
         >
           Sexo
         </InputLabel>
         <Select
+          required
           labelId="lblSexo"
           name="sexo"
           color="info"

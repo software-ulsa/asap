@@ -167,6 +167,112 @@ export const especialidadHeaders = [
   },
 ];
 
+export const pacienteHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "usuario",
+    label: "Nombre",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data["persona"]["nombre"]}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "carrera",
+    label: "Carrera",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data["abreviatura"]}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "matricula",
+    label: "Matricula",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "usuario",
+    label: "Teléfono",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data["persona"]["telefono"]}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+];
+
+export const especialistaHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "usuario",
+    label: "Nombre",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data["persona"]["nombre"]}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "especialidad",
+    label: "Especialidad",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data["nombre"]}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "cedula_prof",
+    label: "Cédula profesional",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "usuario",
+    label: "Teléfono",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data["persona"]["telefono"]}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+];
+
 export const usuarioHeaders = [
   noHeader,
   idHeader,
@@ -270,59 +376,6 @@ export const notaHeaders = [
     options: {
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-];
-
-export const especialistaHeaders = [
-  noHeader,
-  idHeader,
-  {
-    name: "usuario",
-    label: "Nombre",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data["persona"]["nombre"]}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "especialidad",
-    label: "Especialidad",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data["nombre"]}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "cedula_prof",
-    label: "Cédula profesional",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "usuario",
-    label: "Teléfono",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data["persona"]["telefono"]}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,

@@ -6,9 +6,12 @@ import { PhotoCameraRounded } from "@mui/icons-material";
 import { Avatar, Box, Button, Grid, IconButton, Stack } from "@mui/material";
 
 import ImagenesService from "../../../services/ImagesService";
-import { createUser, updateUser } from "../../../services/UsuarioService";
 
-import { usuarioInitialState } from "../../../utils/initialStates";
+import { pacienteInitialState } from "../../../utils/initialStates";
+import {
+  createPaciente,
+  updatePaciente,
+} from "../../../services/PacienteService";
 import {
   handleBack,
   handleClose,
@@ -17,8 +20,8 @@ import {
 
 const ImagenPerfil = ({
   isUpdate = false,
-  usuario,
-  setUsuario,
+  paciente,
+  setPaciente,
   cancelAction,
 }) => {
   const dispatch = useDispatch();
@@ -31,19 +34,19 @@ const ImagenPerfil = ({
     input?.click();
   };
 
-  const guardarUsuario = () => {
+  const guardarPaciente = () => {
     if (file) {
       ImagenesService.upload(file)
         .then((response) => {
-          usuario.imagen = response.data;
+          paciente.imagen = response.data;
         })
         .catch((error) => console.log(error));
     }
     if (isUpdate) {
-      dispatch(updateUser(usuario));
+      dispatch(updatePaciente(paciente));
     } else {
-      dispatch(createUser(usuario));
-      setUsuario(usuarioInitialState(null));
+      dispatch(createPaciente(paciente));
+      setPaciente(pacienteInitialState(null));
     }
     setFile();
     setImage("");
@@ -106,7 +109,7 @@ const ImagenPerfil = ({
           <Button
             variant="contained"
             color="secondary"
-            onClick={guardarUsuario}
+            onClick={guardarPaciente}
           >
             Guardar
           </Button>
