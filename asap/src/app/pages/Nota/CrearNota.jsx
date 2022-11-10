@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   IconButton,
@@ -25,9 +25,12 @@ import { emptyNote } from "../../utils/initialStates";
 
 const CrearNota = ({ open, handleClose }) => {
   const dispatch = useDispatch();
+
   const [nota, setNota] = useState(emptyNote);
   const [mainImage, setMainImage] = useState("");
   const [thumbnailImage, setThumbnailImage] = useState("");
+
+  const { currentUser } = useSelector((state) => state.auth);
 
   const [palabras, setPalabras] = useState([]);
   const [contenido, setContenido] = useState("");
@@ -48,28 +51,26 @@ const CrearNota = ({ open, handleClose }) => {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
   };
+  
 
-  const guardarNota = () => {
-    // if (thumbnailFile) {
-    //   ImagenesService.upload(thumbnailFile)
-    //     .then((response) => {
-    //       nota.foto_thumbnail = response.data;
-    //     })
-    //     .catch((error) => console.log(error));
-    // }
-
+  const guardarNota = () => {   
     if (mainFile) {
       ImagenesService.upload(mainFile)
         .then((response) => {
           nota.imagen = response.data;
+          nota.usuario_id = currentUser.id;
+          dispatch(createNota(nota));
+          setNota(emptyNote);
+          handleClose();
         })
         .catch((error) => console.log(error));
     }else{
       nota.imagen = "";
+      nota.usuario_id = currentUser.id;
+      dispatch(createNota(nota));
+      setNota(emptyNote);
+      handleClose();
     }
-    dispatch(createNota(nota));
-    setNota(emptyNote);
-    handleClose();
   };
 
   const steps = ["Nota", "Imagen Principal"];
@@ -85,18 +86,6 @@ const CrearNota = ({ open, handleClose }) => {
       contenido={contenido}
       setContenido={setContenido}
     />,
-
-    // <ImagenThumbnail
-    //   thumbnailImage={thumbnailImage}
-    //   setThumbnailImage={setThumbnailImage}
-    //   setThumbnailFile={setThumbnailFile}
-    //   setActiveStep={setActiveStep}
-    //   setNota={setNota}
-    //   handleBack={handleBack}
-    //   handleNext={handleNext}
-    //   handleClose={handleClose}
-    // />,
-
     <ImagenPrincipal
       mainImage={mainImage}
       setMainImage={setMainImage}
