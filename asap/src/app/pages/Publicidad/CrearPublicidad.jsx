@@ -12,6 +12,9 @@ import {
   DialogTitle,
   Typography,
   Avatar,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Close, PhotoCameraRounded } from "@mui/icons-material";
@@ -33,7 +36,8 @@ const CrearPublicidad = ({ open, handleClose }) => {
     initialValues: { emptyPublicidad },
     validationSchema: publicidadValidationSchema,
     onSubmit: (values, { resetForm }) => {
-      values.imagen="null";
+      values.imagen = "null";
+      values.activo = values.activo === 'on' ? true : false;
       dispatch(createPublicidad(values));
       resetForm();
       handleClose();
@@ -157,6 +161,19 @@ const CrearPublicidad = ({ open, handleClose }) => {
                 error={formik.touched.fecha_fin && Boolean(formik.errors.fecha_fin)}
                 helperText={formik.touched.fecha_fin && formik.errors.fecha_fin}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      name="activo"
+                      onChange={formik.handleChange}
+                    />
+                  }
+                  label="Activo"
+                />
+              </FormGroup>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="label">Imagen de publicidad</Typography>

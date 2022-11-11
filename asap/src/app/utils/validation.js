@@ -82,27 +82,16 @@ export const publicidadValidationSchema = yup.object({
 export const profileValidationSchema = yup.object({
   nombre: yup.string().required("Nombre requerido"),
   ape_paterno: yup.string().required("Apellido paterno requerido"),
-  ape_materno: yup.string().required("Apellido materno requerido"),
-  edad: yup
-    .number("La edad debe ser un número")
-    .positive("La edad debe ser mayor a 0")
-    .integer("La edad debe ser un número")
-    .max(120, "Edad no válida")
-    .required("Edad requerida"),
+  ape_materno: yup.string().required("Apellido materno requerido"),  
   sexo: yup
     .string()
     .oneOf(["Masculino", "Femenino"])
     .label("Elegir uno")
-    .required("Sexo requerido"),
-  matricula: yup
-    .string()
-    .max(9, "Matricula no válida")
-    .required("Matricula requerida"),
+    .required("Sexo requerido"),  
   telefono: yup
     .string()
     .matches(phoneRegExp, "Teléfono no váildo")
     .required("Teléfono requerido"),
-  correo: yup.string().email("Correo no válido").required("Correo requerido"),
 });
 
 export const notaValidationSchema = yup.object({

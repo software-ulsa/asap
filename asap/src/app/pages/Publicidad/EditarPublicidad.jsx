@@ -12,6 +12,9 @@ import {
   DialogTitle,
   Avatar,
   Typography,
+  FormGroup,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Close, PhotoCameraRounded } from "@mui/icons-material";
@@ -59,6 +62,7 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
           url_empresa: publicidad?.url_empresa || "",
           fecha_inicio: dateInicio || "",
           fecha_fin: dateFin || "",
+          activo: publicidad.activo
         }}
         validationSchema={publicidadValidationSchema}
         onSubmit={(values) => {
@@ -169,6 +173,14 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                     error={props.touched.fecha_fin && Boolean(props.errors.fecha_fin)}
                     helperText={props.touched.fecha_fin && props.errors.fecha_fin}
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Switch name="activo" checked={props.values.activo} onChange={props.handleChange} />}
+                      label="Activo"
+                    />
+                  </FormGroup>
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant="label">Imagen de publicidad</Typography>

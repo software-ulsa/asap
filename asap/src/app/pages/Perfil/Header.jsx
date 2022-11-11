@@ -61,7 +61,7 @@ const Header = ({ user, image, setImage, setFile }) => {
         }}
       >
         <Typography variant="h3" fontWeight="bold">
-          {`${user?.nombre} ${user?.ape_paterno}`}
+          {`${user?.persona?.nombre} ${user?.persona?.ape_paterno}`}
         </Typography>
         <Stack
           direction="row"
@@ -86,7 +86,7 @@ const Header = ({ user, image, setImage, setFile }) => {
             }}
           >
             <EmailRounded />
-            <Typography variant="h8">{user?.correo}</Typography>
+            <Typography variant="h8">{user?.persona?.correo}</Typography>
           </Box>
         </Stack>
       </Box>

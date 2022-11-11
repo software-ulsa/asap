@@ -14,6 +14,7 @@ import ImagenesService from "../../services/ImagesService";
 
 import InfoBasica from "./InfoBasica";
 import Header from "./Header";
+import { PeopleSharp } from "@mui/icons-material";
 
 const Perfil = () => {
   const dispatch = useDispatch();
@@ -23,8 +24,8 @@ const Perfil = () => {
   const [image, setImage] = useState("");
 
   useEffect(() => {
-    if (currentUser.foto_perfil) {
-      ImagenesService.get(currentUser.foto_perfil)
+    if (currentUser.imagen) {
+      ImagenesService.get(currentUser.imagen)
         .then((url) => {
           setImage(url);
         })
@@ -50,17 +51,12 @@ const Perfil = () => {
       <Formik
         initialValues={{
           id: currentUser?.id || -1,
-          nombre: currentUser?.nombre || "",
-          segundo_nombre: currentUser?.segundo_nombre || "",
-          ape_paterno: currentUser?.ape_paterno || "",
-          ape_materno: currentUser?.ape_materno || "",
-          correo: currentUser?.correo || "",
+          nombre: currentUser?.persona?.nombre || "",
+          ape_paterno: currentUser?.persona?.ape_paterno || "",
+          ape_materno: currentUser?.persona?.ape_materno || "",
           password: "",
-          telefono: currentUser?.telefono || "",
-          edad: currentUser?.edad || 0,
-          matricula: currentUser?.matricula || "",
-          sexo: currentUser?.sexo || "Elegir uno",
-          id_rol: currentUser?.id_rol || 0,
+          telefono: currentUser?.persona?.telefono || "",
+          sexo: currentUser?.persona?.sexo || "Elegir uno"
         }}
         validationSchema={profileValidationSchema}
         onSubmit={(values, { setSubmitting }) => {
@@ -90,14 +86,14 @@ const Perfil = () => {
                 gap: 3,
               }}
             >
-              <Button variant="contained" color="secondary" type="submit">
+              {/* <Button variant="contained" color="secondary" type="submit" disabled={!props.isValid}>
                 Guardar
               </Button>
               <Link to="/">
                 <Button variant="contained" color="error">
                   Regresar
                 </Button>
-              </Link>
+              </Link> */}
             </Box>
           </form>
         )}

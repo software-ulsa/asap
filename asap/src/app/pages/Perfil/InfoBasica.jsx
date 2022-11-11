@@ -23,10 +23,11 @@ import {
 const InfoBasica = ({ formik }) => {
   return (
     <Grid container spacing={2} marginTop={2}>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
+          disabled="true"
           label="Nombre"
           name="nombre"
           variant="outlined"
@@ -43,30 +44,12 @@ const InfoBasica = ({ formik }) => {
             ),
           }}
         />
-      </Grid>
-      <Grid item xs={6}>
-        <TextField
-          color="info"
-          fullWidth
-          name="segundo_nombre"
-          label="Segundo nombre"
-          variant="outlined"
-          value={formik.values.segundo_nombre}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Person2Rounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+      </Grid>      
       <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
+          disabled="true"
           label="Apellido paterno"
           name="ape_paterno"
           variant="outlined"
@@ -90,6 +73,7 @@ const InfoBasica = ({ formik }) => {
         <TextField
           color="info"
           fullWidth
+          disabled="true"
           label="Apellido materno"
           name="ape_materno"
           variant="outlined"
@@ -108,28 +92,7 @@ const InfoBasica = ({ formik }) => {
             ),
           }}
         />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          label="Edad"
-          name="edad"
-          variant="outlined"
-          value={formik.values.edad}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.edad && Boolean(formik.errors.edad)}
-          helperText={formik.touched.edad && formik.errors.edad}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <CakeRounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+      </Grid>      
       <Grid item xs={12}>
         <FormControl fullWidth>
           <InputLabel
@@ -146,6 +109,7 @@ const InfoBasica = ({ formik }) => {
             labelId="lblSexo"
             name="sexo"
             color="info"
+            disabled="true"
             value={formik.values.sexo}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -164,34 +128,14 @@ const InfoBasica = ({ formik }) => {
             <MenuItem value="Femenino">Femenino</MenuItem>
           </Select>
         </FormControl>
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          label="Matricula"
-          name="matricula"
-          variant="outlined"
-          value={formik.values.matricula}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.matricula && Boolean(formik.errors.matricula)}
-          helperText={formik.touched.matricula && formik.errors.matricula}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Badge />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+      </Grid>    
       <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
           label="Teléfono móvil"
           name="telefono"
+          disabled="true"
           variant="outlined"
           value={formik.values.telefono}
           onChange={formik.handleChange}
@@ -207,7 +151,7 @@ const InfoBasica = ({ formik }) => {
           }}
         />
       </Grid>
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         <TextField
           color="info"
           fullWidth
@@ -225,7 +169,7 @@ const InfoBasica = ({ formik }) => {
             ),
           }}
         />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };
