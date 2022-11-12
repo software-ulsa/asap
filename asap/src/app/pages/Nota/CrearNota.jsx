@@ -24,7 +24,7 @@ import { ColorlibConnector, NotaStepIcon } from "../../utils/custom";
 import { emptyNote } from "../../utils/initialStates";
 
 const CrearNota = ({ open, handleClose }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
 
   const [nota, setNota] = useState(emptyNote);
   const [mainImage, setMainImage] = useState("");
@@ -51,9 +51,8 @@ const CrearNota = ({ open, handleClose }) => {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
   };
-  
 
-  const guardarNota = () => {   
+  const guardarNota = () => {
     if (mainFile) {
       ImagenesService.upload(mainFile)
         .then((response) => {
@@ -61,14 +60,18 @@ const CrearNota = ({ open, handleClose }) => {
           nota.usuario_id = currentUser.id;
           dispatch(createNota(nota));
           setNota(emptyNote);
+          setActiveStep(0);
+          setPalabras([]);
           handleClose();
         })
         .catch((error) => console.log(error));
-    }else{
+    } else {
       nota.imagen = "";
       nota.usuario_id = currentUser.id;
       dispatch(createNota(nota));
       setNota(emptyNote);
+      setActiveStep(0);
+      setPalabras([]);
       handleClose();
     }
   };
@@ -101,23 +104,13 @@ const CrearNota = ({ open, handleClose }) => {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md">
       <DialogTitle>Agregar nota</DialogTitle>
-      <Box
-        position="absolute"
-        top={0}
-        right={0}
-        paddingTop={1}
-        paddingRight={1}
-      >
+      <Box position="absolute" top={0} right={0} paddingTop={1} paddingRight={1}>
         <IconButton onClick={handleClose}>
           <Close />
         </IconButton>
       </Box>
       <DialogContent>
-        <Stepper
-          activeStep={activeStep}
-          alternativeLabel
-          connector={<ColorlibConnector />}
-        >
+        <Stepper activeStep={activeStep} alternativeLabel connector={<ColorlibConnector />}>
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};

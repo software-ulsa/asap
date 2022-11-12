@@ -62,7 +62,7 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
           url_empresa: publicidad?.url_empresa || "",
           fecha_inicio: dateInicio || "",
           fecha_fin: dateFin || "",
-          activo: publicidad.activo
+          activo: publicidad?.activo
         }}
         validationSchema={publicidadValidationSchema}
         onSubmit={(values) => {

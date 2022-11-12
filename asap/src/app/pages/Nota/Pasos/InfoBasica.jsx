@@ -34,29 +34,23 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
           estado: values.estado,
           palabras_clave: values.palabras_clave,
         }));
+        values.palabras_clave = [];
         handleNext();
       }}
     >
       {(props) => (
-        <form onSubmit={props.handleSubmit}>
+        <form
+          onSubmit={() => {
+            props.handleSubmit();
+            props.values.palabras_clave = [];
+          }}
+        >
           <Grid container spacing={2} marginTop={2}>
             <InputField formik={props} label="Tema" field="tema" type="text" />
-            <InputField
-              formik={props}
-              label="Titulo"
-              field="titulo"
-              type="text"
-            />
-            <InputArray
-              formik={props}
-              field="palabras_clave"
-              label="Palabras clave"
-            />
-            <EstadoNotaSelect
-              formik={props}
-              label="Estado"
-              field="estado"
-            />
+            <InputField formik={props} label="Titulo" field="titulo" type="text" />
+            {props.values["palabras_clave"]}
+            <InputArray formik={props} field="palabras_clave" label="Palabras clave" />
+            <EstadoNotaSelect formik={props} label="Estado" field="estado" />
             <Grid item xs={12}>
               <Box sx={{ marginBottom: 5 }}>
                 <MUIRichTextEditor
@@ -80,12 +74,7 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
             }}
           >
             <Stack direction="row" spacing={2}>
-              <Button
-                variant="contained"
-                color="secondary"
-                type="submit"
-                disabled={!props.isValid}
-              >
+              <Button variant="contained" color="secondary" type="submit" disabled={!props.isValid}>
                 Siguiente
               </Button>
 

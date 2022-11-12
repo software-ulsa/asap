@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { FormControl, Grid } from "@mui/material";
 import ChipInput from "material-ui-chip-input";
 
 const InputArray = ({ formik, label, field }) => {
@@ -15,16 +15,18 @@ const InputArray = ({ formik, label, field }) => {
 
   return (
     <Grid item xs={12}>
-      <ChipInput
-        fullWidth
-        color="info"
-        variant="outlined"
-        label={label}
-        value={formik.values[field]}
-        onAdd={(chip) => handleAddChip(chip)}
-        onDelete={(chip, index) => handleDeleteChip(chip, index)}
-        placeholder="Escribe y presiona enter para agregar"
-      />
+      <FormControl fullWidth>
+        <ChipInput
+          fullWidth
+          color="info"
+          variant="outlined"
+          label={label}
+          value={formik.values[field]}
+          onAdd={(chip) => handleAddChip(chip)}
+          onDelete={(chip, index) => handleDeleteChip(chip, index)}
+          placeholder="Escribe y presiona enter para agregar"
+        />
+      </FormControl>
     </Grid>
   );
 };

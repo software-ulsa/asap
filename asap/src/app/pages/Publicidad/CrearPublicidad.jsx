@@ -37,7 +37,6 @@ const CrearPublicidad = ({ open, handleClose }) => {
     validationSchema: publicidadValidationSchema,
     onSubmit: (values, { resetForm }) => {
       values.imagen = "null";
-      values.activo = values.activo === 'on' ? true : false;
       dispatch(createPublicidad(values));
       resetForm();
       handleClose();
@@ -168,7 +167,8 @@ const CrearPublicidad = ({ open, handleClose }) => {
                   control={
                     <Switch
                       name="activo"
-                      onChange={formik.handleChange}
+                      checked={formik.values.activo}
+                      onChange={(event) => formik.setFieldValue("activo", event.target.checked)}
                     />
                   }
                   label="Activo"
