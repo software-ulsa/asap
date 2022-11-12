@@ -1,21 +1,14 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-import {
-  CategoryRounded,
-  ClassRounded,
-  ManageAccountsRounded,
-  MasksRounded,
-} from "@mui/icons-material";
 import { Box, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-
-import Roles from "./Rol/Roles";
-import Carreras from "./Carrera/Carreras";
-import Categorias from "./Categoria/Categorias";
-import Especialidades from "./Especialidad/Especialidades";
+import { dashboardRoutes } from "../../routes/dashboardRoutes";
 
 const Opciones = () => {
   const [opcion, setOpcion] = useState("roles");
+  const { currentUser } = useSelector((state) => state.auth);
+  const catalogues = dashboardRoutes(currentUser.rol.permisos).catalogues;
 
   return (
     <TabContext value={opcion}>
@@ -26,45 +19,22 @@ const Opciones = () => {
             textColor="primary"
             indicatorColor="primary"
           >
-            <Tab
-              icon={<ManageAccountsRounded />}
-              iconPosition="start"
-              value="roles"
-              label="Roles"
-            />
-            <Tab
-              icon={<CategoryRounded />}
-              iconPosition="start"
-              value="categorias"
-              label="Categorias"
-            />
-            <Tab
-              icon={<ClassRounded />}
-              iconPosition="start"
-              value="carreras"
-              label="Carreras"
-            />
-            <Tab
-              icon={<MasksRounded />}
-              iconPosition="start"
-              value="especialidades"
-              label="Especialidades"
-            />
+            {catalogues.map((tab) => {
+              return (
+                <Tab
+                  icon={tab.icon}
+                  iconPosition={tab.iconPosition}
+                  value={tab.value}
+                  label={tab.label}
+                />
+              );
+            })}
           </TabList>
         </Box>
         <Box>
-          <TabPanel value="roles">
-            <Roles />
-          </TabPanel>
-          <TabPanel value="categorias">
-            <Categorias />
-          </TabPanel>
-          <TabPanel value="carreras">
-            <Carreras />
-          </TabPanel>
-          <TabPanel value="especialidades">
-            <Especialidades />
-          </TabPanel>
+          {catalogues.map((tab) => {
+            return <TabPanel value={tab.value}>{tab.element}</TabPanel>;
+          })}
         </Box>
       </Box>
     </TabContext>

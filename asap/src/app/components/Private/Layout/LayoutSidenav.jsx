@@ -1,14 +1,19 @@
-import { IconButton, ButtonBase } from "@mui/material";
-import { Box, styled, useTheme } from "@mui/system";
-import { themeShadows } from "../../../components/Theme/themeColors";
-import useSettings from "../../../hooks/useSettings";
-import { sidenavCompactWidth, sideNavWidth } from "../../../utils/constant";
-import { convertHexToRGB } from "../../../utils/utils";
-import { Span } from "../../../components/Typography";
 import React from "react";
+
+import { Box, styled, useTheme } from "@mui/system";
+import { IconButton, ButtonBase } from "@mui/material";
+import { JoinLeftRounded, Menu } from "@mui/icons-material";
+
 import Brand from "../../Brand";
 import Sidenav from "../../MainSidebar";
-import { JoinLeftRounded, Menu } from "@mui/icons-material";
+
+import { Span } from "../../../components/Typography";
+import { themeShadows } from "../../../components/Theme/themeColors";
+
+import { convertHexToRGB } from "../../../utils/utils";
+
+import useSettings from "../../../hooks/useSettings";
+import { sidenavCompactWidth, sideNavWidth } from "../../../utils/constant";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 0,
@@ -18,7 +23,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const SidebarNavRoot = styled(Box)(({ theme, width, primaryBg, bgImgURL }) => ({
+const SidebarNavRoot = styled(Box)(({ theme, width }) => ({
   position: "fixed",
   top: 0,
   left: 0,
@@ -76,7 +81,7 @@ const LayoutSidenav = () => {
   };
 
   return (
-    <SidebarNavRoot primaryBg={primaryRGB} width={getSidenavWidth()}>
+    <SidebarNavRoot width={getSidenavWidth()}>
       <NavListBox>
         <Brand />
         <Sidenav />

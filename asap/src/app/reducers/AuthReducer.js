@@ -22,7 +22,7 @@ export const authSlice = createSlice({
     },
     checkUser: (state) => {
       let user = null;
-      const auth = ls.get("currentASAPUser");
+      const auth = ls.get("_user");
       if (auth !== "") {
         user = JSON.parse(auth);
         if (!state.currentUser) state.currentUser = user;
@@ -37,8 +37,8 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         const { userFound, token } = action.payload;
-        ls.set("token", JSON.stringify(token));
-        ls.set("currentASAPUser", JSON.stringify(userFound));
+        ls.set("_token", JSON.stringify(token));
+        ls.set("_user", JSON.stringify(userFound));
         notify(
           "success",
           `Bienvenido ${userFound.persona.nombre} ${userFound.persona.ape_paterno}`
@@ -53,7 +53,7 @@ export const authSlice = createSlice({
     builder
       .addCase(updateProfile.fulfilled, (state, action) => {
         notify("success", "Perfil actualizado");
-        ls.set("currentASAPUser", JSON.stringify(action.payload.user));
+        ls.set("_user", JSON.stringify(action.payload.user));
         state.loading = false;
         state.currentUser = action.payload.user;
       })

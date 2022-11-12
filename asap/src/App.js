@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { RouterProvider } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import publicRoutes from "./app/routes/publicRoutes";
-import privateRoutes from "./app/routes/dashboardRoutes";
+import { publicRoutes } from "./app/routes/publicRoutes";
+import { dashboardRoutes } from "./app/routes/dashboardRoutes";
 
 import { checkUser } from "./app/reducers/AuthReducer";
 
@@ -22,9 +22,13 @@ function App() {
   return (
     <>
       {currentUser ? (
-        <RouterProvider router={privateRoutes} />
+        <RouterProvider
+          router={createBrowserRouter(
+            dashboardRoutes(currentUser.rol.permisos).routes
+          )}
+        />
       ) : (
-        <RouterProvider router={publicRoutes} />
+        <RouterProvider router={createBrowserRouter(publicRoutes)} />
       )}
       <ToastContainer />
     </>

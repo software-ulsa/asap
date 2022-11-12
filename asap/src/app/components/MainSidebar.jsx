@@ -1,9 +1,13 @@
-import { styled } from "@mui/system";
-import { VerticalComponent } from "../components";
-import useSettings from "../hooks/useSettings";
-import { navigations } from "../routes/navigations";
 import { Fragment } from "react";
 import Scrollbar from "react-perfect-scrollbar";
+
+import { styled } from "@mui/system";
+
+import { VerticalComponent } from "../components";
+
+import useSettings from "../hooks/useSettings";
+import { useSelector } from "react-redux";
+import { navigations } from "../routes/navigations";
 
 const StyledScrollBar = styled(Scrollbar)(() => ({
   paddingLeft: "1rem",
@@ -24,6 +28,7 @@ const SideNavMobile = styled("div")(({ theme }) => ({
 
 const MainSidebar = ({ children }) => {
   const { settings, updateSettings } = useSettings();
+  const { currentUser } = useSelector((state) => state.auth);
 
   const updateSidebarMode = (sidebarSettings) => {
     let activeLayoutSettingsName = "layoutSettings";
@@ -45,7 +50,7 @@ const MainSidebar = ({ children }) => {
     <Fragment>
       <StyledScrollBar options={{ suppressScrollX: true }}>
         {children}
-        <VerticalComponent items={navigations} />
+        <VerticalComponent items={navigations(currentUser.rol.permisos)} />
       </StyledScrollBar>
 
       <SideNavMobile onClick={() => updateSidebarMode({ mode: "close" })} />

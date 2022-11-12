@@ -27,6 +27,7 @@ import { themeShadows } from "../../../components/Theme/themeColors";
 
 import ImagenesService from "../../../services/ImagesService";
 import { logout } from "../../../reducers/AuthReducer";
+import { dashboardRoutes } from "../../../routes/dashboardRoutes";
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -91,6 +92,7 @@ const LayoutTopbar = () => {
   const { settings, updateSettings } = useSettings();
   const { mode } = settings.layoutSettings.leftSidebar;
   const { currentUser } = useSelector((state) => state.auth);
+  const catalogues = dashboardRoutes(currentUser.rol.permisos).catalogues;
 
   const [image, setImage] = useState();
 
@@ -156,12 +158,16 @@ const LayoutTopbar = () => {
               </Link>
             </StyledItem>
 
-            <StyledItem>
-              <Link to="/configuracion">
-                <Settings style={{ marginRight: 10 }} color="primary" />
-                <Span> Configuraci&oacute;n </Span>
-              </Link>
-            </StyledItem>
+            {catalogues.length > 0 ? (
+              <StyledItem>
+                <Link to="/configuracion">
+                  <Settings style={{ marginRight: 10 }} color="primary" />
+                  <Span> Configuraci&oacute;n </Span>
+                </Link>
+              </StyledItem>
+            ) : (
+              <></>
+            )}
 
             <StyledItem
               onClick={() => {

@@ -13,7 +13,7 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(
   function (config) {
-    const token = ls.get("token");
+    const token = ls.get("_token");
     config.headers = {
       "Content-Type": "application/json",
     };
@@ -60,7 +60,7 @@ const httpFormDataClient = axios.create({
 
 httpFormDataClient.interceptors.request.use(
   function (config) {
-    const token = ls.get("token");
+    const token = ls.get("_token");
     config.headers = {
       "Content-Type": "multipart/form-data",
     };
