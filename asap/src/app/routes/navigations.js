@@ -39,9 +39,4 @@ export const navigations = [
     path: "/cursos",
     icon: <BookmarksRounded />,
   },
-  {
-    name: "Seleccionar Notas",
-    path: "/seleccionar-nota",
-    icon: <Task />,
-  },
 ];
