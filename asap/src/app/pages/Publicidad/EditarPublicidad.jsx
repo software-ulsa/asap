@@ -177,7 +177,7 @@ const EditarPublicidad = ({ open, handleClose, publicidad }) => {
                 <Grid item xs={12}>
                   <FormGroup>
                     <FormControlLabel
-                      control={<Switch name="activo" checked={props.values.activo} onChange={props.handleChange} />}
+                      control={<Switch name="activo" checked={props.values.activo} onChange={(event) => props.setFieldValue("activo", event.target.checked)} />}
                       label="Activo"
                     />
                   </FormGroup>
