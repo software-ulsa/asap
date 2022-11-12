@@ -40,7 +40,7 @@ const Footer = () => {
             <Paragraph sx={{ m: 0 }}>
               Desarrollado por{" "}
               <a href="https://www.youtube.com/watch?v=8SbUC-UaAxE">
-                Software4All & TrianguleProgramming
+                Software4All & TriangleProgramming
               </a>
             </Paragraph>
           </FooterContent>
