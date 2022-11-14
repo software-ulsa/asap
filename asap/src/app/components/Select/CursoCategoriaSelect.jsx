@@ -5,7 +5,7 @@ import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import { getAllCategorias } from "../../services/CategoriaService";
 
-const CategoriaSelect = ({ formik }) => {
+const CursoCategoriaSelect = ({ formik }) => {
   const dispatch = useDispatch();
   const { categorias, fetched } = useSelector((state) => state.categorias);
 
@@ -54,4 +54,4 @@ const CategoriaSelect = ({ formik }) => {
   );
 };
 
-export default CategoriaSelect;
+export default CursoCategoriaSelect;

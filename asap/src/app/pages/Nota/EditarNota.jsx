@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleClose,
+  rebootActiveStep,
+  setStepSize,
+} from "../../reducers/ModalReducer";
 
 import {
   IconButton,
@@ -10,8 +15,8 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
+import { Box } from "@mui/system";
 
 import { updateNota } from "../../services/NotaService";
 import ImagenesService from "../../services/ImagesService";
@@ -20,35 +25,24 @@ import InfoBasica from "./Pasos/InfoBasica";
 import ImagenPrincipal from "./Pasos/ImagenPrincipal";
 
 import { ColorlibConnector, NotaStepIcon } from "../../utils/custom";
+import { notaInitialState } from "../../utils/initialStates";
 
-const EditarNota = ({ open, handleClose, note }) => {
+const EditarNota = ({ note }) => {
   const dispatch = useDispatch();
-  const [nota, setNota] = useState(note);
+  const { currentUser } = useSelector((state) => state.auth);
+  const { openEdit, activeStep } = useSelector((state) => state.modal);
+
+  const [nota, setNota] = useState();
   const [mainImage, setMainImage] = useState("");
-
-  const [palabras, setPalabras] = useState([]);
-  const [contenido, setContenido] = useState("");
-
   const [mainFile, setMainFile] = useState();
 
-  const [activeStep, setActiveStep] = useState(0);
-
   useEffect(() => {
-    setNota(note);
-    setPalabras(note?.palabras_clave || []);
-    setContenido(note?.contenido || "");
+    setNota(notaInitialState(note));
   }, [note]);
 
-  const handleNext = () => {
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
-  };
-
-  const handleBack = () => {
-    if (activeStep > 0) {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
+  const cancelAction = () => {
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
   const guardarNota = () => {
@@ -56,59 +50,56 @@ const EditarNota = ({ open, handleClose, note }) => {
       ImagenesService.upload(mainFile)
         .then((response) => {
           nota.imagen = response.data;
-          dispatch(updateNota(nota));
-          setActiveStep(0);
-          setPalabras([]);
-          setContenido("");
-          handleClose();
         })
         .catch((error) => console.log(error));
-    } else {
-      nota.imagen = "";
-      dispatch(updateNota(nota));
-      setActiveStep(0);
-      setPalabras([]);
-      setContenido("");
-      handleClose();
     }
+
+    nota.usuario_id = currentUser.id;
+    dispatch(updateNota(nota));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
   const steps = ["Nota", "Imagen Principal"];
   const stepsComponent = [
-    <InfoBasica
-      mode={false}
-      nota={nota}
-      setNota={setNota}
-      handleNext={handleNext}
-      handleClose={handleClose}
-      palabras={palabras}
-      setPalabras={setPalabras}
-      contenido={contenido}
-      setContenido={setContenido}
-    />,
-
+    <InfoBasica nota={nota} setNota={setNota} cancelAction={cancelAction} />,
     <ImagenPrincipal
       mainImage={mainImage}
       setMainImage={setMainImage}
       setMainFile={setMainFile}
-      setActiveStep={setActiveStep}
-      setNota={setNota}
-      handleBack={handleBack}
-      handleClose={handleClose}
       saveNota={guardarNota}
+      cancelAction={cancelAction}
     />,
   ];
 
+  useEffect(() => {
+    dispatch(setStepSize(steps.length));
+  }, []);
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md">
+    <Dialog
+      open={openEdit}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="md"
+    >
       <DialogTitle>Editar nota</DialogTitle>
-      <Box position="absolute" top={0} right={0} paddingTop={1} paddingRight={1}>
-        <IconButton onClick={handleClose}>
+      <Box
+        position="absolute"
+        top={0}
+        right={0}
+        paddingTop={1}
+        paddingRight={1}
+      >
+        <IconButton onClick={() => dispatch(handleClose())}>
           <Close />
         </IconButton>
       </Box>
       <DialogContent>
-        <Stepper activeStep={activeStep} alternativeLabel connector={<ColorlibConnector />}>
+        <Stepper
+          activeStep={activeStep}
+          alternativeLabel
+          connector={<ColorlibConnector />}
+        >
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
@@ -126,5 +117,4 @@ const EditarNota = ({ open, handleClose, note }) => {
     </Dialog>
   );
 };
-
 export default EditarNota;

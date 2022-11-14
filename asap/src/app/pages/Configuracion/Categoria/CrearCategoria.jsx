@@ -19,7 +19,6 @@ import { Close } from "@mui/icons-material";
 import { createCategoria } from "../../../services/CategoriaService";
 
 import InputField from "../../../components/Input/InputField";
-import TipoCategoriaSelect from "../../../components/Select/TipoCategoriaSelect";
 
 const CrearCategoria = () => {
   const dispatch = useDispatch();
@@ -28,15 +27,10 @@ const CrearCategoria = () => {
   const validationSchema = yup.object({
     nombre: yup.string().required("Nombre requerido"),
     descripcion: yup.string().required("Descripción requerida"),
-    tipo: yup
-      .string()
-      .oneOf(["Nota", "Curso"])
-      .label("Elegir uno")
-      .required("Tipo de categoria requerido"),
   });
 
   const formik = useFormik({
-    initialValues: { nombre: "", descripcion: "", tipo: "Elegir uno" },
+    initialValues: { nombre: "", descripcion: "" },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       dispatch(createCategoria(values));
@@ -84,7 +78,6 @@ const CrearCategoria = () => {
               label="Descripcion"
               type="text"
             />
-            <TipoCategoriaSelect formik={formik} />
           </Grid>
         </DialogContent>
         <DialogActions>

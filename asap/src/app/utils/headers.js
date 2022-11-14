@@ -326,34 +326,56 @@ export const usuarioHeaders = [
   },
 ];
 
-export const cursoHeaders = [
-  noHeader,
-  idHeader,
-  {
-    name: "titulo",
-    label: "Titulo",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+export const cursoHeaders = (categorias) => {
+  return [
+    noHeader,
+    idHeader,
+    {
+      name: "titulo",
+      label: "Titulo",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: styles().centeredHeader,
+        }),
       },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
     },
-  },
-  {
-    name: "descripcion",
-    label: "Descripcion",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+    {
+      name: "descripcion",
+      label: "Descripcion",
+      options: {
+        customBodyRender: (data, type, row) => {
+          return <center>{data}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: styles().centeredHeader,
+        }),
       },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
     },
-  },
-];
+    {
+      name: "categoria",
+      label: "Categoria",
+      options: {
+        filterType: "checkbox",
+        filterOptions: {
+          names: [...new Set(categorias.map((item) => item.nombre))],
+          logic(categoria, filterVal) {
+            const show = filterVal.indexOf(categoria["nombre"]) >= 0;
+            return !show;
+          },
+        },
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <center>{value["nombre"]}</center>;
+        },
+        setCellHeaderProps: () => ({
+          className: styles().centeredHeader,
+        }),
+      },
+    },
+  ];
+};
 
 export const notaHeaders = [
   noHeader,
@@ -373,6 +395,18 @@ export const notaHeaders = [
   {
     name: "tema",
     label: "Tema",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "estado",
+    label: "Estado",
     options: {
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;

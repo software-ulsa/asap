@@ -1,28 +1,29 @@
-import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { handleNext } from "../../../reducers/ModalReducer";
+
 import { Formik } from "formik";
 
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import { Box, Button, Grid, Stack } from "@mui/material";
+import MUIRichTextEditor from "mui-rte";
 
 import { notaValidationSchema } from "../../../utils/validation";
-import { emptyNote } from "../../../utils/initialStates";
 
-import ChipInput from "material-ui-chip-input";
-import InputSwitch from "../../../components/Input/InputSwitch";
-import EstadoNotaSelect from "../../../components/Select/EstadoNotaSelect";
-import MUIRichTextEditor from "mui-rte";
 import InputArray from "../../../components/Input/InputArray";
 import InputField from "../../../components/Input/InputField";
+import EstadoNotaSelect from "../../../components/Select/EstadoNotaSelect";
 
-const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
+const InfoBasica = ({ nota, setNota, cancelAction }) => {
+  const dispatch = useDispatch();
+
   return (
     <Formik
-      enableReinitialize={!mode}
+      enableReinitialize
       initialValues={{
-        titulo: nota?.titulo || "",
-        tema: nota?.tema || "",
-        estado: nota?.estado || "Elegir uno",
-        contenido: nota?.contenido || "",
-        palabras_clave: nota?.palabras_clave || [],
+        titulo: nota.titulo,
+        tema: nota.tema,
+        estado: nota.estado,
+        contenido: nota.contenido,
+        palabras_clave: nota.palabras_clave,
       }}
       validationSchema={notaValidationSchema}
       onSubmit={(values) => {
@@ -34,22 +35,26 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
           estado: values.estado,
           palabras_clave: values.palabras_clave,
         }));
-        values.palabras_clave = [];
-        handleNext();
+
+        dispatch(handleNext());
       }}
     >
       {(props) => (
-        <form
-          onSubmit={() => {
-            props.handleSubmit();
-            props.values.palabras_clave = [];
-          }}
-        >
+        <form onSubmit={props.handleSubmit}>
           <Grid container spacing={2} marginTop={2}>
             <InputField formik={props} label="Tema" field="tema" type="text" />
-            <InputField formik={props} label="Titulo" field="titulo" type="text" />
+            <InputField
+              formik={props}
+              label="Titulo"
+              field="titulo"
+              type="text"
+            />
             {props.values["palabras_clave"]}
-            <InputArray formik={props} field="palabras_clave" label="Palabras clave" />
+            <InputArray
+              formik={props}
+              field="palabras_clave"
+              label="Palabras clave"
+            />
             <EstadoNotaSelect formik={props} label="Estado" field="estado" />
             <Grid item xs={12}>
               <Box sx={{ marginBottom: 5 }}>
@@ -74,20 +79,16 @@ const InfoBasica = ({ mode, nota, setNota, handleNext, handleClose }) => {
             }}
           >
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" color="secondary" type="submit" disabled={!props.isValid}>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                disabled={!props.isValid}
+              >
                 Siguiente
               </Button>
 
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => {
-                  if (mode) {
-                    setNota(emptyNote);
-                  }
-                  handleClose();
-                }}
-              >
+              <Button variant="contained" color="error" onClick={cancelAction}>
                 Cancelar
               </Button>
             </Stack>

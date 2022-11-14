@@ -1,6 +1,7 @@
 import { StepConnector, stepConnectorClasses } from "@mui/material";
 import {
   AddHomeWorkRounded,
+  ApartmentRounded,
   AssignmentRounded,
   ContactMailRounded,
   ContactPageRounded,
@@ -136,6 +137,25 @@ export function CursoStepIcon(props) {
   const icons = {
     1: <AssignmentRounded />,
     2: <SettingsSuggestRounded />,
+    3: <ImageRounded />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+
+export function PublicidadStepIcon(props) {
+  const { active, completed, className } = props;
+
+  const icons = {
+    1: <AssignmentRounded />,
+    2: <ApartmentRounded />,
     3: <ImageRounded />,
   };
 

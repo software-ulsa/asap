@@ -1,15 +1,12 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handleOpenCreate } from "../../reducers/ModalReducer";
+import { handleOpenEdit } from "../../reducers/ModalReducer";
 
 import SuperDataTable from "../../components/SuperDataTable";
 import { cursoHeaders } from "../../utils/headers";
 import { notify } from "../../utils/utils";
 
 import { Helmet } from "react-helmet";
-
-import { Button, Grid, Typography } from "@mui/material";
 
 import {
   deleteCurso,
@@ -18,17 +15,25 @@ import {
 } from "../../services/CursoService";
 
 import CrearCurso from "./CrearCurso";
+import EditarCurso from "./EditarCurso";
+import { getAllCategorias } from "../../services/CategoriaService";
 
 const Cursos = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cursos, fetched } = useSelector((state) => state.cursos);
+  const { categorias } = useSelector((state) => state.categorias);
+
+  const [itemId, setItemId] = useState(-1);
+  const itemToEdit = cursos.find((curso) => curso.id === Number(itemId));
+
+  const refreshAction = () => {
+    dispatch(getAllCurso());
+    dispatch(getAllCategorias());
+  };
 
   useEffect(() => {
-    if (!fetched) {
-      dispatch(getAllCurso());
-    }
-  }, [fetched, dispatch]);
+    refreshAction();
+  }, []);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => cursos[d.dataIndex].id);
@@ -42,8 +47,8 @@ const Cursos = () => {
   const editAction = (ids) => {
     const idsToEdit = ids.data.map((d) => cursos[d.dataIndex].id);
     if (idsToEdit.length === 1) {
-      const id = idsToEdit[0];
-      navigate("/editar-curso", { state: { id: id } });
+      setItemId(idsToEdit[0]);
+      dispatch(handleOpenEdit());
     } else {
       notify("error", "Solo se puede editar un elemento a la vez");
     }
@@ -55,33 +60,21 @@ const Cursos = () => {
         <title>Cursos - ASAP</title>
         <meta name="Cursos" content="Cursos registrados" />
       </Helmet>
-      <Grid container paddingBottom={2}>
-        <Grid item xs={10}>
-          <Typography variant="h4" fontWeight="bold">
-            Cursos
-          </Typography>
-        </Grid>
-        <Grid item xs={2} justifyContent="center">
-          <Button
-            fullWidth
-            variant="contained"
-            color="success"
-            onClick={() => dispatch(handleOpenCreate())}
-          >
-            Agregar
-          </Button>
-        </Grid>
-      </Grid>
 
       <SuperDataTable
         data={cursos}
-        headers={cursoHeaders}
+        title={"Cursos"}
         fetched={fetched}
+        headers={cursoHeaders(categorias)}
+        refreshAction={refreshAction}
         deleteAction={deleteAction}
         editAction={editAction}
+        tableButtons="CURSO"
       />
 
       <CrearCurso />
+
+      <EditarCurso course={itemToEdit} />
     </>
   );
 };

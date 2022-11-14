@@ -8,28 +8,30 @@ import { Box } from "@mui/system";
 
 import InputField from "../../../components/Input/InputField";
 
-import { cursoBasicInfoValidationSchema } from "../../../utils/validation";
+import { publicidadInfoValidationSchema } from "../../../utils/validation";
+import InputSwitch from "../../../components/Input/InputSwitch";
 
-const InfoBasica = ({ curso, setCurso, cancelAction }) => {
+const InfoBasica = ({ publicidad, setPublicidad, cancelAction }) => {
   const dispatch = useDispatch();
   return (
     <Formik
       enableReinitialize
       initialValues={{
-        id: curso.id,
-        titulo: curso.titulo,
-        descripcion: curso.descripcion,
-        objetivo: curso.objetivo,
-        duracion: curso.duracion,
+        nombre: publicidad.nombre,
+        descripcion: publicidad.descripcion,
+        fecha_inicio: publicidad.fecha_inicio,
+        fecha_fin: publicidad.fecha_fin,
+        activo: publicidad.activo,
       }}
-      validationSchema={cursoBasicInfoValidationSchema}
+      validationSchema={publicidadInfoValidationSchema}
       onSubmit={(values) => {
-        setCurso((prev) => ({
+        setPublicidad((prev) => ({
           ...prev,
-          titulo: values.titulo,
+          nombre: values.nombre,
           descripcion: values.descripcion,
-          objetivo: values.objetivo,
-          duracion: values.duracion,
+          fecha_inicio: values.fecha_inicio,
+          fecha_fin: values.fecha_fin,
+          activo: values.activo,
         }));
         dispatch(handleNext());
       }}
@@ -39,8 +41,8 @@ const InfoBasica = ({ curso, setCurso, cancelAction }) => {
           <Grid container spacing={2} marginTop={2}>
             <InputField
               formik={props}
-              label="Titulo"
-              field="titulo"
+              label="Nombre"
+              field="nombre"
               type="text"
             />
             <InputField
@@ -51,16 +53,17 @@ const InfoBasica = ({ curso, setCurso, cancelAction }) => {
             />
             <InputField
               formik={props}
-              label="Objetivo"
-              field="objetivo"
-              type="text"
+              label="Fecha de inicio"
+              field="fecha_inicio"
+              type="date"
             />
             <InputField
               formik={props}
-              label="Duracion en horas"
-              field="duracion"
-              type="number"
+              label="Fecha de fin"
+              field="fecha_fin"
+              type="date"
             />
+            <InputSwitch formik={props} label="Activo" field="activo" />
           </Grid>
           <Box
             sx={{

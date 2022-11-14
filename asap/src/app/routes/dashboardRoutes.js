@@ -75,7 +75,6 @@ const addRoute = (element) => {
   children.push({
     path: element.path,
     element: element.element,
-    icon: element.icon,
   });
 
   if (element.subroutes) {

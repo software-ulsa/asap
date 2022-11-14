@@ -1,126 +1,127 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleClose,
+  rebootActiveStep,
+  setStepSize,
+} from "../../reducers/ModalReducer";
 
-import { Helmet } from "react-helmet";
-
-import { Button, Typography, Divider } from "@mui/material";
+import {
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Stepper,
+  Step,
+  StepLabel,
+} from "@mui/material";
 import { Box } from "@mui/system";
+import { Close } from "@mui/icons-material";
 
-import ImagenesService from "../../services/ImagesService";
+import { cursoInitialState } from "../../utils/initialStates";
+import { ColorlibConnector, CursoStepIcon } from "../../utils/custom";
 
-import Actividades from "../Actividad/Actividades";
-import CrearActividad from "../Actividad/CrearActividad";
+import InfoBasica from "./Pasos/InfoBasica";
+import Detalles from "./Pasos/Detalles";
 import ImagenPrincipal from "./Pasos/ImagenPrincipal";
 
-import { useDispatch, useSelector } from "react-redux";
-import { getCursoById } from "../../services/CursoService";
-import InfoBasica from "./Pasos/InfoBasica";
+import { updateCurso } from "../../services/CursoService";
+import ImagesService from "../../services/ImagesService";
 
-const EditarCurso = () => {
-  const navigate = useNavigate();
+const EditarCurso = ({ course }) => {
   const dispatch = useDispatch();
-  const { state } = useLocation();
-
-  const { curso, actividades, fetched } = useSelector(
-    (state) => state.actividades
-  );
+  const { activeStep, openEdit } = useSelector((state) => state.modal);
 
   const [image, setImage] = useState("");
   const [file, setFile] = useState();
+  const [curso, setCurso] = useState();
 
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleOpenCreate = () => setOpenCreate(true);
-  const handleCloseCreate = () => setOpenCreate(false);
+  useEffect(() => {
+    setCurso(cursoInitialState(course));
+  }, [course]);
 
-  const obtenerImagen = (key) => {
-    ImagenesService.get(key)
-      .then((url) => {
-        setImage(url);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const guardarCurso = () => {
+    if (file) {
+      ImagesService.upload(file)
+        .then((response) => {
+          curso.imagen = response.data;
+        })
+        .catch((error) => console.log(error));
+    }
+
+    dispatch(updateCurso(curso));
+    setFile();
+    setImage("");
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
-  useEffect(() => {
-    if (!fetched) {
-      dispatch(getCursoById(state.id));
-    }
-  }, [fetched, dispatch]);
+  const cancelAction = () => {
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
+
+  const steps = ["General", "Detalles", "Icono"];
+  const stepsComponent = [
+    <InfoBasica
+      curso={curso}
+      setCurso={setCurso}
+      cancelAction={cancelAction}
+    />,
+    <Detalles curso={curso} setCurso={setCurso} cancelAction={cancelAction} />,
+    <ImagenPrincipal
+      image={image}
+      setImage={setImage}
+      setFile={setFile}
+      guardarCurso={guardarCurso}
+      cancelAction={cancelAction}
+    />,
+  ];
 
   useEffect(() => {
-    if (curso?.icono !== "") {
-      obtenerImagen(curso.icono);
-    }
-  }, [curso]);
+    dispatch(setStepSize(steps.length));
+  }, []);
 
   return (
-    <>
-      <Helmet>
-        <title>{`${curso?.titulo}`} - ASAP</title>
-        <meta name="Cursos" content="Cursos registrados" />
-      </Helmet>
-      <Box sx={{ width: "100%" }}>
-        <Typography variant="h4" marginBottom={3}>
-          Informaci&oacute;n general
-        </Typography>
-      </Box>
+    <Dialog
+      open={openEdit}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="sm"
+      fullWidth
+    >
+      <DialogTitle>Editar curso</DialogTitle>
       <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        gap={2}
+        position="absolute"
+        top={0}
+        right={0}
+        paddingTop={1}
+        paddingRight={1}
       >
-        <ImagenPrincipal image={image} setImage={setImage} setFile={setFile} />
-        <InfoBasica
-          file={file}
-          curso={curso}
-          mode={false}
-          cancelAction={navigate("/cursos")}
-        />
+        <IconButton onClick={() => dispatch(handleClose())}>
+          <Close />
+        </IconButton>
       </Box>
-      <Divider></Divider>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          py: 3,
-        }}
-        gap={2}
-      >
-        <Typography variant="h4" gutterBottom>
-          Contenido del curso
-        </Typography>
-        <Button variant="contained" color="info" onClick={handleOpenCreate}>
-          Agregar actividad
-        </Button>
-      </Box>
-
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          py: 3,
-        }}
-        gap={2}
-      >
-        <Actividades actividades={actividades} fetched={fetched} />
-      </Box>
-
-      <CrearActividad
-        handleClose={handleCloseCreate}
-        open={openCreate}
-        curso={curso}
-      />
-    </>
+      <DialogContent>
+        <Stepper
+          activeStep={activeStep}
+          alternativeLabel
+          connector={<ColorlibConnector />}
+        >
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps} StepIconComponent={CursoStepIcon}>
+                  {label}
+                </StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        {stepsComponent[activeStep]}
+      </DialogContent>
+    </Dialog>
   );
 };
 

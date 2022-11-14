@@ -1,20 +1,18 @@
 import { Avatar, Box, Button, Grid, IconButton, Stack } from "@mui/material";
 import { PhotoCameraRounded } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
-
-import { emptyNote } from "../../../utils/initialStates";
+import { useDispatch } from "react-redux";
+import { handleBack } from "../../../reducers/ModalReducer";
 
 const ImagenPrincipal = ({
   mainImage,
   setMainImage,
   setMainFile,
-  setActiveStep,
-  setNota,
-  handleBack,
-
-  handleClose,
   saveNota,
+  cancelAction,
 }) => {
+  const dispatch = useDispatch();
+
   const doClickOnInput = () => {
     var input = document.getElementById("subirImagen");
     input?.click();
@@ -71,7 +69,7 @@ const ImagenPrincipal = ({
         <Button
           variant="contained"
           color="info"
-          onClick={handleBack}
+          onClick={() => dispatch(handleBack())}
           sx={{ mr: 1 }}
         >
           Anterior
@@ -81,15 +79,7 @@ const ImagenPrincipal = ({
             Guardar
           </Button>
 
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              setNota(emptyNote);
-              setActiveStep(0);
-              handleClose();
-            }}
-          >
+          <Button variant="contained" color="error" onClick={cancelAction}>
             Cancelar
           </Button>
         </Stack>

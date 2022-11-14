@@ -19,7 +19,6 @@ import { Close } from "@mui/icons-material";
 import { updateCategoria } from "../../../services/CategoriaService";
 
 import InputField from "../../../components/Input/InputField";
-import TipoCategoriaSelect from "../../../components/Select/TipoCategoriaSelect";
 
 const EditarCategoria = ({ categoria }) => {
   const dispatch = useDispatch();
@@ -49,16 +48,10 @@ const EditarCategoria = ({ categoria }) => {
           id: categoria?.id || -1,
           nombre: categoria?.nombre || "",
           descripcion: categoria?.descripcion || "",
-          tipo: categoria?.tipo || "Elegir uno",
         }}
         validationSchema={yup.object({
           nombre: yup.string().required("Nombre requerido"),
           descripcion: yup.string().required("Descripción requerida"),
-          tipo: yup
-            .string()
-            .oneOf(["Nota", "Curso"])
-            .label("Elegir uno")
-            .required("Tipo de categoria requerido"),
         })}
         onSubmit={(values) => {
           dispatch(updateCategoria(values));
@@ -81,7 +74,6 @@ const EditarCategoria = ({ categoria }) => {
                   label="Descripcion"
                   type="text"
                 />
-                <TipoCategoriaSelect formik={props} />
               </Grid>
             </DialogContent>
             <DialogActions>

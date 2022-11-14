@@ -21,7 +21,7 @@ export const modalSlice = createSlice({
       state.openCreate = false;
       state.openEdit = false;
     },
-    handleNext: (state, action) => {
+    handleNext: (state) => {
       if (state.activeStep < state.stepsNumber - 1) {
         state.activeStep += 1;
       }

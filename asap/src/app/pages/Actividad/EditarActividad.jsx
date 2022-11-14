@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { handleClose } from "../../reducers/ModalReducer";
+
 import * as yup from "yup";
 import { useFormik } from "formik";
 
@@ -12,121 +14,94 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-
 import { Box } from "@mui/system";
+import { Close } from "@mui/icons-material";
+
+import InputField from "../../components/Input/InputField";
 
 import { updateActividad } from "../../services/ActividadService";
 import ImagenesService from "../../services/ImagesService";
-import { Close } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
-import { actividadValidationSchema } from "../../utils/validation";
 
-const EditarActividad = ({ open, actividad, handleClose }) => {
+const EditarActividad = ({ actividad, cursoId }) => {
   const dispatch = useDispatch();
-  const [image, setImage] = useState("");
-  const [file, setFile] = useState();
+  const { openEdit } = useSelector((state) => state.modal);
+
+  const validationSchema = yup.object({
+    titulo: yup.string().required("Titulo requerido"),
+    descripcion: yup.string().required("Descripción requerida"),
+  });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      id: actividad?.id,
-      titulo: actividad?.titulo,
-      descripcion: actividad?.descripcion,
-      url_media: actividad?.url_media,
-      id_curso: actividad?.id_curso,
+      id: actividad?.id || -1,
+      titulo: actividad?.titulo || "",
+      descripcion: actividad?.descripcion || "",
+      url_media: actividad?.url_media || "",
+      curso_id: actividad?.curso_id || cursoId,
     },
-    validationSchema: actividadValidationSchema,
-    onSubmit: (values, { resetForm }) => {
-      values.peso = 100;
-
-      if (file) {
-        ImagenesService.upload(file)
-          .then((response) => {
-            values.foto_especialista = response.data;
-          })
-          .catch((error) => console.log(error));
-      }
-
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
       dispatch(updateActividad(values));
-      setFile();
-      setImage("");
-      resetForm();
-      handleClose();
+      dispatch(handleClose());
     },
   });
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm">
-      <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>Editar actividad</DialogTitle>
-        <Box
-          position="absolute"
-          top={0}
-          right={0}
-          paddingTop={1}
-          paddingRight={1}
+    <Dialog
+      open={openEdit}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="sm"
+      fullWidth
+    >
+      <DialogTitle>Editar actividad</DialogTitle>
+      <Box
+        position="absolute"
+        top={0}
+        right={0}
+        paddingTop={1}
+        paddingRight={1}
+      >
+        <IconButton
+          onClick={() => {
+            dispatch(handleClose());
+          }}
         >
-          <IconButton onClick={handleClose}>
-            <Close />
-          </IconButton>
-        </Box>
+          <Close />
+        </IconButton>
+      </Box>
+      <form onSubmit={formik.handleSubmit}>
         <DialogContent>
           <Grid container rowGap={2}>
-            <Grid item xs={12}>
-              <TextField
-                color="info"
-                fullWidth
-                label="Título"
-                name="titulo"
-                variant="outlined"
-                value={formik.values.titulo}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.titulo && Boolean(formik.errors.titulo)}
-                helperText={formik.touched.titulo && formik.errors.titulo}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                color="info"
-                fullWidth
-                name="descripcion"
-                label="Descripcion"
-                variant="outlined"
-                value={formik.values.descripcion}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.descripcion &&
-                  Boolean(formik.errors.descripcion)
-                }
-                helperText={
-                  formik.touched.descripcion && formik.errors.descripcion
-                }
-              />
-            </Grid>
+            <InputField
+              formik={formik}
+              field="titulo"
+              label="Titulo"
+              type="text"
+            />
+            <InputField
+              formik={formik}
+              field="descripcion"
+              label="Descripcion"
+              type="text"
+            />
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "end",
-              pb: 2,
-              px: 2,
-            }}
-            gap={2}
-          >
-            <Button variant="contained" color="secondary" type="submit">
+          <Box paddingBottom={2} paddingRight={2}>
+            <Button
+              style={{ marginRight: 10 }}
+              variant="contained"
+              color="secondary"
+              type="submit"
+            >
               Guardar
             </Button>
             <Button
               variant="contained"
               color="error"
               onClick={() => {
-                formik.resetForm();
-                handleClose();
+                dispatch(handleClose());
               }}
             >
               Cancelar

@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  acceptNota,
   createNota,
   deleteManyNota,
   deleteNota,
   getAllNotas,
+  rejectNota,
   updateNota,
 } from "../services/NotaService";
 import { notify } from "../utils/utils";
@@ -49,6 +51,30 @@ export const notasSlice = createSlice({
         state.notas[foundIndex] = action.payload.nota;
       })
       .addCase(updateNota.rejected, (state) => {
+        notify("error", "Hubo un error al actualizar la nota");
+        state.error = true;
+      });
+    builder
+      .addCase(acceptNota.fulfilled, (state, action) => {
+        notify("success", "Nota aceptada");
+        const foundIndex = state.notas.findIndex(
+          (nota) => nota.id === action.payload.nota.id
+        );
+        state.notas[foundIndex] = action.payload.nota;
+      })
+      .addCase(acceptNota.rejected, (state) => {
+        notify("error", "Hubo un error al actualizar la nota");
+        state.error = true;
+      });
+    builder
+      .addCase(rejectNota.fulfilled, (state, action) => {
+        notify("success", "Nota rechazada");
+        const foundIndex = state.notas.findIndex(
+          (nota) => nota.id === action.payload.nota.id
+        );
+        state.notas[foundIndex] = action.payload.nota;
+      })
+      .addCase(rejectNota.rejected, (state) => {
         notify("error", "Hubo un error al actualizar la nota");
         state.error = true;
       });

@@ -3,9 +3,18 @@ import { useDispatch } from "react-redux";
 import { handleOpenCreate } from "../reducers/ModalReducer";
 
 import { Box } from "@mui/system";
-import MUIDataTable from "mui-datatables";
 import { Add, Delete, Edit, Refresh } from "@mui/icons-material";
-import { CircularProgress, IconButton, Typography } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  Typography,
+  Tooltip,
+} from "@mui/material";
+
+import CursoButtons from "./ActionButtons/CursoButtons";
+
+import MUIDataTable from "mui-datatables";
+import NotaButtons from "./ActionButtons/NotaButtons";
 
 const SuperDataTable = ({
   data,
@@ -15,9 +24,26 @@ const SuperDataTable = ({
   refreshAction,
   deleteAction,
   editAction,
+  tableButtons = "DEFAULT",
 }) => {
   const dispatch = useDispatch();
   const [selected, setSelected] = useState([]);
+
+  const renderButtons = (selectedRows) => {
+    const item = selectedRows.data.map((d) => data[d.dataIndex])[0];
+
+    switch (tableButtons) {
+      case "CURSO":
+        return <CursoButtons setSelected={setSelected} item={item} />;
+
+      case "NOTA":
+        return <NotaButtons setSelected={setSelected} item={item} />;
+
+      default:
+        return <></>;
+    }
+  };
+
   const options = {
     viewColumns: false,
     filterType: "checkbox",
@@ -26,34 +52,43 @@ const SuperDataTable = ({
     customToolbar: () => {
       return (
         <>
-          <IconButton onClick={refreshAction}>
-            <Refresh />
-          </IconButton>
-          <IconButton onClick={() => dispatch(handleOpenCreate())}>
-            <Add />
-          </IconButton>
+          <Tooltip title="Refrescar tabla">
+            <IconButton onClick={refreshAction}>
+              <Refresh />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Crear">
+            <IconButton onClick={() => dispatch(handleOpenCreate())}>
+              <Add />
+            </IconButton>
+          </Tooltip>
         </>
       );
     },
     customToolbarSelect: (selectedRows) => {
       return (
         <Box paddingRight="2em">
-          <IconButton
-            onClick={() => {
-              deleteAction(selectedRows);
-              setSelected([]);
-            }}
-          >
-            <Delete />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              editAction(selectedRows);
-              setSelected([]);
-            }}
-          >
-            <Edit />
-          </IconButton>
+          <Tooltip title="Eliminar">
+            <IconButton
+              onClick={() => {
+                deleteAction(selectedRows);
+                setSelected([]);
+              }}
+            >
+              <Delete />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Editar">
+            <IconButton
+              onClick={() => {
+                editAction(selectedRows);
+                setSelected([]);
+              }}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
+          {renderButtons(selectedRows)}
         </Box>
       );
     },

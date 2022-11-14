@@ -5,34 +5,27 @@ import { handleBack, handleNext } from "../../../reducers/ModalReducer";
 import { Grid, Button, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 
-import { cursoDetailValidationSchema } from "../../../utils/validation";
+import { publicidadDetailValidationSchema } from "../../../utils/validation";
 
 import InputField from "../../../components/Input/InputField";
-import InputSwitch from "../../../components/Input/InputSwitch";
-import InputArray from "../../../components/Input/InputArray";
-import CursoCategoriaSelect from "../../../components/Select/CursoCategoriaSelect";
 
-const Detalles = ({ curso, setCurso, cancelAction }) => {
+const Detalles = ({ publicidad, setPublicidad, cancelAction }) => {
   const dispatch = useDispatch();
   return (
     <Formik
       enableReinitialize
       initialValues={{
-        activo: curso.activo,
-        fecha_inicio: curso.fecha_inicio,
-        fecha_fin: curso.fecha_fin,
-        palabras_clave: curso.palabras_clave,
-        categoria_id: curso.categoria_id,
+        empresa: publicidad.empresa,
+        url_empresa: publicidad.url_empresa,
+        correo_empresa: publicidad.correo_empresa,
       }}
-      validationSchema={cursoDetailValidationSchema}
+      validationSchema={publicidadDetailValidationSchema}
       onSubmit={(values) => {
-        setCurso((prev) => ({
+        setPublicidad((prev) => ({
           ...prev,
-          activo: values.activo,
-          fecha_inicio: values.fecha_inicio,
-          fecha_fin: values.fecha_fin,
-          palabras_clave: values.palabras_clave,
-          categoria_id: values.categoria_id,
+          empresa: values.empresa,
+          url_empresa: values.url_empresa,
+          correo_empresa: values.correo_empresa,
         }));
         dispatch(handleNext());
       }}
@@ -42,23 +35,22 @@ const Detalles = ({ curso, setCurso, cancelAction }) => {
           <Grid container spacing={2} marginTop={2}>
             <InputField
               formik={props}
-              field="fecha_inicio"
-              label="Fecha de inicio"
-              type="date"
+              field="empresa"
+              label="Nombre de la empresa"
+              type="text"
             />
             <InputField
               formik={props}
-              field="fecha_fin"
-              label="Fecha de cierre"
-              type="date"
+              field="url_empresa"
+              label="Sitio de la empresa"
+              type="text"
             />
-            <InputArray
+            <InputField
               formik={props}
-              field="palabras_clave"
-              label="Palabras clave"
+              field="correo_empresa"
+              label="Correo de la empresa"
+              type="text"
             />
-            <CursoCategoriaSelect formik={props} />
-            <InputSwitch formik={props} field="activo" label="Activar curso" />
           </Grid>
           <Box
             sx={{

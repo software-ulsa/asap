@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import SuperDataTable from "../../components/SuperDataTable";
-import { notaHeaders } from "../../utils/headers";
+import { handleOpenEdit } from "../../reducers/ModalReducer";
 
 import { Helmet } from "react-helmet";
+import SuperDataTable from "../../components/SuperDataTable";
 
-import { Button, Grid, Typography } from "@mui/material";
+import { notaHeaders } from "../../utils/headers";
+import { notify } from "../../utils/utils";
 
 import {
   deleteManyNota,
@@ -16,20 +16,17 @@ import {
 
 import CrearNota from "./CrearNota";
 import EditarNota from "./EditarNota";
-import { notify } from "../../utils/utils";
-import { handleOpenCreate, handleOpenEdit, handleClose } from "../../reducers/ModalReducer";
 
 const Notas = () => {
   const dispatch = useDispatch();
   const { notas, fetched } = useSelector((state) => state.notas);
-  const { openCreate, openEdit } = useSelector((state) => state.modal);
 
   const [itemId, setItemId] = useState(-1);
-  const itemToEdit = notas.find((nota) => nota.id === Number(itemId));    
+  const itemToEdit = notas.find((nota) => nota.id === Number(itemId));
 
   const refreshAction = () => {
     dispatch(getAllNotas());
-  }
+  };
 
   useEffect(() => {
     refreshAction();
@@ -60,24 +57,21 @@ const Notas = () => {
         <title>Notas - ASAP</title>
         <meta name="Notas" content="Notas registradas" />
       </Helmet>
-      
+
       <SuperDataTable
         data={notas}
-        title={'Notas'}        
+        title={"Notas"}
         headers={notaHeaders}
         fetched={fetched}
         deleteAction={deleteAction}
         editAction={editAction}
         refreshAction={refreshAction}
+        tableButtons="NOTA"
       />
 
-      <CrearNota handleClose={() => dispatch(handleClose())} open={openCreate} />
+      <CrearNota />
 
-      <EditarNota
-        handleClose={() => dispatch(handleClose())}
-        open={openEdit}
-        note={itemToEdit}
-      />
+      <EditarNota note={itemToEdit} />
     </>
   );
 };

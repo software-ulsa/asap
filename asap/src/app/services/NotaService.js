@@ -11,6 +11,14 @@ export const updateNota = createAsyncThunk("notas/updateNota", async (nota) => {
   return (await httpClient.put(`${prefix}/${nota.id}`, nota)).data;
 });
 
+export const acceptNota = createAsyncThunk("notas/acceptNota", async (nota) => {
+  return (await httpClient.put(`${prefix}/aceptar/${nota.id}`, nota)).data;
+});
+
+export const rejectNota = createAsyncThunk("notas/rejectNota", async (nota) => {
+  return (await httpClient.put(`${prefix}/rechazar/${nota.id}`, nota)).data;
+});
+
 export const deleteNota = createAsyncThunk("notas/deleteNota", async (id) => {
   return (await httpClient.delete(`${prefix}/${id}`)).data;
 });

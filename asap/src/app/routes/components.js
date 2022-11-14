@@ -5,7 +5,6 @@ import {
   PagesRounded,
   PersonRounded,
   SellRounded,
-  Task,
 } from "@mui/icons-material";
 
 import Opciones from "../pages/Configuracion/Opciones";
@@ -19,7 +18,7 @@ import Publicidades from "../pages/Publicidad/Publicidades";
 import Notas from "../pages/Nota/Notas";
 
 import Cursos from "../pages/Curso/Cursos";
-import EditarCurso from "../pages/Curso/EditarCurso";
+import Actividades from "../pages/Actividad/Actividades";
 
 export const components = [
   {
@@ -53,10 +52,8 @@ export const components = [
     icon: <BookmarksRounded />,
     subroutes: [
       {
-        path: "/editar-curso",
-        name: "EDITAR CURSO",
-        element: <EditarCurso key={8} />,
-        icon: "no-icon",
+        path: "/actividades",
+        element: <Actividades key={8} />,
       },
     ],
   },

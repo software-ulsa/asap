@@ -6,11 +6,10 @@ import {
   updateActividad,
   getAllActividadByCursoId,
 } from "../services/ActividadService";
-import { getCursoById, updateCurso } from "../services/CursoService";
+
 import { notify } from "../utils/utils";
 
 const initialState = {
-  curso: {},
   actividades: [],
   fetched: false,
   error: false,
@@ -22,31 +21,12 @@ export const actividadesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCursoById.pending, (state) => {
-        state.fetched = false;
-      })
-      .addCase(getCursoById.fulfilled, (state, action) => {
-        state.fetched = true;
-        state.curso = action.payload;
-      })
-      .addCase(getCursoById.rejected, (state) => {
-        state.error = true;
-        state.fetched = true;
-      });
-    builder
-      .addCase(updateCurso.fulfilled, (state, action) => {
-        notify("success", "Se agregó la actividad");
-        state.curso = action.payload;
-      })
-      .addCase(updateCurso.rejected, (state) => {
-        notify("error", "Hubo un error al agregar la actividad");
-        state.error = true;
-      });
-    builder
       .addCase(createActividad.fulfilled, (state, action) => {
+        notify("success", "Se agregó la actividad");
         state.actividades.push(action.payload.actividad);
       })
       .addCase(createActividad.rejected, (state) => {
+        notify("success", "Hubo un error al agregar la actividad");
         state.error = true;
       });
     builder
@@ -55,7 +35,7 @@ export const actividadesSlice = createSlice({
       })
       .addCase(getAllActividadByCursoId.fulfilled, (state, action) => {
         state.fetched = true;
-        state.actividades = action.payload.actividades;
+        state.actividades = action.payload;
       })
       .addCase(getAllActividadByCursoId.rejected, (state) => {
         state.error = true;
@@ -65,9 +45,9 @@ export const actividadesSlice = createSlice({
       .addCase(updateActividad.fulfilled, (state, action) => {
         notify("success", "Se actualizó la actividad");
         var foundIndex = state.actividades.findIndex(
-          (actividad) => actividad.id === action.payload.actividad.id
+          (actividad) => actividad.id === action.payload.actividadUpdated.id
         );
-        state.actividades[foundIndex] = action.payload.actividad;
+        state.actividades[foundIndex] = action.payload.actividadUpdated;
       })
       .addCase(updateActividad.rejected, (state) => {
         notify("error", "Hubo un error al actualizar la actividad");

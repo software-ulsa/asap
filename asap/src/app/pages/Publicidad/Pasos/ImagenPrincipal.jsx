@@ -1,21 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  handleBack,
-  handleClose,
-  rebootActiveStep,
-} from "../../../reducers/ModalReducer";
+import { handleBack } from "../../../reducers/ModalReducer";
 
 import { Box } from "@mui/system";
 import { grey } from "@mui/material/colors";
 import { PhotoCameraRounded } from "@mui/icons-material";
 import { IconButton, Avatar, Button, Stack } from "@mui/material";
 
-const IconCurso = ({
+const IconPublicidad = ({
   image,
   setImage,
   setFile,
-  guardarCurso,
+  guardarPublicidad,
   cancelAction,
 }) => {
   const dispatch = useDispatch();
@@ -78,7 +74,11 @@ const IconCurso = ({
           Anterior
         </Button>
         <Stack direction="row" spacing={2}>
-          <Button variant="contained" color="secondary" onClick={guardarCurso}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={guardarPublicidad}
+          >
             Guardar
           </Button>
 
@@ -91,4 +91,4 @@ const IconCurso = ({
   );
 };
 
-export default IconCurso;
+export default IconPublicidad;

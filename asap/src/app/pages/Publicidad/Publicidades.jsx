@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { handleOpenEdit } from "../../reducers/ModalReducer";
 
-import SuperDataTable from "../../components/SuperDataTable";
 import { publicidadHeaders } from "../../utils/headers";
 import { notify } from "../../utils/utils";
 
 import { Helmet } from "react-helmet";
-
-import { Button, Grid, Typography } from "@mui/material";
+import SuperDataTable from "../../components/SuperDataTable";
 
 import {
   deleteManyPublicidad,
@@ -18,16 +17,14 @@ import {
 import CrearPublicidad from "./CrearPublicidad";
 import EditarPublicidad from "./EditarPublicidad";
 
-import { handleOpenCreate, handleOpenEdit, handleClose } from "../../reducers/ModalReducer";
-
 const Publicidades = () => {
   const dispatch = useDispatch();
   const { publicidades, fetched } = useSelector((state) => state.publicidades);
 
   const [itemId, setItemId] = useState(-1);
-  const itemToEdit = publicidades.find((publicidad) => publicidad.id === Number(itemId));
-
-  const { openCreate, openEdit } = useSelector((state) => state.modal);
+  const itemToEdit = publicidades.find(
+    (publicidad) => publicidad.id === Number(itemId)
+  );
 
   const refreshAction = () => {
     dispatch(getAllPublicidad());
@@ -73,13 +70,9 @@ const Publicidades = () => {
         refreshAction={refreshAction}
       />
 
-      <CrearPublicidad handleClose={() => dispatch(handleClose())} open={openCreate} />
+      <CrearPublicidad />
 
-      <EditarPublicidad
-        handleClose={() => dispatch(handleClose())}
-        open={openEdit}
-        publicidad={itemToEdit}
-      />
+      <EditarPublicidad publicity={itemToEdit} />
     </>
   );
 };

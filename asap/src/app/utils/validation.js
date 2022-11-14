@@ -69,25 +69,45 @@ export const registerUserValidationSchema = (isCreate) => {
   });
 };
 
-export const publicidadValidationSchema = yup.object({
+export const publicidadInfoValidationSchema = yup.object({
   nombre: yup.string().required("Nombre requerido"),
-  descripcion: yup.string().required("Descripción de empresa requerida"),
+  descripcion: yup.string().required("Descripción de publicidad requerida"),
+  fecha_inicio: yup
+    .date()
+    .default(() => new Date())
+    .required("Fecha de inicio requerido"),
+  fecha_fin: yup
+    .date()
+    .when(
+      "fecha_inicio",
+      (fecha_inicio, schema) =>
+        fecha_inicio &&
+        schema.min(
+          fecha_inicio,
+          "La fecha de fin debe ser posterior a la de inicio"
+        )
+    )
+    .required("Fecha de fin requerido"),
+});
+
+export const publicidadDetailValidationSchema = yup.object({
   empresa: yup.string().required("Nombre de empresa requerida"),
-  correo_empresa: yup.string().email("Correo no válido").required("Correo requerido"),
-  url_empresa: yup.string().required("URL requerido"),
-  fecha_inicio: yup.date().default(() => new Date()).required('Fecha de inicio requerido'),
-  fecha_fin: yup.date().when("fecha_inicio",(fecha_inicio, schema) => fecha_inicio && schema.min(fecha_inicio, "La fecha de fin debe ser posterior a la de inicio")).required('Fecha de fin requerido'),
+  correo_empresa: yup
+    .string()
+    .email("Correo no válido")
+    .required("Correo requerido"),
+  url_empresa: yup.string().url("URL no válido").required("URL requerido"),
 });
 
 export const profileValidationSchema = yup.object({
   nombre: yup.string().required("Nombre requerido"),
   ape_paterno: yup.string().required("Apellido paterno requerido"),
-  ape_materno: yup.string().required("Apellido materno requerido"),  
+  ape_materno: yup.string().required("Apellido materno requerido"),
   sexo: yup
     .string()
     .oneOf(["Masculino", "Femenino"])
     .label("Elegir uno")
-    .required("Sexo requerido"),  
+    .required("Sexo requerido"),
   telefono: yup
     .string()
     .matches(phoneRegExp, "Teléfono no váildo")

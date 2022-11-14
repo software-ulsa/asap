@@ -1,3 +1,5 @@
+import { parseDate } from "./utils";
+
 export const especialistaInitialState = (especialista) => {
   const item = {
     id: especialista?.id || -1,
@@ -59,44 +61,49 @@ export const usuarioInitialState = (usuario) => {
   return item;
 };
 
-export const emptyUser = {
-  id: -1,
-  nombre: "",
-  segundo_nombre: "",
-  ape_paterno: "",
-  ape_materno: "",
-  edad: 0,
-  sexo: "Elegir uno",
-  foto_usuario: "",
-  matricula: "",
-  password: "",
-  telefono: "",
-  id_rol: 0,
-  correo: "",
-  activo: true,
+export const cursoInitialState = (curso) => {
+  const item = {
+    id: curso?.id || -1,
+    titulo: curso?.titulo || "",
+    descripcion: curso?.descripcion || "",
+    objetivo: curso?.objetivo || "",
+    duracion: curso?.duracion || 0,
+    fecha_inicio: parseDate(curso?.fecha_inicio),
+    fecha_fin: parseDate(curso?.fecha_fin),
+    activo: curso?.activo || false,
+    imagen: curso?.imagen || "",
+    palabras_clave: curso?.palabras_clave || [],
+    categoria_id: curso?.categoria_id || "Elegir uno",
+  };
+  return item;
 };
 
-export const emptyNote = {
-  id: -1,
-  titulo: "",
-  tema: "",
-  contenido: "",
-  palabras_clave: [],
-  foto_principal: "",
-  foto_thumbnail: "",
+export const notaInitialState = (nota) => {
+  const item = {
+    id: nota?.id || -1,
+    titulo: nota?.titulo || "",
+    contenido: nota?.contenido || "",
+    imagen: nota?.imagen || "",
+    estado: nota?.estado || "",
+    tema: nota?.tema || "",
+    palabras_clave: nota?.palabras_clave || [],
+    usuario_id: nota?.usuario_id || -1,
+  };
+  return item;
 };
 
-export const emptyPublicidad = {
-  id: -1,
-  nombre: "",
-  descripcion: "",
-  dot_empresa: "",
-  email: "",
-  url: "",
-  fecha_inicio: "",
-  fecha_vencimiento: "",
+export const publicidadInitialState = (publicidad) => {
+  const item = {
+    id: publicidad?.id || -1,
+    nombre: publicidad?.nombre || "",
+    descripcion: publicidad?.descripcion || "",
+    empresa: publicidad?.empresa || "",
+    correo_empresa: publicidad?.correo_empresa || "",
+    url_empresa: publicidad?.url_empresa || "",
+    imagen: publicidad?.imagen || "",
+    fecha_inicio: parseDate(publicidad?.fecha_inicio),
+    fecha_fin: parseDate(publicidad?.fecha_fin),
+    activo: publicidad?.activo || false,
+  };
+  return item;
 };
-
-export const emptyCurso = { titulo: "", descripcion: "" };
-
-export const emptyActividad = { titulo: "", descripcion: "", url_media: "a" };

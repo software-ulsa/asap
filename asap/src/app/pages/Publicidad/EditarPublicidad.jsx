@@ -1,243 +1,133 @@
-import { useDispatch } from "react-redux";
-import { Formik } from "formik";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleClose,
+  rebootActiveStep,
+  setStepSize,
+} from "../../reducers/ModalReducer";
 
 import {
-  Grid,
   IconButton,
-  Button,
-  TextField,
   Dialog,
-  DialogActions,
-  DialogContent,
   DialogTitle,
-  Avatar,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Switch,
+  DialogContent,
+  Stepper,
+  Step,
+  StepLabel,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { Close, PhotoCameraRounded } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 
+import { publicidadInitialState } from "../../utils/initialStates";
+import { ColorlibConnector, PublicidadStepIcon } from "../../utils/custom";
+
+import InfoBasica from "./Pasos/InfoBasica";
+import Detalles from "./Pasos/Detalles";
+import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+
+import ImagesService from "../../services/ImagesService";
 import { updatePublicidad } from "../../services/PublicidadService";
 
-import { publicidadValidationSchema } from "../../utils/validation";
-import { useState } from "react";
-import { grey } from "@mui/material/colors";
-
-const EditarPublicidad = ({ open, handleClose, publicidad }) => {
+const EditarPublicidad = ({ publicity }) => {
   const dispatch = useDispatch();
-  const dateInicio = new Date(publicidad?.fecha_inicio || "2022-10-28")
-    .toISOString()
-    .split("T")[0]
-    .replaceAll("/", "-");
-  const dateFin = new Date(publicidad?.fecha_fin || "2022-10-28")
-    .toISOString()
-    .split("T")[0]
-    .replaceAll("/", "-");
+  const { activeStep, openEdit } = useSelector((state) => state.modal);
 
-  const [mainImage, setMainImage] = useState("");
-  const [mainFile, setMainFile] = useState();
+  const [publicidad, setPublicidad] = useState();
+  const [image, setImage] = useState("");
+  const [file, setFile] = useState();
 
-  const doClickOnInput = () => {
-    var input = document.getElementById("subirImagen");
-    input?.click();
+  useEffect(() => {
+    setPublicidad(publicidadInitialState(publicity));
+  }, [publicity]);
+
+  const guardarPublicidad = () => {
+    if (file) {
+      ImagesService.upload(file)
+        .then((response) => {
+          publicidad.imagen = response.data;
+        })
+        .catch((error) => console.log(error));
+    }
+
+    dispatch(updatePublicidad(publicidad));
+    setFile();
+    setImage("");
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
   };
 
+  const cancelAction = () => {
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
+
+  const steps = ["General", "Empresa", "Imagen"];
+  const stepsComponent = [
+    <InfoBasica
+      publicidad={publicidad}
+      setPublicidad={setPublicidad}
+      cancelAction={cancelAction}
+    />,
+    <Detalles
+      publicidad={publicidad}
+      setPublicidad={setPublicidad}
+      cancelAction={cancelAction}
+    />,
+    <ImagenPrincipal
+      image={image}
+      setImage={setImage}
+      setFile={setFile}
+      guardarPublicidad={guardarPublicidad}
+      cancelAction={cancelAction}
+    />,
+  ];
+
+  useEffect(() => {
+    dispatch(setStepSize(steps.length));
+  }, []);
+
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={openEdit}
+      onClose={() => dispatch(handleClose())}
+      maxWidth="sm"
+      fullWidth
+    >
       <DialogTitle>Editar publicidad</DialogTitle>
-      <Box position="absolute" top={0} right={0} paddingTop={1} paddingRight={1}>
-        <IconButton onClick={handleClose}>
+      <Box
+        position="absolute"
+        top={0}
+        right={0}
+        paddingTop={1}
+        paddingRight={1}
+      >
+        <IconButton onClick={() => dispatch(handleClose())}>
           <Close />
         </IconButton>
       </Box>
-      <Formik
-        initialValues={{
-          id: publicidad?.id || -1,
-          nombre: publicidad?.nombre || "",
-          descripcion: publicidad?.descripcion || "",
-          empresa: publicidad?.empresa || "",
-          correo_empresa: publicidad?.correo_empresa || "",
-          url_empresa: publicidad?.url_empresa || "",
-          fecha_inicio: dateInicio || "",
-          fecha_fin: dateFin || "",
-          activo: publicidad?.activo
-        }}
-        validationSchema={publicidadValidationSchema}
-        onSubmit={(values) => {
-          dispatch(updatePublicidad(values));
-          handleClose();
-        }}
-      >
-        {(props) => (
-          <form onSubmit={props.handleSubmit}>
-            <DialogContent>
-              <Grid container rowGap={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    color="info"
-                    fullWidth
-                    label="Nombre"
-                    name="nombre"
-                    variant="outlined"
-                    value={props.values.nombre}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.nombre && Boolean(props.errors.nombre)}
-                    helperText={props.touched.nombre && props.errors.nombre}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="info"
-                    fullWidth
-                    name="descripcion"
-                    label="Descripcion de empresa"
-                    variant="outlined"
-                    value={props.values.descripcion}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.descripcion && Boolean(props.errors.descripcion)}
-                    helperText={props.touched.descripcion && props.errors.descripcion}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="info"
-                    fullWidth
-                    name="empresa"
-                    label="Nombre de empresa"
-                    variant="outlined"
-                    value={props.values.empresa}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.empresa && Boolean(props.errors.empresa)}
-                    helperText={props.touched.empresa && props.errors.empresa}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="info"
-                    fullWidth
-                    label="Email"
-                    name="correo_empresa"
-                    variant="outlined"
-                    value={props.values.correo_empresa}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.correo_empresa && Boolean(props.errors.correo_empresa)}
-                    helperText={props.touched.correo_empresa && props.errors.correo_empresa}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="info"
-                    fullWidth
-                    name="url_empresa"
-                    label="Url de la empresa"
-                    variant="outlined"
-                    value={props.values.url_empresa}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.url_empresa && Boolean(props.errors.url_empresa)}
-                    helperText={props.touched.url_empresa && props.errors.url_empresa}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    type="date"
-                    color="info"
-                    fullWidth
-                    name="fecha_inicio"
-                    label="Fecha de inicio"
-                    variant="outlined"
-                    value={props.values.fecha_inicio}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.fecha_inicio && Boolean(props.errors.fecha_inicio)}
-                    helperText={props.touched.fecha_inicio && props.errors.fecha_inicio}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    type="date"
-                    color="info"
-                    fullWidth
-                    name="fecha_fin"
-                    label="Fecha de vencimiento"
-                    variant="outlined"
-                    value={props.values.fecha_fin}
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    error={props.touched.fecha_fin && Boolean(props.errors.fecha_fin)}
-                    helperText={props.touched.fecha_fin && props.errors.fecha_fin}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={<Switch name="activo" checked={props.values.activo} onChange={(event) => props.setFieldValue("activo", event.target.checked)} />}
-                      label="Activo"
-                    />
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="label">Imagen de publicidad</Typography>
-                  <Box display="flex" justifyContent="center" alignItems="center">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="subirImagen"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                          setMainImage(URL.createObjectURL(file));
-                          setMainFile(file);
-                        }
-                      }}
-                      hidden
-                    ></input>
-                    <IconButton
-                      onClick={doClickOnInput}
-                      disableFocusRipple
-                      disableTouchRipple
-                      disableRipple
-                    >
-                      <Avatar
-                        sx={{
-                          bgcolor: grey[900],
-                          height: "300px",
-                          width: "300px",
-                        }}
-                        src={mainImage}
-                      >
-                        <PhotoCameraRounded />
-                      </Avatar>
-                    </IconButton>
-                  </Box>
-                </Grid>
-              </Grid>
-            </DialogContent>
-            <DialogActions>
-              <Box paddingBottom={2} paddingRight={2}>
-                <Button
-                  style={{ marginRight: 10 }}
-                  variant="contained"
-                  color="secondary"
-                  type="submit"
-                  disabled={!props.isValid}
+      <DialogContent>
+        <Stepper
+          activeStep={activeStep}
+          alternativeLabel
+          connector={<ColorlibConnector />}
+        >
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel
+                  {...labelProps}
+                  StepIconComponent={PublicidadStepIcon}
                 >
-                  Guardar
-                </Button>
-                <Button variant="contained" color="error" onClick={handleClose}>
-                  Cancelar
-                </Button>
-              </Box>
-            </DialogActions>
-          </form>
-        )}
-      </Formik>
+                  {label}
+                </StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        {stepsComponent[activeStep]}
+      </DialogContent>
     </Dialog>
   );
 };

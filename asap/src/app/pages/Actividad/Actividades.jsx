@@ -1,26 +1,43 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { handleOpenEdit } from "../../reducers/ModalReducer";
 
 import SuperDataTable from "../../components/SuperDataTable";
 
-import {
-  deleteActividad,
-  deleteManyActividad,
-} from "../../services/ActividadService";
-
-import EditarActividad from "./EditarActividad";
+import { Box } from "@mui/system";
+import { Typography } from "@mui/material";
 
 import { notify } from "../../utils/utils";
 import { actividadHeaders } from "../../utils/headers";
 
-const ActividadItem = ({ actividades, fetched }) => {
-  const dispatch = useDispatch();
-  const [itemId, setItemId] = useState(-1);
-  const itemToEdit = actividades.find((nota) => nota.id === Number(itemId));
+import {
+  deleteActividad,
+  deleteManyActividad,
+  getAllActividadByCursoId,
+} from "../../services/ActividadService";
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
+import CrearActividad from "./CrearActividad";
+import EditarActividad from "./EditarActividad";
+
+const ActividadItem = () => {
+  const dispatch = useDispatch();
+  const { actividades, fetched } = useSelector((state) => state.actividades);
+
+  const [itemId, setItemId] = useState(-1);
+  const itemToEdit = actividades.find(
+    (actividad) => actividad.id === Number(itemId)
+  );
+
+  const { state } = useLocation();
+
+  const refreshAction = () => {
+    dispatch(getAllActividadByCursoId(state.item.id));
+  };
+
+  useEffect(() => {
+    refreshAction();
+  }, []);
 
   const deleteAction = (ids) => {
     const idsToDelete = ids.data.map((d) => actividades[d.dataIndex].id);
@@ -35,7 +52,7 @@ const ActividadItem = ({ actividades, fetched }) => {
     const idsToEdit = ids.data.map((d) => actividades[d.dataIndex].id);
     if (idsToEdit.length === 1) {
       setItemId(idsToEdit[0]);
-      handleOpenEdit();
+      dispatch(handleOpenEdit());
     } else {
       notify("error", "Solo se puede editar un elemento a la vez");
     }
@@ -43,19 +60,23 @@ const ActividadItem = ({ actividades, fetched }) => {
 
   return (
     <>
+      <Box sx={{ width: "100%" }}>
+        <Typography variant="h4" marginBottom={3}>
+          {`Curso: ${state.item.titulo}`}
+        </Typography>
+      </Box>
       <SuperDataTable
         data={actividades}
-        headers={actividadHeaders}
+        title="Actividades"
         fetched={fetched}
+        headers={actividadHeaders}
+        refreshAction={refreshAction}
         deleteAction={deleteAction}
         editAction={editAction}
       />
 
-      <EditarActividad
-        open={openEdit}
-        actividad={itemToEdit}
-        handleClose={handleCloseEdit}
-      />
+      <CrearActividad cursoId={state.item.id} />
+      <EditarActividad actividad={itemToEdit} cursoId={state.item.id} />
     </>
   );
 };
