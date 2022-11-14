@@ -61,6 +61,7 @@ const Perfil = () => {
           username: currentUser.username,
           rol_id: currentUser.rol_id,
           activo: currentUser.activo,
+          imagen: currentUser.imagen,
           password: "",
         }}
         validationSchema={profileValidationSchema}
