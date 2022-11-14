@@ -34,39 +34,39 @@ export const components = [
     icon: <MedicationRounded />,
   },
   {
+    path: "/pacientes",
+    name: "PACIENTES",
+    element: <Pacientes key={5} />,
+    icon: <Face4Rounded />,
+  },
+  {
     path: "/notas",
     name: "NOTAS",
-    element: <Notas key={5} />,
+    element: <Notas key={6} />,
     icon: <PagesRounded />,
   },
   {
     path: "/publicidad",
     name: "PUBLICIDADES",
-    element: <Publicidades key={6} />,
+    element: <Publicidades key={7} />,
     icon: <SellRounded />,
   },
   {
     path: "/cursos",
     name: "CURSOS",
-    element: <Cursos key={7} />,
+    element: <Cursos key={8} />,
     icon: <BookmarksRounded />,
     subroutes: [
       {
         path: "/actividades",
-        element: <Actividades key={8} />,
+        element: <Actividades key={9} />,
       },
     ],
   },
   {
     path: "/configuracion",
     name: "CONFIGURACION",
-    element: <Opciones key={9} />,
+    element: <Opciones key={10} />,
     icon: "no-icon",
-  },
-  {
-    path: "/pacientes",
-    name: "PACIENTES",
-    element: <Pacientes key={10} />,
-    icon: <Face4Rounded />,
   },
 ];

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { Box, Tab } from "@mui/material";
@@ -6,9 +6,9 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { dashboardRoutes } from "../../routes/dashboardRoutes";
 
 const Opciones = () => {
-  const [opcion, setOpcion] = useState("roles");
   const { currentUser } = useSelector((state) => state.auth);
   const catalogues = dashboardRoutes(currentUser.rol.permisos).catalogues;
+  const [opcion, setOpcion] = useState(catalogues[0].value);
 
   return (
     <TabContext value={opcion}>

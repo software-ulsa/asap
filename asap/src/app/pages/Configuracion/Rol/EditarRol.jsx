@@ -19,6 +19,7 @@ import { Close } from "@mui/icons-material";
 import { updateRol } from "../../../services/RolService";
 
 import InputField from "../../../components/Input/InputField";
+import PermisosSelect from "../../../components/Select/PermisosSelect";
 
 const EditarRol = ({ rol }) => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const EditarRol = ({ rol }) => {
           id: rol?.id || -1,
           nombre: rol?.nombre || "",
           descripcion: rol?.descripcion || "",
+          permisos: rol?.permisos || [],
         }}
         validationSchema={yup.object({
           nombre: yup.string().required("Nombre requerido"),
@@ -74,6 +76,7 @@ const EditarRol = ({ rol }) => {
                   label="Descripcion"
                   type="text"
                 />
+                <PermisosSelect formik={props} />
               </Grid>
             </DialogContent>
             <DialogActions>

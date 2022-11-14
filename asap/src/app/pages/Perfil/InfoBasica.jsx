@@ -1,175 +1,104 @@
 import {
-  Badge,
-  CakeRounded,
+  CalendarMonthRounded,
   ContactPhoneRounded,
-  PasswordRounded,
-  Person2Rounded,
   Person3Rounded,
   Person4Rounded,
   PersonRounded,
-  PhoneRounded,
   WcRounded,
 } from "@mui/icons-material";
-import {
-  FormControl,
-  Grid,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Grid, InputAdornment } from "@mui/material";
+
+import InputFieldWithIcon from "../../components/Input/InputFieldWithIcon";
+import SexoSelect from "../../components/Select/SexoSelect";
 
 const InfoBasica = ({ formik }) => {
   return (
     <Grid container spacing={2} marginTop={2}>
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          disabled="true"
-          label="Nombre"
-          name="nombre"
-          variant="outlined"
-          value={formik.values.nombre}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.nombre && Boolean(formik.errors.nombre)}
-          helperText={formik.touched.nombre && formik.errors.nombre}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <PersonRounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>      
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          disabled="true"
-          label="Apellido paterno"
-          name="ape_paterno"
-          variant="outlined"
-          value={formik.values.ape_paterno}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.ape_paterno && Boolean(formik.errors.ape_paterno)
-          }
-          helperText={formik.touched.ape_paterno && formik.errors.ape_paterno}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Person4Rounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          disabled="true"
-          label="Apellido materno"
-          name="ape_materno"
-          variant="outlined"
-          value={formik.values.ape_materno}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.ape_materno && Boolean(formik.errors.ape_materno)
-          }
-          helperText={formik.touched.ape_materno && formik.errors.ape_materno}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Person3Rounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>      
-      <Grid item xs={12}>
-        <FormControl fullWidth>
-          <InputLabel
-            color={
-              formik.touched.sexo && Boolean(formik.errors.sexo)
-                ? "error"
-                : "info"
-            }
-            id="lblSexo"
-          >
-            Sexo
-          </InputLabel>
-          <Select
-            labelId="lblSexo"
-            name="sexo"
-            color="info"
-            disabled="true"
-            value={formik.values.sexo}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.sexo && Boolean(formik.errors.sexo)}
-            label="Sexo"
-            startAdornment={
-              <WcRounded
-                sx={{ marginRight: 1, color: "rgba(0, 0, 0, 0.54)" }}
-              />
-            }
-          >
-            <MenuItem disabled value="Elegir uno">
-              Elegir uno
-            </MenuItem>
-            <MenuItem value="Masculino">Masculino</MenuItem>
-            <MenuItem value="Femenino">Femenino</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>    
-      <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          label="Teléfono móvil"
-          name="telefono"
-          disabled="true"
-          variant="outlined"
-          value={formik.values.telefono}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.telefono && Boolean(formik.errors.telefono)}
-          helperText={formik.touched.telefono && formik.errors.telefono}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <ContactPhoneRounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-      {/* <Grid item xs={12}>
-        <TextField
-          color="info"
-          fullWidth
-          label="Nueva contraseña"
-          name="password"
-          type="password"
-          variant="outlined"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <PasswordRounded />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid> */}
+      <InputFieldWithIcon
+        formik={formik}
+        field="nombre"
+        label="Nombre"
+        type="text"
+        inputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PersonRounded />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <InputFieldWithIcon
+        formik={formik}
+        field="ape_paterno"
+        label="Apellido paterno"
+        type="text"
+        inputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Person4Rounded />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <InputFieldWithIcon
+        formik={formik}
+        field="ape_materno"
+        label="Apellido materno"
+        type="text"
+        inputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Person3Rounded />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <InputFieldWithIcon
+        formik={formik}
+        field="fecha_nac"
+        label="Fecha de nacimiento"
+        type="date"
+        inputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <CalendarMonthRounded />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <SexoSelect
+        formik={formik}
+        startAdornment={
+          <WcRounded sx={{ marginRight: 1, color: "rgba(0, 0, 0, 0.54)" }} />
+        }
+      />
+      <InputFieldWithIcon
+        formik={formik}
+        field="telefono"
+        label="Teléfono móvil"
+        type="text"
+        inputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <ContactPhoneRounded />
+            </InputAdornment>
+          ),
+        }}
+      />
+      <InputFieldWithIcon
+        formik={formik}
+        field="password"
+        label="Nueva contraseña"
+        type="text"
+        required={false}
+        inputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <ContactPhoneRounded />
+            </InputAdornment>
+          ),
+        }}
+      />
     </Grid>
   );
 };

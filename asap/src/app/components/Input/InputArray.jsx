@@ -10,7 +10,7 @@ const InputArray = ({ formik, label, field }) => {
   const handleDeleteChip = (chip, index) => {
     const oldData = formik.values[field];
     const newData = oldData?.filter((item, i) => i !== index);
-    formik.setFieldValue("palabras_clave", newData);
+    formik.setFieldValue(field, newData);
   };
 
   return (

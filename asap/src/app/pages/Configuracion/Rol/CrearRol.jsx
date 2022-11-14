@@ -19,6 +19,7 @@ import { Close } from "@mui/icons-material";
 import { createRol } from "../../../services/RolService";
 
 import InputField from "../../../components/Input/InputField";
+import PermisosSelect from "../../../components/Select/PermisosSelect";
 
 const CrearRol = () => {
   const dispatch = useDispatch();
@@ -27,10 +28,11 @@ const CrearRol = () => {
   const validationSchema = yup.object({
     nombre: yup.string().required("Nombre requerido"),
     descripcion: yup.string().required("Descripción requerida"),
+    permisos: yup.array().required("Debe agregar por lo menos 1 permiso"),
   });
 
   const formik = useFormik({
-    initialValues: { nombre: "", descripcion: "" },
+    initialValues: { nombre: "", descripcion: "", permisos: [] },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       dispatch(createRol(values));
@@ -78,6 +80,7 @@ const CrearRol = () => {
               label="Descripcion"
               type="text"
             />
+            <PermisosSelect formik={formik} />
           </Grid>
         </DialogContent>
         <DialogActions>

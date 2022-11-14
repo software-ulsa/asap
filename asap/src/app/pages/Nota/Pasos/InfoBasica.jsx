@@ -49,7 +49,6 @@ const InfoBasica = ({ nota, setNota, cancelAction }) => {
               field="titulo"
               type="text"
             />
-            {props.values["palabras_clave"]}
             <InputArray
               formik={props}
               field="palabras_clave"

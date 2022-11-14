@@ -1,6 +1,6 @@
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
-const SexoSelect = ({ formik }) => {
+const SexoSelect = ({ formik, startAdornment = <></> }) => {
   return (
     <Grid item xs={12}>
       <FormControl fullWidth>
@@ -25,6 +25,7 @@ const SexoSelect = ({ formik }) => {
           onBlur={formik.handleBlur}
           error={formik.touched.sexo && Boolean(formik.errors.sexo)}
           label="Sexo"
+          startAdornment={startAdornment}
         >
           <MenuItem disabled value="Elegir uno">
             Elegir uno
