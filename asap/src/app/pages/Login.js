@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { login } from "../services/UsuarioService";
 
 import { Helmet } from "react-helmet";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
 import {
@@ -30,14 +30,13 @@ import Banner from "../images/banner.png";
 import Background from "../images/background.png";
 
 export default function Login() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { currentUser, loading, error } = useSelector((state) => state.auth);
+  const { currentUser, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const keyDownHandler = (event) => {
