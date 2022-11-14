@@ -124,18 +124,6 @@ export const categoriaHeaders = [
       }),
     },
   },
-  {
-    name: "tipo",
-    label: "Tipo",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
 ];
 
 export const especialidadHeaders = [
