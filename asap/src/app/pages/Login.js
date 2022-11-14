@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 
 import { login } from "../services/UsuarioService";
 
 import { Helmet } from "react-helmet";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { LoadingButton } from "@mui/lab";
 
 import {
@@ -39,6 +39,23 @@ export default function Login() {
 
   const { currentUser, loading, error } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (username !== "" && password !== "") {
+          iniciarSesion();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, [username, password]);
+
   const iniciarSesion = () => {
     const user = {
       username: username,
@@ -46,15 +63,6 @@ export default function Login() {
     };
 
     dispatch(login(user));
-
-    if (!error) {
-      navigate("/");
-    } else {
-      toast.error(
-        "error",
-        error.error ? error.error : "Credenciales inválidas"
-      );
-    }
   };
 
   if (currentUser) return <Navigate to="/" />;
@@ -183,6 +191,7 @@ export default function Login() {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </section>
     </>
   );

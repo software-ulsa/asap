@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleClose } from "../../reducers/ModalReducer";
 
@@ -16,13 +17,20 @@ import {
 import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
 
+import { isValidHttpUrl } from "../../utils/utils";
+
 import { createActividad } from "../../services/ActividadService";
+import ImagenesService from "../../services/ImagesService";
 
 import InputField from "../../components/Input/InputField";
+
+import Media from "./Pasos/Media";
 
 const CrearActividad = ({ cursoId }) => {
   const dispatch = useDispatch();
   const { openCreate } = useSelector((state) => state.modal);
+  const [mainImage, setMainImage] = useState("");
+  const [mainFile, setMainFile] = useState();
 
   const validationSchema = yup.object({
     titulo: yup.string().required("Titulo requerido"),
@@ -33,11 +41,26 @@ const CrearActividad = ({ cursoId }) => {
     initialValues: {
       titulo: "",
       descripcion: "",
-      url_media: "",
+      youtube_url: "",
+      doc_url: "",
       curso_id: cursoId,
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values, { resetForm, setErrors }) => {
+      if (mainFile) {
+        ImagenesService.upload(mainFile)
+          .then((response) => {
+            values.url_media = response.data;
+          })
+          .catch((error) => console.log(error));
+      } else if (
+        values.youtube_url !== "" &&
+        isValidHttpUrl(values.youtube_url)
+      ) {
+        values.url_media = values.youtube_url;
+      } else if (values.doc_url !== "" && isValidHttpUrl(values.doc_url)) {
+        values.url_media = values.doc_url;
+      }
       dispatch(createActividad(values));
       dispatch(handleClose());
       resetForm();
@@ -79,9 +102,17 @@ const CrearActividad = ({ cursoId }) => {
             />
             <InputField
               formik={formik}
+              multiline={true}
+              minRows={3}
               field="descripcion"
               label="Descripcion"
               type="text"
+            />
+            <Media
+              formik={formik}
+              mainImage={mainImage}
+              setMainImage={setMainImage}
+              setMainFile={setMainFile}
             />
           </Grid>
         </DialogContent>

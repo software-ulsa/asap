@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useNavigation } from "react-router-dom";
 import SecureLS from "secure-ls";
 import { login, updateProfile } from "../services/UsuarioService";
 import { notify } from "../utils/utils";
@@ -37,16 +38,19 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         const { userFound, token } = action.payload;
+
+        state.loading = false;
+        state.currentUser = userFound;
+
         ls.set("_token", JSON.stringify(token));
         ls.set("_user", JSON.stringify(userFound));
         notify(
           "success",
           `Bienvenido ${userFound.persona.nombre} ${userFound.persona.ape_paterno}`
         );
-        state.loading = false;
-        state.currentUser = userFound;
       })
       .addCase(login.rejected, (state) => {
+        notify("error", "Verifique sus credenciales");
         state.error = true;
         state.loading = false;
       });

@@ -47,6 +47,8 @@ const InfoBasica = ({ publicidad, setPublicidad, cancelAction }) => {
             />
             <InputField
               formik={props}
+              multiline={true}
+              minRows={3}
               label="Descripcion"
               field="descripcion"
               type="text"

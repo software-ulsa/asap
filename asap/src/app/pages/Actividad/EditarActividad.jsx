@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleClose } from "../../reducers/ModalReducer";
 
@@ -12,7 +13,6 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { Close } from "@mui/icons-material";
@@ -22,9 +22,14 @@ import InputField from "../../components/Input/InputField";
 import { updateActividad } from "../../services/ActividadService";
 import ImagenesService from "../../services/ImagesService";
 
+import Media from "./Pasos/Media";
+import { isValidHttpUrl } from "../../utils/utils";
+
 const EditarActividad = ({ actividad, cursoId }) => {
   const dispatch = useDispatch();
   const { openEdit } = useSelector((state) => state.modal);
+  const [mainImage, setMainImage] = useState("");
+  const [mainFile, setMainFile] = useState();
 
   const validationSchema = yup.object({
     titulo: yup.string().required("Titulo requerido"),
@@ -37,11 +42,30 @@ const EditarActividad = ({ actividad, cursoId }) => {
       id: actividad?.id || -1,
       titulo: actividad?.titulo || "",
       descripcion: actividad?.descripcion || "",
-      url_media: actividad?.url_media || "",
+      youtube_url: actividad?.url_media.includes("youtube")
+        ? actividad?.url_media
+        : "",
+      doc_url: !actividad?.url_media.includes("youtube")
+        ? actividad?.url_media
+        : "",
       curso_id: actividad?.curso_id || cursoId,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      if (mainFile) {
+        ImagenesService.upload(mainFile)
+          .then((response) => {
+            values.url_media = response.data;
+          })
+          .catch((error) => console.log(error));
+      } else if (
+        values.youtube_url !== "" &&
+        isValidHttpUrl(values.youtube_url)
+      ) {
+        values.url_media = values.youtube_url;
+      } else if (values.doc_url !== "" && isValidHttpUrl(values.doc_url)) {
+        values.url_media = values.doc_url;
+      }
       dispatch(updateActividad(values));
       dispatch(handleClose());
     },
@@ -81,9 +105,17 @@ const EditarActividad = ({ actividad, cursoId }) => {
             />
             <InputField
               formik={formik}
+              multiline={true}
+              minRows={3}
               field="descripcion"
               label="Descripcion"
               type="text"
+            />
+            <Media
+              formik={formik}
+              mainImage={mainImage}
+              setMainImage={setMainImage}
+              setMainFile={setMainFile}
             />
           </Grid>
         </DialogContent>
