@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-import Logo from "../images/logo.png";
+import Logo from "../images/asap-banner.png";
 
 const Home = () => {
   return (
@@ -14,16 +14,16 @@ const Home = () => {
         justifyContent: "center",
       }}
     >
-      <Typography
+      {/* <Typography
         variant="h2"
         gutterBottom
-        fontFamily="cursive"
+        fontFamily="arial"
         fontWeight="light"
         color="#2596be"
       >
-        Bienvenido a
-      </Typography>
-      <img alt="Logo ASAP" src={Logo} />
+        Bienvenid@ a
+      </Typography> */}
+      <img width={'100%'} height={'113%'} alt="Logo ASAP" src={Logo} />
     </Box>
   );
 };
