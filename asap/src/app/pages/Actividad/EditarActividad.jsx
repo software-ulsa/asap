@@ -65,7 +65,10 @@ const EditarActividad = ({ actividad, cursoId }) => {
         values.url_media = values.youtube_url;
       } else if (values.doc_url !== "" && isValidHttpUrl(values.doc_url)) {
         values.url_media = values.doc_url;
+      } else {
+        values.url_media = "";
       }
+
       dispatch(updateActividad(values));
       dispatch(handleClose());
     },

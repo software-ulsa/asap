@@ -46,7 +46,7 @@ const CrearActividad = ({ cursoId }) => {
       curso_id: cursoId,
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { resetForm, setErrors }) => {
+    onSubmit: (values, { resetForm }) => {
       if (mainFile) {
         ImagenesService.upload(mainFile)
           .then((response) => {
@@ -60,7 +60,10 @@ const CrearActividad = ({ cursoId }) => {
         values.url_media = values.youtube_url;
       } else if (values.doc_url !== "" && isValidHttpUrl(values.doc_url)) {
         values.url_media = values.doc_url;
+      } else {
+        values.url_media = "";
       }
+
       dispatch(createActividad(values));
       dispatch(handleClose());
       resetForm();

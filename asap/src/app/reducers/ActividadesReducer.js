@@ -26,7 +26,7 @@ export const actividadesSlice = createSlice({
         state.actividades.push(action.payload.actividad);
       })
       .addCase(createActividad.rejected, (state) => {
-        notify("success", "Hubo un error al agregar la actividad");
+        notify("error", "Hubo un error al agregar la actividad");
         state.error = true;
       });
     builder
