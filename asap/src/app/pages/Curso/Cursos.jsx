@@ -16,19 +16,16 @@ import {
 
 import CrearCurso from "./CrearCurso";
 import EditarCurso from "./EditarCurso";
-import { getAllCategorias } from "../../services/CategoriaService";
 
 const Cursos = () => {
   const dispatch = useDispatch();
   const { cursos, fetched } = useSelector((state) => state.cursos);
-  const { categorias } = useSelector((state) => state.categorias);
 
   const [itemId, setItemId] = useState(-1);
   const itemToEdit = cursos.find((curso) => curso.id === Number(itemId));
 
   const refreshAction = () => {
     dispatch(getAllCurso());
-    dispatch(getAllCategorias());
   };
 
   useEffect(() => {
@@ -65,7 +62,7 @@ const Cursos = () => {
         data={cursos}
         title={"Cursos"}
         fetched={fetched}
-        headers={cursoHeaders(categorias)}
+        headers={cursoHeaders}
         refreshAction={refreshAction}
         deleteAction={deleteAction}
         editAction={editAction}

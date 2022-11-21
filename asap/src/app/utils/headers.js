@@ -46,6 +46,7 @@ export const rolHeaders = [
     name: "nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -58,6 +59,20 @@ export const rolHeaders = [
     name: "descripcion",
     label: "Descripcion",
     options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "permisos",
+    label: "Permisos",
+    options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -75,6 +90,7 @@ export const carreraHeaders = [
     name: "nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -87,6 +103,7 @@ export const carreraHeaders = [
     name: "abreviatura",
     label: "Abreviatura",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -104,6 +121,7 @@ export const categoriaHeaders = [
     name: "nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -116,6 +134,7 @@ export const categoriaHeaders = [
     name: "descripcion",
     label: "Descripcion",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -133,6 +152,7 @@ export const especialidadHeaders = [
     name: "nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -159,11 +179,12 @@ export const pacienteHeaders = [
   noHeader,
   idHeader,
   {
-    name: "usuario",
+    name: "usuario.persona.nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["persona"]["nombre"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -171,20 +192,8 @@ export const pacienteHeaders = [
     },
   },
   {
-    name: "carrera",
+    name: "carrera.abreviatura",
     label: "Carrera",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data["abreviatura"]}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "matricula",
-    label: "Matricula",
     options: {
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
@@ -195,11 +204,25 @@ export const pacienteHeaders = [
     },
   },
   {
-    name: "usuario",
+    name: "matricula",
+    label: "Matricula",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "usuario.persona.telefono",
     label: "Teléfono",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["persona"]["telefono"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -212,11 +235,12 @@ export const especialistaHeaders = [
   noHeader,
   idHeader,
   {
-    name: "usuario",
+    name: "usuario.persona.nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["persona"]["nombre"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -224,20 +248,8 @@ export const especialistaHeaders = [
     },
   },
   {
-    name: "especialidad",
+    name: "especialidad.nombre",
     label: "Especialidad",
-    options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data["nombre"]}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "cedula_prof",
-    label: "Cédula profesional",
     options: {
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
@@ -248,11 +260,25 @@ export const especialistaHeaders = [
     },
   },
   {
-    name: "usuario",
+    name: "cedula_prof",
+    label: "Cédula profesional",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "usuario.persona.telefono",
     label: "Teléfono",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["persona"]["telefono"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -265,11 +291,12 @@ export const usuarioHeaders = [
   noHeader,
   idHeader,
   {
-    name: "persona",
+    name: "persona.nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["nombre"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -277,11 +304,12 @@ export const usuarioHeaders = [
     },
   },
   {
-    name: "persona",
+    name: "persona.correo",
     label: "Correo",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["correo"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -289,11 +317,12 @@ export const usuarioHeaders = [
     },
   },
   {
-    name: "persona",
+    name: "persona.telefono",
     label: "Teléfono",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data["telefono"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -301,11 +330,11 @@ export const usuarioHeaders = [
     },
   },
   {
-    name: "rol",
+    name: "rol.nombre",
     label: "Rol",
     options: {
       customBodyRender: (data, type, row) => {
-        return <center>{data["nombre"]}</center>;
+        return <center>{data}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
@@ -314,56 +343,48 @@ export const usuarioHeaders = [
   },
 ];
 
-export const cursoHeaders = (categorias) => {
-  return [
-    noHeader,
-    idHeader,
-    {
-      name: "titulo",
-      label: "Titulo",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: styles().centeredHeader,
-        }),
+export const cursoHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "titulo",
+    label: "Titulo",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
       },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
     },
-    {
-      name: "descripcion",
-      label: "Descripcion",
-      options: {
-        customBodyRender: (data, type, row) => {
-          return <center>{data}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: styles().centeredHeader,
-        }),
+  },
+  {
+    name: "descripcion",
+    label: "Descripcion",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
       },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
     },
-    {
-      name: "categoria",
-      label: "Categoria",
-      options: {
-        filterType: "checkbox",
-        filterOptions: {
-          names: [...new Set(categorias.map((item) => item.nombre))],
-          logic(categoria, filterVal) {
-            const show = filterVal.indexOf(categoria["nombre"]) >= 0;
-            return !show;
-          },
-        },
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <center>{value["nombre"]}</center>;
-        },
-        setCellHeaderProps: () => ({
-          className: styles().centeredHeader,
-        }),
+  },
+  {
+    name: "categoria.nombre",
+    label: "Categoria",
+    options: {
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
       },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
     },
-  ];
-};
+  },
+];
 
 export const notaHeaders = [
   noHeader,
@@ -372,6 +393,7 @@ export const notaHeaders = [
     name: "titulo",
     label: "Titulo",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -413,6 +435,7 @@ export const publicidadHeaders = [
     name: "nombre",
     label: "Nombre",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -437,6 +460,7 @@ export const publicidadHeaders = [
     name: "correo_empresa",
     label: "Correo",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -454,6 +478,7 @@ export const actividadHeaders = [
     name: "titulo",
     label: "Titulo",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -466,6 +491,7 @@ export const actividadHeaders = [
     name: "descripcion",
     label: "Descripcion",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },

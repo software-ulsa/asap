@@ -48,6 +48,7 @@ const SuperDataTable = ({
     viewColumns: false,
     filterType: "checkbox",
     rowsSelected: selected,
+    enableNestedDataAccess: ".",
     rowsPerPageOptions: [10, 15, 20],
     customToolbar: () => {
       return (
