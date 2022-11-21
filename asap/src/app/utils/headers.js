@@ -1,4 +1,7 @@
+import { Pending, ThumbDown, ThumbUp } from "@mui/icons-material";
+import { Chip } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { Box } from "@mui/system";
 
 const styles = makeStyles((theme) => ({
   centeredHeader: {
@@ -13,19 +16,30 @@ const styles = makeStyles((theme) => ({
       fontWeight: "bold",
     },
   },
+  centeredHeaderDiv: {
+    "& > div": {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center",
+      margin: 0,
+      fontWeight: "bold",
+    },
+  },
 }));
 
 const noHeader = {
   name: "",
   label: "No.",
   options: {
+    sort: false,
     filter: false,
     customBodyRender: (value, tableMeta, update) => {
       let rowIndex = Number(tableMeta.rowIndex) + 1;
       return <center>{rowIndex}</center>;
     },
     setCellHeaderProps: () => ({
-      className: styles().centeredHeader,
+      className: styles().centeredHeaderDiv,
     }),
   },
 };
@@ -73,9 +87,19 @@ export const rolHeaders = [
     label: "Permisos",
     options: {
       filter: false,
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {data.map((permiso, index) => (
+            <Chip color="info" key={index} label={permiso} />
+          ))}
+        </Box>
+      ),
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
       }),
@@ -183,18 +207,7 @@ export const pacienteHeaders = [
     label: "Nombre",
     options: {
       filter: false,
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "carrera.abreviatura",
-    label: "Carrera",
-    options: {
+
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -229,6 +242,26 @@ export const pacienteHeaders = [
       }),
     },
   },
+  {
+    name: "carrera.abreviatura",
+    label: "Carrera",
+    options: {
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Chip sx={{ backgroundColor: "#a3e9df" }} label={data} />
+        </Box>
+      ),
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
 ];
 
 export const especialistaHeaders = [
@@ -247,10 +280,12 @@ export const especialistaHeaders = [
       }),
     },
   },
+
   {
-    name: "especialidad.nombre",
-    label: "Especialidad",
+    name: "usuario.persona.telefono",
+    label: "Teléfono",
     options: {
+      filter: false,
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },
@@ -273,13 +308,20 @@ export const especialistaHeaders = [
     },
   },
   {
-    name: "usuario.persona.telefono",
-    label: "Teléfono",
+    name: "especialidad.nombre",
+    label: "Especialidad",
     options: {
-      filter: false,
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Chip sx={{ backgroundColor: "#e5e9a3" }} label={data} />
+        </Box>
+      ),
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
       }),
@@ -333,9 +375,17 @@ export const usuarioHeaders = [
     name: "rol.nombre",
     label: "Rol",
     options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Chip sx={{ backgroundColor: "#d8a3e9" }} label={data} />
+        </Box>
+      ),
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
       }),
@@ -376,9 +426,17 @@ export const cursoHeaders = [
     name: "categoria.nombre",
     label: "Categoria",
     options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Chip sx={{ backgroundColor: "#a3d6e9" }} label={data} />
+        </Box>
+      ),
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
       }),
@@ -418,9 +476,35 @@ export const notaHeaders = [
     name: "estado",
     label: "Estado",
     options: {
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Chip
+            icon={
+              data === "Pendiente" ? (
+                <Pending />
+              ) : data === "Aceptado" ? (
+                <ThumbUp />
+              ) : (
+                <ThumbDown />
+              )
+            }
+            color={
+              data === "Aceptado"
+                ? "success"
+                : data === "Rechazado"
+                ? "error"
+                : "secondary"
+            }
+            label={data}
+          />
+        </Box>
+      ),
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
       }),
