@@ -70,10 +70,12 @@ const Perfil = () => {
             ImagenesService.upload(file)
               .then((response) => {
                 values.imagen = response.data;
+                dispatch(updateProfile(values));
               })
               .catch((error) => console.log(error));
+          } else {
+            dispatch(updateProfile(values));
           }
-          dispatch(updateProfile(values));
         }}
       >
         {(props) => (

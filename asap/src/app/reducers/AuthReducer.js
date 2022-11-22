@@ -56,10 +56,12 @@ export const authSlice = createSlice({
       });
     builder
       .addCase(updateProfile.fulfilled, (state, action) => {
-        notify("success", "Perfil actualizado");
-        ls.set("_user", JSON.stringify(action.payload.user));
         state.loading = false;
         state.currentUser = action.payload.user;
+
+        ls.set("_user", JSON.stringify(action.payload.user));
+
+        notify("success", "Perfil actualizado");
       })
       .addCase(updateProfile.rejected, (state) => {
         notify("error", "Hubo un error al actualizar el perfil");
