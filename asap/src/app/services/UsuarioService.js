@@ -41,6 +41,13 @@ export const getById = createAsyncThunk("users/getById", async (id) => {
   return (await httpClient.get(`${prefix}/getById/${id}`)).data;
 });
 
+export const getCurrentUserById = createAsyncThunk(
+  "users/getCurrentUserById",
+  async (id) => {
+    return (await httpClient.get(`${prefix}/getById/${id}`)).data;
+  }
+);
+
 export const getByRol = createAsyncThunk("users/getByRol", async (rol) => {
   return (await httpClient.get(`${prefix}/getByRol/${rol}`)).data;
 });

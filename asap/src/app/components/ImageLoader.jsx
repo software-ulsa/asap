@@ -60,85 +60,82 @@ const ImageLoader = ({
 
   return (
     <>
-      <Grid container spacing={2} marginTop={2} px={10}>
-        <Grid item xs={12}>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <input
-              type="file"
-              accept="image/*"
-              id="subirImagen"
-              onChange={(e) => uploadImage(e)}
-              hidden
-            ></input>
-            {error ? (
-              <Box
-                sx={{
-                  height: { height },
-                  width: { width },
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Avatar
-                  sx={{
-                    bgcolor: red[500],
-                    height: { height },
-                    width: { width },
-                  }}
-                  imgProps={{
-                    onLoad: () => setLoaded(true),
-                  }}
-                  src={image}
-                  variant={variant}
-                >
-                  <BrokenImageRounded sx={{ fontSize: "4em" }} />
-                </Avatar>
-              </Box>
-            ) : (
-              <>
-                <Box
-                  sx={
-                    loaded
-                      ? { display: "none" }
-                      : {
-                          height: { height },
-                          width: { width },
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }
-                  }
-                >
-                  <CircularProgress color="secondary" />
-                </Box>
-                <IconButton
-                  sx={
-                    loaded ? { display: "inline-block" } : { display: "none" }
-                  }
-                  onClick={doClickOnInput}
-                >
-                  <Avatar
-                    sx={{
-                      bgcolor: grey[900],
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: { height }, width: { width } }}
+      >
+        <input
+          type="file"
+          accept="image/*"
+          id="subirImagen"
+          onChange={(e) => uploadImage(e)}
+          hidden
+        ></input>
+        {error ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Avatar
+              sx={{
+                bgcolor: red[500],
+                height: { height },
+                width: { width },
+              }}
+              imgProps={{
+                onLoad: () => setLoaded(true),
+              }}
+              src={image}
+              variant={variant}
+            >
+              <BrokenImageRounded sx={{ fontSize: "4em" }} />
+            </Avatar>
+          </Box>
+        ) : (
+          <>
+            <Box
+              sx={
+                loaded
+                  ? { display: "none" }
+                  : {
                       height: { height },
                       width: { width },
-                    }}
-                    imgProps={{
-                      onLoad: () => setLoaded(true),
-                    }}
-                    src={image}
-                    variant={variant}
-                  >
-                    <PhotoCameraRounded />
-                  </Avatar>
-                </IconButton>
-              </>
-            )}
-          </Box>
-        </Grid>
-      </Grid>
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }
+              }
+            >
+              <CircularProgress color="secondary" />
+            </Box>
+            <IconButton
+              sx={loaded ? { display: "inline-block" } : { display: "none" }}
+              onClick={doClickOnInput}
+            >
+              <Avatar
+                sx={{
+                  bgcolor: grey[900],
+                  height: { height },
+                  width: { width },
+                }}
+                imgProps={{
+                  onLoad: () => setLoaded(true),
+                }}
+                src={image}
+                variant={variant}
+              >
+                <PhotoCameraRounded />
+              </Avatar>
+            </IconButton>
+          </>
+        )}
+      </Box>
     </>
   );
 };

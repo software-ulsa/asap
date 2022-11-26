@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, updateProfile } from "../services/UsuarioService";
+import {
+  getCurrentUserById,
+  login,
+  updateProfile,
+} from "../services/UsuarioService";
 import { notify } from "../utils/utils";
 
 import SecureLS from "secure-ls";
@@ -20,15 +24,6 @@ export const authSlice = createSlice({
       state.currentUser = null;
       state.token = null;
       ls.removeAll();
-    },
-    checkUser: (state) => {
-      let user = null;
-      const auth = ls.get("_user");
-      if (auth !== "") {
-        user = JSON.parse(auth);
-        if (!state.currentUser) state.currentUser = user;
-        else if (user.id !== state.currentUser.id) state.currentUser = user;
-      }
     },
   },
   extraReducers: (builder) => {
@@ -66,9 +61,31 @@ export const authSlice = createSlice({
       .addCase(updateProfile.rejected, (state) => {
         notify("error", "Hubo un error al actualizar el perfil");
         state.error = true;
+        state.loading = false;
+      });
+
+    builder
+      .addCase(getCurrentUserById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentUser = action.payload;
+
+        ls.set("_user", JSON.stringify(action.payload));
+
+        notify(
+          "success",
+          `Bienvenido de vuelta, ${action.payload.persona.nombre}`
+        );
+      })
+      .addCase(getCurrentUserById.rejected, (state) => {
+        notify("error", "Hubo un error al recuperar la sesión");
+        state.error = true;
+        state.loading = false;
+        state.currentUser = null;
+        state.token = null;
+        ls.removeAll();
       });
   },
 });
 
-export const { logout, checkUser } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

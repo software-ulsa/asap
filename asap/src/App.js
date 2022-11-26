@@ -5,19 +5,27 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { publicRoutes } from "./app/routes/publicRoutes";
 import { dashboardRoutes } from "./app/routes/dashboardRoutes";
 
-import { checkUser } from "./app/reducers/AuthReducer";
-
 import { ToastContainer } from "react-toastify";
+import SecureLS from "secure-ls";
+
+import { getCurrentUserById } from "./app/services/UsuarioService";
 
 function App() {
   const dispatch = useDispatch();
-  const { currentUser, loading } = useSelector((state) => state.auth);
+  const ls = new SecureLS({ encodingType: "aes" });
+
+  const { currentUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!loading) {
-      dispatch(checkUser());
+    let user = null;
+    const auth = ls.get("_user");
+    if (auth !== "") {
+      user = JSON.parse(auth);
+      dispatch(getCurrentUserById(user.id));
     }
-  }, [currentUser, dispatch]);
+  }, [dispatch]);
+
+  useEffect(() => {}, [currentUser]);
 
   return (
     <>

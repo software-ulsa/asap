@@ -1,7 +1,7 @@
-import { Pending, ThumbDown, ThumbUp } from "@mui/icons-material";
-import { Chip } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
+import { makeStyles } from "@mui/styles";
+import { Chip, FormControl, Grid, TextField, Typography } from "@mui/material";
+import { Pending, ThumbDown, ThumbUp } from "@mui/icons-material";
 
 const styles = makeStyles((theme) => ({
   centeredHeader: {
@@ -199,6 +199,142 @@ export const especialidadHeaders = [
   },
 ];
 
+export const usuarioHeaders = [
+  noHeader,
+  idHeader,
+  {
+    name: "persona.nombre",
+    label: "Nombre",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "persona.correo",
+    label: "Correo",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "persona.telefono",
+    label: "Teléfono",
+    options: {
+      filter: false,
+      customBodyRender: (data, type, row) => {
+        return <center>{data}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+  {
+    name: "created_at",
+    label: "Fecha de registro",
+    options: {
+      customBodyRender: (data, type, row) => {
+        const date = new Date(data).toLocaleDateString("en-GB");
+        return <center>{date}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+      filterType: "custom",
+      filterOptions: {
+        logic: (data, filters) => {
+          const date = new Date(new Date(data).toLocaleDateString());
+          const f0 = new Date(filters[0] || "");
+          const f1 = new Date(filters[1] || "");
+          if (f0 && f1) {
+            return date <= f0 || date >= f1;
+          } else if (f0) {
+            return date <= f0;
+          } else if (f1) {
+            return date >= f1;
+          }
+          return false;
+        },
+        display: (filterList, onChange, index, column) => {
+          return (
+            <FormControl>
+              <Grid container gap={2}>
+                <Grid item xs={12}>
+                  <Typography variant="body2" color="#34314c8a">
+                    Fecha de registro
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="De"
+                    type="date"
+                    value={filterList[index][0] || ""}
+                    sx={{ width: 220 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(event) => {
+                      filterList[index][0] = event.target.value;
+                      onChange(filterList[index], index, column);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Hasta"
+                    type="date"
+                    value={filterList[index][1] || ""}
+                    sx={{ width: 220 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(event) => {
+                      filterList[index][1] = event.target.value;
+                      onChange(filterList[index], index, column);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </FormControl>
+          );
+        },
+      },
+    },
+  },
+  {
+    name: "rol.nombre",
+    label: "Rol",
+    options: {
+      customBodyRender: (data) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Chip sx={{ backgroundColor: "#d8a3e9" }} label={data} />
+        </Box>
+      ),
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+    },
+  },
+];
+
 export const pacienteHeaders = [
   noHeader,
   idHeader,
@@ -320,70 +456,6 @@ export const especialistaHeaders = [
           }}
         >
           <Chip sx={{ backgroundColor: "#e5e9a3" }} label={data} />
-        </Box>
-      ),
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-];
-
-export const usuarioHeaders = [
-  noHeader,
-  idHeader,
-  {
-    name: "persona.nombre",
-    label: "Nombre",
-    options: {
-      filter: false,
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "persona.correo",
-    label: "Correo",
-    options: {
-      filter: false,
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "persona.telefono",
-    label: "Teléfono",
-    options: {
-      filter: false,
-      customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
-      },
-      setCellHeaderProps: () => ({
-        className: styles().centeredHeader,
-      }),
-    },
-  },
-  {
-    name: "rol.nombre",
-    label: "Rol",
-    options: {
-      customBodyRender: (data) => (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Chip sx={{ backgroundColor: "#d8a3e9" }} label={data} />
         </Box>
       ),
       setCellHeaderProps: () => ({

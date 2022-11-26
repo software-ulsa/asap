@@ -6,8 +6,9 @@ import {
 } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
 import { Box } from "@mui/system";
+import ImageLoader from "../../components/ImageLoader";
 
-const Header = ({ user, image, setImage, setFile }) => {
+const Header = ({ user, formik }) => {
   const doClickOnInput = () => {
     var input = document.getElementById("subirImagen");
     input?.click();
@@ -26,31 +27,12 @@ const Header = ({ user, image, setImage, setFile }) => {
         gap: 2,
       }}
     >
-      <input
-        type="file"
-        accept="image/*"
-        id="subirImagen"
-        onChange={(e) => {
-          const file = e.target.files[0];
-          if (file) {
-            setImage(URL.createObjectURL(file));
-            setFile(file);
-          }
-        }}
-        hidden
-      ></input>
-      <IconButton onClick={doClickOnInput}>
-        <Avatar
-          sx={{
-            bgcolor: grey[900],
-            height: "150px",
-            width: "150px",
-          }}
-          src={image}
-        >
-          <PhotoCameraRounded />
-        </Avatar>
-      </IconButton>
+      <ImageLoader
+        formik={formik}
+        campo="imagen"
+        height="150px"
+        width="150px"
+      />
       <Box
         sx={{
           width: "100%",

@@ -89,7 +89,7 @@ const InfoBasica = ({ formik }) => {
         formik={formik}
         field="password"
         label="Nueva contraseña"
-        type="text"
+        type="password"
         required={false}
         inputProps={{
           startAdornment: (

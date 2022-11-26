@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Tab, Grid, Box, InputAdornment } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -45,12 +45,14 @@ const Media = ({ formik }) => {
           </TabList>
         </Box>
         <TabPanel value="imagen">
-          <ImageLoader
-            formik={formik}
-            campo="url_media"
-            width="400px"
-            variant="rounded"
-          />
+          <Grid item xs={12}>
+            <ImageLoader
+              formik={formik}
+              campo="url_media"
+              width="400px"
+              variant="rounded"
+            />
+          </Grid>
         </TabPanel>
         <TabPanel value="youtube">
           <InputFieldWithIcon
