@@ -22,40 +22,37 @@ import { updateNota } from "../../services/NotaService";
 import ImagenesService from "../../services/ImagesService";
 
 import InfoBasica from "./Pasos/InfoBasica";
-import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+import InputImage from "../../components/Input/InputImage";
 
 import { ColorlibConnector, NotaStepIcon } from "../../utils/custom";
 import { notaInitialState } from "../../utils/initialStates";
-
 const EditarNota = ({ note }) => {
   const dispatch = useDispatch();
+  const prevImage = note?.imagen || "";
   const { currentUser } = useSelector((state) => state.auth);
   const { openEdit, activeStep } = useSelector((state) => state.modal);
 
   const [nota, setNota] = useState();
-  const [mainImage, setMainImage] = useState("");
-  const [mainFile, setMainFile] = useState();
 
   useEffect(() => {
     setNota(notaInitialState(note));
   }, [note]);
 
-  const cancelAction = () => {
+  const saveAction = () => {
+    nota.usuario_id = currentUser.id;
+    dispatch(updateNota(nota));
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
 
-  const guardarNota = () => {
-    if (mainFile) {
-      ImagenesService.upload(mainFile)
-        .then((response) => {
-          nota.imagen = response.data;
-        })
-        .catch((error) => console.log(error));
+  const cancelAction = () => {
+    if (nota.imagen !== prevImage) {
+      ImagenesService.delete(nota.imagen).catch((error) => console.log(error));
+      setNota((prev) => ({
+        ...prev,
+        imagen: prevImage,
+      }));
     }
-
-    nota.usuario_id = currentUser.id;
-    dispatch(updateNota(nota));
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
@@ -63,11 +60,10 @@ const EditarNota = ({ note }) => {
   const steps = ["Nota", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica nota={nota} setNota={setNota} cancelAction={cancelAction} />,
-    <ImagenPrincipal
-      mainImage={mainImage}
-      setMainImage={setMainImage}
-      setMainFile={setMainFile}
-      saveNota={guardarNota}
+    <InputImage
+      item={nota}
+      setItem={setNota}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];

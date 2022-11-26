@@ -23,13 +23,21 @@ import { ColorlibConnector, PacienteStepIcon } from "../../utils/custom";
 
 import Persona from "../../components/Steps/Persona";
 import UsuarioPaciente from "../../components/Steps/UsuarioPaciente";
+import InputImage from "../../components/Input/InputImage";
 
-import ImagenPerfil from "./Pasos/ImagenPerfil";
+import { createPaciente } from "../../services/PacienteService";
 
 const CrearPaciente = () => {
   const dispatch = useDispatch();
   const { activeStep, openCreate } = useSelector((state) => state.modal);
   const [paciente, setPaciente] = useState(pacienteInitialState(null));
+
+  const saveAction = () => {
+    dispatch(createPaciente(paciente));
+    setPaciente(pacienteInitialState(null));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
 
   const cancelAction = () => {
     setPaciente(pacienteInitialState(null));
@@ -49,9 +57,10 @@ const CrearPaciente = () => {
       setItem={setPaciente}
       cancelAction={cancelAction}
     />,
-    <ImagenPerfil
-      paciente={paciente}
-      setPaciente={setPaciente}
+    <InputImage
+      item={paciente}
+      setItem={setPaciente}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];

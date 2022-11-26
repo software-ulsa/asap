@@ -23,40 +23,38 @@ import { ColorlibConnector, PublicidadStepIcon } from "../../utils/custom";
 
 import InfoBasica from "./Pasos/InfoBasica";
 import Detalles from "./Pasos/Detalles";
-import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+import InputImage from "../../components/Input/InputImage";
 
-import ImagesService from "../../services/ImagesService";
+import ImagenesService from "../../services/ImagesService";
 import { updatePublicidad } from "../../services/PublicidadService";
 
 const EditarPublicidad = ({ publicity }) => {
   const dispatch = useDispatch();
+  const prevImage = publicity?.imagen || "";
   const { activeStep, openEdit } = useSelector((state) => state.modal);
 
   const [publicidad, setPublicidad] = useState();
-  const [image, setImage] = useState("");
-  const [file, setFile] = useState();
 
   useEffect(() => {
     setPublicidad(publicidadInitialState(publicity));
   }, [publicity]);
 
-  const guardarPublicidad = () => {
-    if (file) {
-      ImagesService.upload(file)
-        .then((response) => {
-          publicidad.imagen = response.data;
-        })
-        .catch((error) => console.log(error));
-    }
-
+  const saveAction = () => {
     dispatch(updatePublicidad(publicidad));
-    setFile();
-    setImage("");
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
 
   const cancelAction = () => {
+    if (publicidad.imagen !== prevImage) {
+      ImagenesService.delete(publicidad.imagen).catch((error) =>
+        console.log(error)
+      );
+      setPublicidad((prev) => ({
+        ...prev,
+        imagen: prevImage,
+      }));
+    }
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
@@ -73,12 +71,13 @@ const EditarPublicidad = ({ publicity }) => {
       setPublicidad={setPublicidad}
       cancelAction={cancelAction}
     />,
-    <ImagenPrincipal
-      image={image}
-      setImage={setImage}
-      setFile={setFile}
-      guardarPublicidad={guardarPublicidad}
+    <InputImage
+      item={publicidad}
+      setItem={setPublicidad}
+      saveAction={saveAction}
       cancelAction={cancelAction}
+      variant="rounded"
+      width="450px"
     />,
   ];
 

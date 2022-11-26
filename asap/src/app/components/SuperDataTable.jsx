@@ -34,10 +34,22 @@ const SuperDataTable = ({
 
     switch (tableButtons) {
       case "CURSO":
-        return <CursoButtons setSelected={setSelected} item={item} />;
+        return (
+          <CursoButtons
+            setSelected={setSelected}
+            item={item}
+            size={selectedRows.data.length}
+          />
+        );
 
       case "NOTA":
-        return <NotaButtons setSelected={setSelected} item={item} />;
+        return (
+          <NotaButtons
+            setSelected={setSelected}
+            item={item}
+            size={selectedRows.data.length}
+          />
+        );
 
       default:
         return <></>;

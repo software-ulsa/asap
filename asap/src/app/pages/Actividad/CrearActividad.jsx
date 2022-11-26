@@ -20,7 +20,6 @@ import { Close } from "@mui/icons-material";
 import { isValidHttpUrl } from "../../utils/utils";
 
 import { createActividad } from "../../services/ActividadService";
-import ImagenesService from "../../services/ImagesService";
 
 import InputField from "../../components/Input/InputField";
 
@@ -29,9 +28,6 @@ import Media from "./Pasos/Media";
 const CrearActividad = ({ cursoId }) => {
   const dispatch = useDispatch();
   const { openCreate } = useSelector((state) => state.modal);
-  const [mainImage, setMainImage] = useState("");
-  const [mainFile, setMainFile] = useState();
-
   const validationSchema = yup.object({
     titulo: yup.string().required("Titulo requerido"),
     descripcion: yup.string().required("Descripción requerida"),
@@ -43,25 +39,17 @@ const CrearActividad = ({ cursoId }) => {
       descripcion: "",
       youtube_url: "",
       doc_url: "",
+      url_media: "",
       curso_id: cursoId,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      if (mainFile) {
-        ImagenesService.upload(mainFile)
-          .then((response) => {
-            values.url_media = response.data;
-          })
-          .catch((error) => console.log(error));
-      } else if (
-        values.youtube_url !== "" &&
-        isValidHttpUrl(values.youtube_url)
-      ) {
-        values.url_media = values.youtube_url;
-      } else if (values.doc_url !== "" && isValidHttpUrl(values.doc_url)) {
-        values.url_media = values.doc_url;
-      } else {
-        values.url_media = "";
+      if (values.url_media === "") {
+        if (values.youtube_url !== "" && isValidHttpUrl(values.youtube_url)) {
+          values.url_media = values.youtube_url;
+        } else if (values.doc_url !== "" && isValidHttpUrl(values.doc_url)) {
+          values.url_media = values.doc_url;
+        }
       }
 
       dispatch(createActividad(values));
@@ -111,12 +99,7 @@ const CrearActividad = ({ cursoId }) => {
               label="Descripcion"
               type="text"
             />
-            <Media
-              formik={formik}
-              mainImage={mainImage}
-              setMainImage={setMainImage}
-              setMainFile={setMainFile}
-            />
+            <Media formik={formik} />
           </Grid>
         </DialogContent>
         <DialogActions>

@@ -19,17 +19,20 @@ import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
 import { ColorlibConnector, EspecialistaStepIcon } from "../../utils/custom";
+import { especialistaInitialState } from "../../utils/initialStates";
 
 import Persona from "../../components/Steps/Persona";
 import UsuarioEspecialista from "../../components/Steps/UsuarioEspecialista";
 
 import Domicilio from "./Pasos/Domicilio";
-import ImagenPerfil from "./Pasos/ImagenPerfil";
+import InputImage from "../../components/Input/InputImage";
 
-import { especialistaInitialState } from "../../utils/initialStates";
+import { updateEspecialista } from "../../services/EspecialistaService";
+import ImagenesService from "../../services/ImagesService";
 
 const EditarEspecialista = ({ specialist }) => {
   const dispatch = useDispatch();
+  const prevImage = specialist?.imagen || "";
   const { activeStep, openEdit } = useSelector((state) => state.modal);
   const [especialista, setEspecialista] = useState();
 
@@ -37,7 +40,22 @@ const EditarEspecialista = ({ specialist }) => {
     setEspecialista(especialistaInitialState(specialist));
   }, [specialist]);
 
+  const saveAction = () => {
+    dispatch(updateEspecialista(especialista));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
+
   const cancelAction = () => {
+    if (especialista.imagen !== prevImage) {
+      ImagenesService.delete(especialista.imagen).catch((error) =>
+        console.log(error)
+      );
+      setEspecialista((prev) => ({
+        ...prev,
+        imagen: prevImage,
+      }));
+    }
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
@@ -61,10 +79,10 @@ const EditarEspecialista = ({ specialist }) => {
       setEspecialista={setEspecialista}
       cancelAction={cancelAction}
     />,
-    <ImagenPerfil
-      isUpdate={true}
-      especialista={especialista}
-      setEspecialista={setEspecialista}
+    <InputImage
+      item={especialista}
+      setItem={setEspecialista}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];

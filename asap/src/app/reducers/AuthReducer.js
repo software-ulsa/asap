@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useNavigation } from "react-router-dom";
-import SecureLS from "secure-ls";
 import { login, updateProfile } from "../services/UsuarioService";
 import { notify } from "../utils/utils";
+
+import SecureLS from "secure-ls";
 
 const ls = new SecureLS({ encodingType: "aes" });
 const initialState = {

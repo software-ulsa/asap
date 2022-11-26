@@ -23,40 +23,35 @@ import { ColorlibConnector, CursoStepIcon } from "../../utils/custom";
 
 import InfoBasica from "./Pasos/InfoBasica";
 import Detalles from "./Pasos/Detalles";
-import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+import InputImage from "../../components/Input/InputImage";
 
 import { updateCurso } from "../../services/CursoService";
 import ImagesService from "../../services/ImagesService";
 
 const EditarCurso = ({ course }) => {
   const dispatch = useDispatch();
+  const prevImage = course?.imagen || "";
   const { activeStep, openEdit } = useSelector((state) => state.modal);
-
-  const [image, setImage] = useState("");
-  const [file, setFile] = useState();
   const [curso, setCurso] = useState();
 
   useEffect(() => {
     setCurso(cursoInitialState(course));
   }, [course]);
 
-  const guardarCurso = () => {
-    if (file) {
-      ImagesService.upload(file)
-        .then((response) => {
-          curso.imagen = response.data;
-        })
-        .catch((error) => console.log(error));
-    }
-
+  const saveAction = () => {
     dispatch(updateCurso(curso));
-    setFile();
-    setImage("");
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
 
   const cancelAction = () => {
+    if (curso.imagen !== prevImage) {
+      ImagesService.delete(curso.imagen).catch((error) => console.log(error));
+      setCurso((prev) => ({
+        ...prev,
+        imagen: prevImage,
+      }));
+    }
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
@@ -69,12 +64,13 @@ const EditarCurso = ({ course }) => {
       cancelAction={cancelAction}
     />,
     <Detalles curso={curso} setCurso={setCurso} cancelAction={cancelAction} />,
-    <ImagenPrincipal
-      image={image}
-      setImage={setImage}
-      setFile={setFile}
-      guardarCurso={guardarCurso}
+    <InputImage
+      item={curso}
+      setItem={setCurso}
+      saveAction={saveAction}
       cancelAction={cancelAction}
+      variant="rounded"
+      width="450px"
     />,
   ];
 

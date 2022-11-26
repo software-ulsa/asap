@@ -23,32 +23,19 @@ import { ColorlibConnector, CursoStepIcon } from "../../utils/custom";
 
 import InfoBasica from "./Pasos/InfoBasica";
 import Detalles from "./Pasos/Detalles";
-import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+import InputImage from "../../components/Input/InputImage";
 
 import { createCurso } from "../../services/CursoService";
-import ImagesService from "../../services/ImagesService";
 
 const CrearCurso = () => {
   const dispatch = useDispatch();
   const { activeStep, openCreate } = useSelector((state) => state.modal);
 
-  const [image, setImage] = useState("");
-  const [file, setFile] = useState();
   const [curso, setCurso] = useState(cursoInitialState(null));
 
-  const guardarCurso = () => {
-    if (file) {
-      ImagesService.upload(file)
-        .then((response) => {
-          curso.imagen = response.data;
-        })
-        .catch((error) => console.log(error));
-    }
-
+  const saveAction = () => {
     dispatch(createCurso(curso));
     setCurso(cursoInitialState(null));
-    setFile();
-    setImage("");
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
@@ -67,12 +54,13 @@ const CrearCurso = () => {
       cancelAction={cancelAction}
     />,
     <Detalles curso={curso} setCurso={setCurso} cancelAction={cancelAction} />,
-    <ImagenPrincipal
-      image={image}
-      setImage={setImage}
-      setFile={setFile}
-      guardarCurso={guardarCurso}
+    <InputImage
+      item={curso}
+      setItem={setCurso}
+      saveAction={saveAction}
       cancelAction={cancelAction}
+      variant="rounded"
+      width="450px"
     />,
   ];
 

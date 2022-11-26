@@ -19,16 +19,18 @@ import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
 import { ColorlibConnector, PacienteStepIcon } from "../../utils/custom";
+import { pacienteInitialState } from "../../utils/initialStates";
 
 import Persona from "../../components/Steps/Persona";
 import UsuarioPaciente from "../../components/Steps/UsuarioPaciente";
+import InputImage from "../../components/Input/InputImage";
 
-import ImagenPerfil from "./Pasos/ImagenPerfil";
-
-import { pacienteInitialState } from "../../utils/initialStates";
+import { updatePaciente } from "../../services/PacienteService";
+import ImagenesService from "../../services/ImagesService";
 
 const EditarPaciente = ({ pacient }) => {
   const dispatch = useDispatch();
+  const prevImage = pacient?.imagen || "";
   const { activeStep, openEdit } = useSelector((state) => state.modal);
   const [paciente, setPaciente] = useState();
 
@@ -36,7 +38,23 @@ const EditarPaciente = ({ pacient }) => {
     setPaciente(pacienteInitialState(pacient));
   }, [pacient]);
 
+  const saveAction = () => {
+    dispatch(updatePaciente(paciente));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
+
   const cancelAction = () => {
+    if (paciente.imagen !== prevImage) {
+      ImagenesService.delete(paciente.imagen).catch((error) =>
+        console.log(error)
+      );
+      paciente((prev) => ({
+        ...prev,
+        imagen: prevImage,
+      }));
+    }
+
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
@@ -55,10 +73,10 @@ const EditarPaciente = ({ pacient }) => {
       setItem={setPaciente}
       cancelAction={cancelAction}
     />,
-    <ImagenPerfil
-      isUpdate={true}
-      paciente={paciente}
-      setPaciente={setPaciente}
+    <InputImage
+      item={paciente}
+      setItem={setPaciente}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];

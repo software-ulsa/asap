@@ -23,37 +23,29 @@ import { ColorlibConnector, PublicidadStepIcon } from "../../utils/custom";
 
 import InfoBasica from "./Pasos/InfoBasica";
 import Detalles from "./Pasos/Detalles";
-import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+import InputImage from "../../components/Input/InputImage";
 
-import ImagesService from "../../services/ImagesService";
+import ImagenesService from "../../services/ImagesService";
 import { createPublicidad } from "../../services/PublicidadService";
 
 const CrearPublicidad = () => {
   const dispatch = useDispatch();
   const { activeStep, openCreate } = useSelector((state) => state.modal);
-
-  const [image, setImage] = useState("");
-  const [file, setFile] = useState();
   const [publicidad, setPublicidad] = useState(publicidadInitialState(null));
 
-  const guardarPublicidad = () => {
-    if (file) {
-      ImagesService.upload(file)
-        .then((response) => {
-          publicidad.imagen = response.data;
-        })
-        .catch((error) => console.log(error));
-    }
-
+  const saveAction = () => {
     dispatch(createPublicidad(publicidad));
     setPublicidad(publicidadInitialState(null));
-    setFile();
-    setImage("");
     dispatch(rebootActiveStep());
     dispatch(handleClose());
   };
 
   const cancelAction = () => {
+    if (publicidad.imagen !== "") {
+      ImagenesService.delete(publicidad.imagen).catch((error) =>
+        console.log(error)
+      );
+    }
     setPublicidad(publicidadInitialState(null));
     dispatch(rebootActiveStep());
     dispatch(handleClose());
@@ -71,12 +63,13 @@ const CrearPublicidad = () => {
       setPublicidad={setPublicidad}
       cancelAction={cancelAction}
     />,
-    <ImagenPrincipal
-      image={image}
-      setImage={setImage}
-      setFile={setFile}
-      guardarPublicidad={guardarPublicidad}
+    <InputImage
+      item={publicidad}
+      setItem={setPublicidad}
+      saveAction={saveAction}
       cancelAction={cancelAction}
+      variant="rounded"
+      width="450px"
     />,
   ];
 

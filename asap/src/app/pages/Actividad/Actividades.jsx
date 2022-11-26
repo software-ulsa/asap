@@ -22,14 +22,14 @@ import EditarActividad from "./EditarActividad";
 
 const ActividadItem = () => {
   const dispatch = useDispatch();
+  const { state } = useLocation();
+
   const { actividades, fetched } = useSelector((state) => state.actividades);
 
   const [itemId, setItemId] = useState(-1);
   const itemToEdit = actividades.find(
     (actividad) => actividad.id === Number(itemId)
   );
-
-  const { state } = useLocation();
 
   const refreshAction = () => {
     dispatch(getAllActividadByCursoId(state.item.id));

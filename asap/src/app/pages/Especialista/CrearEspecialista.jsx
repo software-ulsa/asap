@@ -25,7 +25,9 @@ import Persona from "../../components/Steps/Persona";
 import UsuarioEspecialista from "../../components/Steps/UsuarioEspecialista";
 
 import Domicilio from "./Pasos/Domicilio";
-import ImagenPerfil from "./Pasos/ImagenPerfil";
+import InputImage from "../../components/Input/InputImage";
+
+import { createEspecialista } from "../../services/EspecialistaService";
 
 const CrearEspecialista = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,13 @@ const CrearEspecialista = () => {
   const [especialista, setEspecialista] = useState(
     especialistaInitialState(null)
   );
+
+  const saveAction = () => {
+    dispatch(createEspecialista(especialista));
+    setEspecialista(especialistaInitialState(null));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
 
   const cancelAction = () => {
     setEspecialista(especialistaInitialState(null));
@@ -57,9 +66,10 @@ const CrearEspecialista = () => {
       setEspecialista={setEspecialista}
       cancelAction={cancelAction}
     />,
-    <ImagenPerfil
-      especialista={especialista}
-      setEspecialista={setEspecialista}
+    <InputImage
+      item={especialista}
+      setItem={setEspecialista}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];

@@ -3,8 +3,9 @@ import { useDispatch } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
 import { ThumbDownRounded, ThumbUpRounded } from "@mui/icons-material";
 import { acceptNota, rejectNota } from "../../services/NotaService";
+import { notify } from "../../utils/utils";
 
-const NotaButtons = ({ item, setSelected }) => {
+const NotaButtons = ({ item, setSelected, size }) => {
   const dispatch = useDispatch();
 
   const aceptarNota = () => {
@@ -21,7 +22,11 @@ const NotaButtons = ({ item, setSelected }) => {
         <IconButton
           onClick={() => {
             setSelected([]);
-            aceptarNota();
+            if (size === 1) {
+              aceptarNota();
+            } else {
+              notify("error", "Solo se puede aceptar un elemento a la vez");
+            }
           }}
         >
           <ThumbUpRounded />
@@ -31,7 +36,11 @@ const NotaButtons = ({ item, setSelected }) => {
         <IconButton
           onClick={() => {
             setSelected([]);
-            rechazarNota();
+            if (size === 1) {
+              rechazarNota();
+            } else {
+              notify("error", "Solo se puede aceptar un elemento a la vez");
+            }
           }}
         >
           <ThumbDownRounded />

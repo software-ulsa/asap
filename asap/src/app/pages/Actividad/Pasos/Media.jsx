@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Tabs, Tab, Grid, Box, InputAdornment } from "@mui/material";
+import { Tab, Grid, Box, InputAdornment } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
   AddAPhotoRounded,
@@ -8,10 +8,10 @@ import {
   YouTube,
 } from "@mui/icons-material";
 
-import ImagenPrincipal from "./ImagenPrincipal";
 import InputFieldWithIcon from "../../../components/Input/InputFieldWithIcon";
+import ImageLoader from "../../../components/ImageLoader";
 
-const Media = ({ formik, mainImage, setMainImage, setMainFile }) => {
+const Media = ({ formik }) => {
   const [value, setValue] = useState("imagen");
 
   const handleChange = (event, newValue) => {
@@ -45,10 +45,11 @@ const Media = ({ formik, mainImage, setMainImage, setMainFile }) => {
           </TabList>
         </Box>
         <TabPanel value="imagen">
-          <ImagenPrincipal
-            mainImage={mainImage}
-            setMainImage={setMainImage}
-            setMainFile={setMainFile}
+          <ImageLoader
+            formik={formik}
+            campo="url_media"
+            width="400px"
+            variant="rounded"
           />
         </TabPanel>
         <TabPanel value="youtube">

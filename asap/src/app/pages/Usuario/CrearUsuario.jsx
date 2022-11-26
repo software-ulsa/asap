@@ -23,15 +23,29 @@ import { ColorlibConnector, UsuarioStepIcon } from "../../utils/custom";
 
 import Persona from "../../components/Steps/Persona";
 import Usuario from "../../components/Steps/Usuario";
+import InputImage from "../../components/Input/InputImage";
 
-import ImagenPerfil from "./Pasos/ImagenPerfil";
+import { createUser } from "../../services/UsuarioService";
+import ImagenesService from "../../services/ImagesService";
 
 const CrearUsuario = () => {
   const dispatch = useDispatch();
   const { activeStep, openCreate } = useSelector((state) => state.modal);
   const [usuario, setUsuario] = useState(usuarioInitialState(null));
 
+  const saveAction = () => {
+    dispatch(createUser(usuario));
+    setUsuario(usuarioInitialState(null));
+    dispatch(rebootActiveStep());
+    dispatch(handleClose());
+  };
+
   const cancelAction = () => {
+    if (usuario.imagen !== "") {
+      ImagenesService.delete(usuario.imagen).catch((error) =>
+        console.log(error)
+      );
+    }
     setUsuario(usuarioInitialState(null));
     dispatch(rebootActiveStep());
     dispatch(handleClose());
@@ -41,9 +55,10 @@ const CrearUsuario = () => {
   const stepsComponent = [
     <Persona item={usuario} setItem={setUsuario} cancelAction={cancelAction} />,
     <Usuario item={usuario} setItem={setUsuario} cancelAction={cancelAction} />,
-    <ImagenPerfil
-      usuario={usuario}
-      setUsuario={setUsuario}
+    <InputImage
+      item={usuario}
+      setItem={setUsuario}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];

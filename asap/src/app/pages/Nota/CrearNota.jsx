@@ -19,10 +19,9 @@ import { Close } from "@mui/icons-material";
 import { Box } from "@mui/system";
 
 import { createNota } from "../../services/NotaService";
-import ImagenesService from "../../services/ImagesService";
 
 import InfoBasica from "./Pasos/InfoBasica";
-import ImagenPrincipal from "./Pasos/ImagenPrincipal";
+import InputImage from "../../components/Input/InputImage";
 
 import { ColorlibConnector, NotaStepIcon } from "../../utils/custom";
 import { notaInitialState } from "../../utils/initialStates";
@@ -33,8 +32,6 @@ const CrearNota = () => {
   const { openCreate, activeStep } = useSelector((state) => state.modal);
 
   const [nota, setNota] = useState(notaInitialState(null));
-  const [mainImage, setMainImage] = useState("");
-  const [mainFile, setMainFile] = useState();
 
   const cancelAction = () => {
     dispatch(rebootActiveStep());
@@ -42,15 +39,7 @@ const CrearNota = () => {
     dispatch(handleClose());
   };
 
-  const guardarNota = () => {
-    if (mainFile) {
-      ImagenesService.upload(mainFile)
-        .then((response) => {
-          nota.imagen = response.data;
-        })
-        .catch((error) => console.log(error));
-    }
-
+  const saveAction = () => {
     nota.usuario_id = currentUser.id;
     dispatch(createNota(nota));
     dispatch(rebootActiveStep());
@@ -62,11 +51,10 @@ const CrearNota = () => {
   const steps = ["Nota", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica nota={nota} setNota={setNota} cancelAction={cancelAction} />,
-    <ImagenPrincipal
-      mainImage={mainImage}
-      setMainImage={setMainImage}
-      setMainFile={setMainFile}
-      saveNota={guardarNota}
+    <InputImage
+      item={nota}
+      setItem={setNota}
+      saveAction={saveAction}
       cancelAction={cancelAction}
     />,
   ];
