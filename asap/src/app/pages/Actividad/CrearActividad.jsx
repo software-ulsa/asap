@@ -40,7 +40,8 @@ const CrearActividad = ({ cursoId }) => {
     dispatch(handleClose());
   };
 
-  const saveAction = () => {
+  const saveAction = (value) => {
+    actividad.url_media = value;
     dispatch(createActividad(actividad));
     dispatch(rebootActiveStep());
 

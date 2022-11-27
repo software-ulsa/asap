@@ -34,6 +34,7 @@ const EditarActividad = ({ activity, cursoId }) => {
 
   useEffect(() => {
     setActividad(actividadInitialState(activity, cursoId));
+    console.log(activity);
   }, [activity]);
 
   const cancelAction = () => {
@@ -41,7 +42,8 @@ const EditarActividad = ({ activity, cursoId }) => {
     dispatch(handleClose());
   };
 
-  const saveAction = () => {
+  const saveAction = (value) => {
+    actividad.url_media = value;
     dispatch(updateActividad(actividad));
     dispatch(rebootActiveStep());
     dispatch(handleClose());

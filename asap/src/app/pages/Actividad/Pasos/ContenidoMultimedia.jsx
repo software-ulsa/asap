@@ -33,12 +33,7 @@ const ContenidoMultimedia = ({
             values.url_media = values.doc_url;
           }
         }
-
-        setActividad((prev) => ({
-          ...prev,
-          url_media: values.url_media,
-        }));
-        saveAction();
+        saveAction(values.url_media);
       }}
     >
       {(props) => (
