@@ -26,6 +26,7 @@ import InputImage from "../../components/Input/InputImage";
 
 import { ColorlibConnector, NotaStepIcon } from "../../utils/custom";
 import { notaInitialState } from "../../utils/initialStates";
+import TextEditor from "../../components/TextEditor";
 const EditarNota = ({ note }) => {
   const dispatch = useDispatch();
   const prevImage = note?.imagen || "";
@@ -57,9 +58,15 @@ const EditarNota = ({ note }) => {
     dispatch(handleClose());
   };
 
-  const steps = ["Nota", "Imagen Principal"];
+  const steps = ["Nota", "Contenido", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica nota={nota} setNota={setNota} cancelAction={cancelAction} />,
+    <TextEditor
+      item={nota}
+      setItem={setNota}
+      campo="contenido"
+      cancelAction={cancelAction}
+    />,
     <InputImage
       item={nota}
       setItem={setNota}

@@ -2,6 +2,7 @@ import { Box } from "@mui/system";
 import { makeStyles } from "@mui/styles";
 import { Chip, FormControl, Grid, TextField, Typography } from "@mui/material";
 import { Pending, ThumbDown, ThumbUp } from "@mui/icons-material";
+import { truncateString } from "./utils";
 
 const styles = makeStyles((theme) => ({
   centeredHeader: {
@@ -487,11 +488,83 @@ export const cursoHeaders = [
     options: {
       filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        return <center>{truncateString(data, 65)}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,
       }),
+    },
+  },
+  {
+    name: "created_at",
+    label: "Fecha de creacion",
+    options: {
+      customBodyRender: (data, type, row) => {
+        const date = new Date(data).toLocaleDateString("en-GB");
+        return <center>{date}</center>;
+      },
+      setCellHeaderProps: () => ({
+        className: styles().centeredHeader,
+      }),
+      filterType: "custom",
+      filterOptions: {
+        logic: (data, filters) => {
+          const date = new Date(new Date(data).toLocaleDateString());
+          const f0 = new Date(filters[0] || "");
+          const f1 = new Date(filters[1] || "");
+          if (f0 && f1) {
+            return date <= f0 || date >= f1;
+          } else if (f0) {
+            return date <= f0;
+          } else if (f1) {
+            return date >= f1;
+          }
+          return false;
+        },
+        display: (filterList, onChange, index, column) => {
+          return (
+            <FormControl>
+              <Grid container gap={2}>
+                <Grid item xs={12}>
+                  <Typography variant="body2" color="#34314c8a">
+                    Fecha de creacion
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="De"
+                    type="date"
+                    value={filterList[index][0] || ""}
+                    sx={{ width: 220 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(event) => {
+                      filterList[index][0] = event.target.value;
+                      onChange(filterList[index], index, column);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Hasta"
+                    type="date"
+                    value={filterList[index][1] || ""}
+                    sx={{ width: 220 }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(event) => {
+                      filterList[index][1] = event.target.value;
+                      onChange(filterList[index], index, column);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </FormControl>
+          );
+        },
+      },
     },
   },
   {
@@ -649,7 +722,11 @@ export const actividadHeaders = [
     options: {
       filter: false,
       customBodyRender: (data, type, row) => {
-        return <center>{data}</center>;
+        const raw = data
+          .replace(/<(.|\n)*?>/g, "")
+          .replace(/&nbsp;/g, "")
+          .trim();
+        return <center>{truncateString(raw, 50)}</center>;
       },
       setCellHeaderProps: () => ({
         className: styles().centeredHeader,

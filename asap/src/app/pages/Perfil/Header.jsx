@@ -1,19 +1,9 @@
-import { IconButton, Typography, Avatar, Stack, Divider } from "@mui/material";
-import {
-  EmailRounded,
-  ManageAccounts,
-  PhotoCameraRounded,
-} from "@mui/icons-material";
-import { grey } from "@mui/material/colors";
+import { Typography, Stack, Divider } from "@mui/material";
+import { EmailRounded, ManageAccounts } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import ImageLoader from "../../components/ImageLoader";
 
 const Header = ({ user, formik }) => {
-  const doClickOnInput = () => {
-    var input = document.getElementById("subirImagen");
-    input?.click();
-  };
-
   return (
     <Box
       sx={{

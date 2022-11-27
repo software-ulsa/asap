@@ -22,6 +22,7 @@ import { createNota } from "../../services/NotaService";
 
 import InfoBasica from "./Pasos/InfoBasica";
 import InputImage from "../../components/Input/InputImage";
+import TextEditor from "../../components/TextEditor";
 
 import { ColorlibConnector, NotaStepIcon } from "../../utils/custom";
 import { notaInitialState } from "../../utils/initialStates";
@@ -48,9 +49,15 @@ const CrearNota = () => {
     dispatch(handleClose());
   };
 
-  const steps = ["Nota", "Imagen Principal"];
+  const steps = ["Nota", "Contenido", "Imagen Principal"];
   const stepsComponent = [
     <InfoBasica nota={nota} setNota={setNota} cancelAction={cancelAction} />,
+    <TextEditor
+      item={nota}
+      setItem={setNota}
+      campo="contenido"
+      cancelAction={cancelAction}
+    />,
     <InputImage
       item={nota}
       setItem={setNota}

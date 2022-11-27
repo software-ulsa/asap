@@ -44,15 +44,20 @@ const Media = ({ formik }) => {
             ></Tab>
           </TabList>
         </Box>
-        <TabPanel value="imagen">
-          <Grid item xs={12}>
-            <ImageLoader
-              formik={formik}
-              campo="url_media"
-              width="400px"
-              variant="rounded"
-            />
-          </Grid>
+        <TabPanel
+          value="imagen"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ImageLoader
+            formik={formik}
+            campo="url_media"
+            width="400px"
+            variant="rounded"
+          />
         </TabPanel>
         <TabPanel value="youtube">
           <InputFieldWithIcon

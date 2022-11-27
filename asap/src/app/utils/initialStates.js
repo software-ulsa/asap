@@ -107,3 +107,26 @@ export const publicidadInitialState = (publicidad) => {
   };
   return item;
 };
+
+export const actividadInitialState = (actividad, cursoId) => {
+  const item = {
+    id: actividad?.id || -1,
+    titulo: actividad?.titulo || "",
+    descripcion: actividad?.descripcion || "",
+    url_media: actividad?.url_media
+      ? !actividad?.url_media.includes("http")
+        ? actividad.url_media
+        : ""
+      : "",
+    youtube_url: actividad?.url_media.includes("youtube")
+      ? actividad?.url_media
+      : "",
+    doc_url:
+      actividad?.url_media.includes("http") &&
+      !actividad?.url_media.includes("youtube")
+        ? actividad?.url_media
+        : "",
+    curso_id: actividad?.curso_id || cursoId,
+  };
+  return item;
+};

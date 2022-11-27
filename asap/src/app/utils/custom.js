@@ -9,9 +9,11 @@ import {
   FaceRetouchingNaturalRounded,
   ImageRounded,
   LandscapeRounded,
+  PermMediaRounded,
   PersonRounded,
   SchoolRounded,
   SettingsSuggestRounded,
+  TextSnippetRounded,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 
@@ -117,8 +119,9 @@ export function NotaStepIcon(props) {
 
   const icons = {
     1: <AssignmentRounded />,
-    2: <LandscapeRounded />,
-    3: <ImageRounded />,
+    2: <TextSnippetRounded />,
+    3: <LandscapeRounded />,
+    4: <ImageRounded />,
   };
 
   return (
@@ -157,6 +160,24 @@ export function PublicidadStepIcon(props) {
     1: <AssignmentRounded />,
     2: <ApartmentRounded />,
     3: <ImageRounded />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+
+export function ActividadStepIcon(props) {
+  const { active, completed, className } = props;
+
+  const icons = {
+    1: <TextSnippetRounded />,
+    2: <PermMediaRounded />,
   };
 
   return (

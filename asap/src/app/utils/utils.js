@@ -12,6 +12,14 @@ export const notify = (action, message) => {
     : toast.error(message, configuration);
 };
 
+export function truncateString(str, num) {
+  if (str.length > num) {
+    return str.slice(0, num) + "...";
+  } else {
+    return str;
+  }
+}
+
 export function isValidHttpUrl(string) {
   let url;
   try {

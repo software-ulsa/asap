@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { grey, red } from "@mui/material/colors";
 import { BrokenImageRounded, PhotoCameraRounded } from "@mui/icons-material";
-import { Avatar, Box, CircularProgress, Grid, IconButton } from "@mui/material";
+import { Avatar, Box, CircularProgress, IconButton } from "@mui/material";
 
 import ImagenesService from "../services/ImagesService";
 

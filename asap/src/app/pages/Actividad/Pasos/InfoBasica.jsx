@@ -5,32 +5,30 @@ import { Formik } from "formik";
 
 import { Box, Button, Grid, Stack } from "@mui/material";
 
-import { notaValidationSchema } from "../../../utils/validation";
+import { actividadValidationSchema } from "../../../utils/validation";
 
-import InputArray from "../../../components/Input/InputArray";
 import InputField from "../../../components/Input/InputField";
-import EstadoNotaSelect from "../../../components/Select/EstadoNotaSelect";
+import TextEditorWithFormik from "../../../components/TextEditorWithFormik";
 
-const InfoBasica = ({ nota, setNota, cancelAction }) => {
+import { useState } from "react";
+
+const InfoBasica = ({ actividad, setActividad, cancelAction }) => {
   const dispatch = useDispatch();
+  const [empty, setEmpty] = useState(true);
 
   return (
     <Formik
       enableReinitialize
       initialValues={{
-        titulo: nota.titulo,
-        tema: nota.tema,
-        estado: nota.estado,
-        palabras_clave: nota.palabras_clave,
+        titulo: actividad.titulo,
+        descripcion: actividad.descripcion,
       }}
-      validationSchema={notaValidationSchema}
+      validationSchema={actividadValidationSchema}
       onSubmit={(values) => {
-        setNota((prev) => ({
+        setActividad((prev) => ({
           ...prev,
           titulo: values.titulo,
-          tema: values.tema,
-          estado: values.estado,
-          palabras_clave: values.palabras_clave,
+          descripcion: values.descripcion,
         }));
 
         dispatch(handleNext());
@@ -39,19 +37,18 @@ const InfoBasica = ({ nota, setNota, cancelAction }) => {
       {(props) => (
         <form onSubmit={props.handleSubmit}>
           <Grid container spacing={2} marginTop={2}>
-            <InputField formik={props} label="Tema" field="tema" type="text" />
             <InputField
               formik={props}
-              label="Titulo"
               field="titulo"
+              label="Titulo"
               type="text"
             />
-            <InputArray
+            <TextEditorWithFormik
               formik={props}
-              field="palabras_clave"
-              label="Palabras clave"
+              actividad={actividad}
+              campo="descripcion"
+              setEmpty={setEmpty}
             />
-            <EstadoNotaSelect formik={props} label="Estado" field="estado" />
           </Grid>
           <Box
             sx={{
@@ -67,7 +64,7 @@ const InfoBasica = ({ nota, setNota, cancelAction }) => {
                 variant="contained"
                 color="secondary"
                 type="submit"
-                disabled={!props.isValid}
+                disabled={!props.isValid || empty}
               >
                 Siguiente
               </Button>

@@ -49,7 +49,7 @@ const EditarPaciente = ({ pacient }) => {
       ImagenesService.delete(paciente.imagen).catch((error) =>
         console.log(error)
       );
-      paciente((prev) => ({
+      setPaciente((prev) => ({
         ...prev,
         imagen: prevImage,
       }));

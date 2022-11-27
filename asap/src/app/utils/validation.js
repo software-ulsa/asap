@@ -181,5 +181,4 @@ export const especialistaProfessionValidationSchema = yup.object({
 
 export const actividadValidationSchema = yup.object({
   titulo: yup.string().required("Título requerido"),
-  descripcion: yup.string().required("Descripción requerida"),
 });

@@ -76,7 +76,7 @@ const ActividadItem = () => {
       />
 
       <CrearActividad cursoId={state.item.id} />
-      <EditarActividad actividad={itemToEdit} cursoId={state.item.id} />
+      <EditarActividad activity={itemToEdit} cursoId={state.item.id} />
     </>
   );
 };
