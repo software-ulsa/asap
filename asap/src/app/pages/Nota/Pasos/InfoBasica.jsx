@@ -4,13 +4,13 @@ import { handleNext } from "../../../reducers/ModalReducer";
 import { Formik } from "formik";
 
 import { Box, Button, Grid, Stack } from "@mui/material";
-import MUIRichTextEditor from "mui-rte";
 
 import { notaValidationSchema } from "../../../utils/validation";
 
 import InputArray from "../../../components/Input/InputArray";
 import InputField from "../../../components/Input/InputField";
 import EstadoNotaSelect from "../../../components/Select/EstadoNotaSelect";
+import TextEditor from "../../../components/TextEditor";
 
 const InfoBasica = ({ nota, setNota, cancelAction }) => {
   const dispatch = useDispatch();
@@ -57,14 +57,7 @@ const InfoBasica = ({ nota, setNota, cancelAction }) => {
             <EstadoNotaSelect formik={props} label="Estado" field="estado" />
             <Grid item xs={12}>
               <Box sx={{ marginBottom: 5 }}>
-                <MUIRichTextEditor
-                  defaultValue={props.values.contenido}
-                  inlineToolbar={true}
-                  label="Escribe el contenido de la nota aquí"
-                  onSave={(data) => {
-                    props.setFieldValue("contenido", data);
-                  }}
-                />
+                <TextEditor formik={props} nota={nota} />
               </Box>
             </Grid>
           </Grid>
