@@ -34,7 +34,6 @@ const EditarActividad = ({ activity, cursoId }) => {
 
   useEffect(() => {
     setActividad(actividadInitialState(activity, cursoId));
-    console.log(activity);
   }, [activity]);
 
   const cancelAction = () => {
