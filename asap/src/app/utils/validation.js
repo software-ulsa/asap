@@ -32,6 +32,8 @@ export const domicilioValidationSchema = yup.object({
   codigo_postal: yup
     .string()
     .matches(numberRegExp, "Código postal no váildo")
+    .min(5, "Código postal no váildo")
+    .max(5, "Código postal no váildo")
     .required("Código postal requerido"),
 });
 

@@ -49,13 +49,17 @@ const Usuario = ({ isUpdating, item, setItem, cancelAction }) => {
               type="password"
               required={!isUpdating}
             />
+            {isUpdating ? (
+              <></>
+            ) : (
+              <InputField
+                formik={props}
+                field="cedula_prof"
+                label="Cédula profesional"
+                type="text"
+              />
+            )}
 
-            <InputField
-              formik={props}
-              field="cedula_prof"
-              label="Cédula profesional"
-              type="text"
-            />
             <EspecialidadesSelect formik={props} />
           </Grid>
           <Box

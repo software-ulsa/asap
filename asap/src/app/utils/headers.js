@@ -344,7 +344,6 @@ export const pacienteHeaders = [
     label: "Nombre",
     options: {
       filter: false,
-
       customBodyRender: (data, type, row) => {
         return <center>{data}</center>;
       },

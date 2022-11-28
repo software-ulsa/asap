@@ -3,8 +3,9 @@ import ChipInput from "material-ui-chip-input";
 
 const InputArray = ({ formik, label, field }) => {
   const handleAddChip = (chip) => {
-    const oldData = formik.values[field];
+    const oldData = Object.assign([], formik.values[field]);
     oldData.push(chip);
+    formik.setFieldValue(field, oldData);
   };
 
   const handleDeleteChip = (chip, index) => {
