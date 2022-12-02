@@ -12,6 +12,7 @@ import {
   Grid,
   IconButton,
   Stack,
+  Typography,
 } from "@mui/material";
 
 import ImagenesService from "../../services/ImagesService";
@@ -25,11 +26,14 @@ const InputImage = ({
   height = "300px",
   width = "300px",
   variant = "",
+  condition = false,
 }) => {
   const dispatch = useDispatch();
   const [image, setImage] = useState("");
+  const [lastKey, setLastKey] = useState("");
   const [loaded, setLoaded] = useState(item[campo] ? false : true);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {}, [loaded]);
 
@@ -41,6 +45,7 @@ const InputImage = ({
         })
         .catch((error) => {
           setError(true);
+          setErrorMessage("No se pudo recuperar la imagen");
           console.log(`${error.message}. No se pudo recuperar la imagen`);
         });
     }
@@ -51,24 +56,67 @@ const InputImage = ({
     input?.click();
   };
 
-  const uploadImage = (event) => {
+  const sendToS3 = (file) => {
+    setLoaded(false);
+    ImagenesService.upload(file)
+      .then((response) => {
+        setLastKey(response.data);
+        setImage(URL.createObjectURL(file));
+        setItem((prev) => ({
+          ...prev,
+          [campo]: response.data,
+        }));
+        setLoaded(true);
+        setErrorMessage("");
+        setError(false);
+      })
+      .catch((error) => {
+        setLoaded(true);
+        setError(true);
+        setImage("");
+        setLastKey("");
+        setErrorMessage("No se pudo recuperar la imagen");
+        console.log(`Error ${error.message}. No se pudo recuperar la imagen`);
+      });
+  };
+
+  const getImageInput = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setLoaded(false);
-      ImagenesService.upload(file)
-        .then((response) => {
-          setImage(URL.createObjectURL(file));
-          setItem((prev) => ({
-            ...prev,
-            [campo]: response.data,
-          }));
-          setLoaded(true);
+      var img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      img.onload = function () {
+        if (condition) {
+          if (img.width === img.height) {
+            sendToS3(file);
+          } else {
+            setError(true);
+            setErrorMessage("Solo se pueden subir imagenes cuadradas");
+            setImage("");
+            setLastKey("");
+          }
+        } else {
+          sendToS3(file);
+        }
+      };
+    }
+  };
+
+  const uploadImage = (event) => {
+    if (lastKey !== "") {
+      ImagenesService.delete(lastKey)
+        .then(() => {
+          getImageInput(event);
         })
         .catch((error) => {
-          setLoaded(true);
           setError(true);
-          console.log(`Error ${error.message}. No se pudo recuperar la imagen`);
+          setErrorMessage("No se pudo cambiar la imagen");
+          setImage("");
+          setLastKey("");
+          console.log(`Error ${error.message}. No se pudo eliminar la imagen`);
         });
+    } else {
+      getImageInput(event);
     }
   };
 
@@ -87,6 +135,7 @@ const InputImage = ({
             {error ? (
               <Box
                 sx={{
+                  marginTop: 2,
                   height: { height },
                   width: { width },
                   display: "flex",
@@ -95,20 +144,30 @@ const InputImage = ({
                   alignItems: "center",
                 }}
               >
-                <Avatar
-                  sx={{
-                    bgcolor: red[500],
-                    height: { height },
-                    width: { width },
-                  }}
-                  imgProps={{
-                    onLoad: () => setLoaded(true),
-                  }}
-                  src={image}
-                  variant={variant}
+                <Typography
+                  variant="subtitle1"
+                  gutterBottom
+                  textAlign="center"
+                  fontWeight="bold"
                 >
-                  <BrokenImageRounded sx={{ fontSize: "4em" }} />
-                </Avatar>
+                  {`Error: ${errorMessage}`}
+                </Typography>
+                <IconButton onClick={doClickOnInput}>
+                  <Avatar
+                    sx={{
+                      bgcolor: red[500],
+                      height: { height },
+                      width: { width },
+                    }}
+                    imgProps={{
+                      onLoad: () => setLoaded(true),
+                    }}
+                    src={image}
+                    variant={variant}
+                  >
+                    <BrokenImageRounded sx={{ fontSize: "4em" }} />
+                  </Avatar>
+                </IconButton>
               </Box>
             ) : (
               <>
@@ -160,7 +219,8 @@ const InputImage = ({
           flexDirection: "row",
           justifyContent: "space-between",
           py: 2,
-          px: 2,
+          pb: 2,
+          pt: error ? 8 : 2,
         }}
       >
         <Button

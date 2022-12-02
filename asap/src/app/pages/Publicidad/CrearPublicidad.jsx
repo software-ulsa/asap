@@ -69,7 +69,7 @@ const CrearPublicidad = () => {
       saveAction={saveAction}
       cancelAction={cancelAction}
       variant="rounded"
-      width="450px"
+      condition={true}
     />,
   ];
 

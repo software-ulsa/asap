@@ -14,6 +14,7 @@ const ImageLoader = ({
   variant = "",
 }) => {
   const [image, setImage] = useState("");
+  const [lastKey, setLastKey] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -40,21 +41,46 @@ const ImageLoader = ({
     input?.click();
   };
 
-  const uploadImage = (event) => {
+  const sendToS3 = (file) => {
+    setLoaded(false);
+    ImagenesService.upload(file)
+      .then((response) => {
+        formik.setFieldValue(campo, response.data);
+        setLastKey(response.data);
+        setImage(URL.createObjectURL(file));
+        setLoaded(true);
+        setError(false);
+      })
+      .catch((error) => {
+        setLoaded(true);
+        setError(true);
+        setImage("");
+        setLastKey("");
+        console.log(`Error ${error.message}. No se pudo recuperar la imagen`);
+      });
+  };
+
+  const getImageInput = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setLoaded(false);
-      ImagenesService.upload(file)
-        .then((response) => {
-          setImage(URL.createObjectURL(file));
-          formik.setFieldValue(campo, response.data);
-          setLoaded(true);
+      sendToS3(file);
+    }
+  };
+
+  const uploadImage = (event) => {
+    if (lastKey !== "") {
+      ImagenesService.delete(lastKey)
+        .then(() => {
+          getImageInput(event);
         })
         .catch((error) => {
-          setLoaded(true);
           setError(true);
-          console.log(`Error ${error.message}. No se pudo recuperar la imagen`);
+          setImage("");
+          setLastKey("");
+          console.log(`Error ${error.message}. No se pudo eliminar la imagen`);
         });
+    } else {
+      getImageInput(event);
     }
   };
 
